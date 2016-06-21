@@ -16,7 +16,10 @@ MC
 from fifostr import FIFOStr  #include this statement with a path to fifostr.py
 
 
-#Usage example
+#Usage example 
+
+See example.py
+
 def main():
     myFifoStr=FIFOStr(5) #make a fifostr of length 
     myFifoStr+='1234567' #adds 1234567 to fifostr ... but len of fifostr is 5

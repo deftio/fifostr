@@ -28,8 +28,9 @@
 
 from collections import deque
 
-#Simple FIFO for look-back strings --> allows rolling FIFO of last n chars seen
+#Simple FIFO (First-In-First-Out) for strings --> allows rolling FIFO of last n chars seen
 #use addPattern() / delPattern() to add/delete patterns to look for
+#patterns can be strings or regular expressions (regex)
 
 class FIFOStr(deque):
 	def __init__(self, size):
