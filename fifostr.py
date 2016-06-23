@@ -24,45 +24,97 @@
 	3. This notice may not be removed or altered from any source
 	distribution.
 
+	#this class should work on either python 2.7+ or python 3+ distributions
+	#for performance notes see README.md
 """
 
 from collections import deque
+import re 
+import itertools
 
 #Simple FIFO (First-In-First-Out) for strings --> allows rolling FIFO of last n chars seen
-#use addPattern() / delPattern() to add/delete patterns to look for
-#patterns can be strings or regular expressions (regex)
+#use addPattern() / delPattern() to add/delete patterns to look for in the fifo
+#patterns can be strings, regular expressions (regex), or a user-supplied-function provided that
+#the function takes a string, returns a bool
 
 class FIFOStr(deque):
 	def __init__(self, size):
-		super( FIFOStr, self ).__init__(maxlen=size)
-		self.patterns = {}
-		self.foo = 7
-    
+		super( FIFOStr, self ).__init__(maxlen=size) #inheritance from deque
+		self.patterns = {} 
+
+	#hackish internal typeOf Operator... takes certain types and returns string equivalent
+	def typeStr(self,x):
+		xt = str(type(x))
+		def f(): return
+		t = {
+			str(type(123))	:"int",
+			str(type(0.1)) : "float",
+			str(type(re.compile(""))): "regex",
+			str(type(self.head)):"function", #note type is 'instancemethod'
+			str(type(f)):"function",
+			str(type("")):"str"
+		}
+		if (xt) in t:
+			return t[xt]
+		return xt
+
+    #head, tail, all operations ==============================================
 	def head(self,l=1):
 		if len(self)<l: 
 		    l=len(self)
-		return "".join([self[i] for i in xrange(l)])
+		return "".join([self[i] for i in range(l)])
     
 	def tail(self,l=1):
 		if len(self)<l: 
 		    l=len(self)
-		return "".join([self[i] for i in xrange(len(self)-l,len(self))])
+		return "".join([self[i] for i in range(len(self)-l,len(self))])
     
 	def all(self):
 		return "".join(self)
 
+	#simple tests for equality at head/tail/all given a string ===============
 	def eqhead(self,instring):
 		return self.head(len(instring))==instring    
     
 	def eqtail(self,instring):
 		return self.tail(len(instring))==instring
 
-	def append(self,x):
-		print x
+	def eq(self,instring):
+		return self.all()==instring
+
+	#operators================================================================
+	def append(self,x,inc): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
+		print (x)
 		return deque.append(self,x)
 
 	def __iadd__(self,x)		:
+		#todo do pattern handling
 		return deque.__iadd__(self,x)
+
+	def __getitem__(self, index): #add slicing support ... its a "string" after all ;)
+		#print("--->",index,type(index)) #debug
+		if isinstance(index, slice):
+			return "".join(itertools.islice(self, index.start, index.stop, index.step))
+		if isinstance(index, list):
+			return "".join([deque.__getitem__(self, x) for x in index])
+		if isinstance(index, tuple):
+			return "".join([deque.__getitem__(self, x) for x in index]			)
+		return str(deque.__getitem__(self, index))
+
+	#pattern handling==========================================================
+	def testPattern(self,pattern, callbackfn, start=0,end='end',label="",log=False):
+		if (end=='end'):
+			end=len(self)
+		pt = self.typeStr(pattern)
+		if (pt=="str"):
+			print (pattern,pt)
+		elif (pt=="regex"):
+			print (pattern,pt)
+		elif (pt=="function"):
+			print (pattern,pt)
+		#else pattern is not allowable type...
+		return -1
+		print (start,end)
 
 	def addPattern(self):
 		return ""
@@ -76,8 +128,9 @@ class FIFOStr(deque):
 	def clearPatterns(self):
 		return ""
 
-
-
+"""
+#see examples.py for complete examples in use.
+#these examples commented out below are just for getting started.
 def main():
 	#simple examples...
 	myFifoStr=FIFOStr(5)
@@ -103,3 +156,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+"""
