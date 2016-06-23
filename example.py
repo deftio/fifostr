@@ -35,6 +35,7 @@ import itertools
 
 def main():
 	#simple examples...
+	print("simple examples for fifostr\nA class for treatings strings as FIFO(deque) with matching abilities\n")
 	myFifoStr=FIFOStr(5)
 	print ("myFifoStr=FIFOStr(5) ==>",myFifoStr)
 	
@@ -63,20 +64,40 @@ def main():
 	print ("myFifoStr.all()=",myFifoStr.all())
 
 	#tests for internal type testing... 
-	print (myFifoStr.typeStr(123))
-	print (myFifoStr.typeStr("123"))
-	print (myFifoStr.typeStr(1.2))
-	print (myFifoStr.typeStr(re.compile("we")))
-	print (myFifoStr.typeStr(main))
+	print (myFifoStr.typeStr(123))				#returns "int"
+	print (myFifoStr.typeStr("123"))			#returns "str"
+	print (myFifoStr.typeStr(1.2))				#returns "float"
+	print (myFifoStr.typeStr(re.compile("we"))) #returns "regex"
+	print (myFifoStr.typeStr(main))				#returns "function"
 
 	
 	#retrieval  
-	print (myFifoStr[3])			#accepts integer index  
-	print (myFifoStr[1:4]) 			#accepts slice TODO accept indexing e.g. [1,5,-1]
-	print (myFifoStr[[1,4,2]]) 		#accepts list 
-	print (myFifoStr[1,3,4])		#accepts tuple
+	print ("\nindexing")
+	print ("myFifoStr[3]="+myFifoStr[3])			#accepts integer index  
+	print ("myFifoStr[1:4]="+myFifoStr[1:4]) 		#accepts slice TODO accept indexing e.g. [1,5,-1]
+	print ("myFifoStr[[1,4,2]]="+myFifoStr[[1,4,2]])#accepts list 
+	print ("myFifoStr[1,3,4]="+myFifoStr[1,3,4])	#accepts tuple
 
-	#print (myFifoStr.testPattern("123"))
+	#simple pattern matching
+	print ("\npattern match tests")
+	print ("\nstrings========")
+	print ("myFifoStr.testPattern('this')",myFifoStr.testPattern('this'))
+	print ("myFifoStr.testPattern('67890')",myFifoStr.testPattern('67890'))
+	print ("\nregexes========")
+	r1=re.compile("[0-9]+")
+	print ("r1=re.compile([0-9]+)\nmyFifoStr.testPattern(r1)",myFifoStr.testPattern(r1))
+	r2=re.compile("[a-z]+")
+	print ("r2=re.compile([a-z]+)\nmyFifoStr.testPattern(r2)",myFifoStr.testPattern(r2))
+	print ("\nfunctions======")
+	def f1(s):
+		return s=='tada'
+	print ("def f1(s):\n\treturn s=='tada'\nmyFifoStr.testPattern(r1)",myFifoStr.testPattern(f1))
+	print ()
+	def f2(s):
+		return s=='67890'		
+	print ("def f1(s):\n\treturn s=='67890'\nmyFifoStr.testPattern(r1)",myFifoStr.testPattern(f2))
+	print ("\n")
 
+	#storing / deleting and managing patterns
 if __name__ == '__main__':
     main()

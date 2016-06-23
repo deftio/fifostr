@@ -40,7 +40,8 @@ import itertools
 class FIFOStr(deque):
 	def __init__(self, size):
 		super( FIFOStr, self ).__init__(maxlen=size) #inheritance from deque
-		self.patterns = {} 
+		self.patterns 	= {} #dict of patterns to search for
+		self.patternIdx = 0
 
 	#hackish internal typeOf Operator... takes certain types and returns string equivalent
 	def typeStr(self,x):
@@ -50,15 +51,16 @@ class FIFOStr(deque):
 			str(type(123))	:"int",
 			str(type(0.1)) : "float",
 			str(type(re.compile(""))): "regex",
-			str(type(self.head)):"function", #note type is 'instancemethod'
+			str(type(self.head)):"function", #note raw type is 'instancemethod'
 			str(type(f)):"function",
-			str(type("")):"str"
+			str(type("")):"str",
+			str(type(FIFOStr)):"class"
 		}
 		if (xt) in t:
 			return t[xt]
 		return xt
 
-    #head, tail, all operations ==============================================
+    #head,tail,all operations ==============================================
 	def head(self,l=1):
 		if len(self)<l: 
 		    l=len(self)
@@ -102,31 +104,66 @@ class FIFOStr(deque):
 		return str(deque.__getitem__(self, index))
 
 	#pattern handling==========================================================
-	def testPattern(self,pattern, callbackfn, start=0,end='end',label="",log=False):
-		if (end=='end'):
+	def testPattern(self, pattern, start=0,end='e'):
+		if (end=='e'):
 			end=len(self)
+		s=self[start:end]		
 		pt = self.typeStr(pattern)
-		if (pt=="str"):
-			print (pattern,pt)
-		elif (pt=="regex"):
-			print (pattern,pt)
-		elif (pt=="function"):
-			print (pattern,pt)
+		#cheesy dynamic type handling here...  
+		if (pt=="str"):  		#just match the string return True
+			if pattern==s:
+				return True
+		elif (pt=="regex"): 	#if the regex matches using re.match() return True
+			if pattern.search(s) != None:
+				return True
+		elif (pt=="function"):  #if its a function then we pass the string to the function
+			return pattern(s)==True #enforces primitive casting to boolean
 		#else pattern is not allowable type...
-		return -1
-		print (start,end)
+		return False
 
-	def addPattern(self):
-		return ""
+	def testAllPatterns(self,doCallbacks=False,retnList=True): #checks all active patterns, returns result as list [index,label,<result>]
+		l = []
+		for i in self.patterns:
+			if (self.patterns[i][5]):
+				r=testPattern(self.patterns[i][0],self.patterns[i][1],self.patterns[i][2])
+				l.push(i,patterns[i][4],r)
+				if (doCallbacks):
+					if r:
+						self.patterns[i][3](self[self.patterns[i][1]:self.patterns[i][2]])
+		if retnList:
+			return l
+		return
 
-	def delPattern(self):
-		return ""
+	def addPattern(self,pattern, callbackfn, start=0,end='e',label="",active=True):
+		n = self.patternIdx
+		self.patterns[n] = [pattern,start,end,callbackfn,label,active]
+		self.patternIdx += 1
+		return n
+
+	def setPatternActiveState(self,index,state):
+		if (index in self.patterns):
+			self.patterns[index][5] = state==True
+		return state==True
+
+	def getPatternActiveState(self,index):
+		if (index in self.patterns):
+			return self.patterns[index][5]
+		return -1 #error in index
+
+	def delPattern(self,index):
+		if (index in self.patterns):
+			del self.patterns[index]
+		return numPatterns()
 
 	def showPatterns(self):
-		return ""
+		return dict(self.patterns) #return shallow copy of current patterns
 
-	def clearPatterns(self):
-		return ""
+	def clearPatterns(self): #remove all patterns from pattern search dictionary
+		self.patterns={}
+		return numPatterns()
+
+	def numPatterns(self):	 #show number of patterns in the search dictionary
+		return len(self.patterns)
 
 """
 #see examples.py for complete examples in use.
