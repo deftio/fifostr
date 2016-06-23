@@ -37,9 +37,9 @@ import itertools
 #patterns can be strings, regular expressions (regex), or a user-supplied-function provided that
 #the function takes a string, returns a bool
 
-class FIFOStr(deque):
+class fifostr(deque):
 	def __init__(self, size):
-		super( FIFOStr, self ).__init__(maxlen=size) #inheritance from deque
+		super( fifostr, self ).__init__(maxlen=size) #inheritance from deque
 		self.patterns 	= {} #dict of patterns to search for
 		self.patternIdx = 0
 
@@ -54,7 +54,7 @@ class FIFOStr(deque):
 			str(type(self.head)):"function", #note raw type is 'instancemethod'
 			str(type(f)):"function",
 			str(type("")):"str",
-			str(type(FIFOStr)):"class"
+			str(type(fifostr)):"class"
 		}
 		if (xt) in t:
 			return t[xt]

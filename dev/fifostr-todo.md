@@ -18,12 +18,12 @@ def addPattern: (pattern, function, opt_name_string) #default is class_var "matc
 ##pattern consists of:
 	pattern 	: regex | str | function of pattern to trigger on
 	callbackfn 	: function to call back when pattern found
-		params are (optname) #if supplied 
+		params are (matching_string_section) 
 	optname 	: an optional label for when the pattern is found
 	optlog		: optional to call logging fn when pattern hit (not-logged is default)
 	pos_s		: start substring position to look for in fifostr (0 is default)
 	pos_e		: end substring position to look for in fifostr (maxlen-1 is default)
-
+	active		: whether this pattern is currently being interrogated
 
 ##Todo:
 -constructor 
@@ -38,4 +38,5 @@ def addPattern: (pattern, function, opt_name_string) #default is class_var "matc
 	-user_func(x) --> bool 
 		e.g. []
 -check Python 2.7+ and Python 3+ compatibility with tests
--.eqHead, .eqTail, .eq --> accept str or regex
+-.eqHead, .eqTail, .eq --> accept str or regex?
+-test pattern add/del/triggers

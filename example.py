@@ -29,15 +29,15 @@ from __future__ import print_function #just for parenthesis wrapping in python 2
 
 """
 
-from fifostr import FIFOStr
+from fifostr import fifostr
 import re
-import itertools
+
 
 def main():
 	#simple examples...
 	print("simple examples for fifostr\nA class for treatings strings as FIFO(deque) with matching abilities\n")
-	myFifoStr=FIFOStr(5)
-	print ("myFifoStr=FIFOStr(5) ==>",myFifoStr)
+	myFifoStr=fifostr(5)
+	print ("myFifoStr=fifostr(5) ==>",myFifoStr)
 	
 	myFifoStr+='1234567'
 	print ("print myFifoStr+='1234567' ==>",myFifoStr)
@@ -99,5 +99,11 @@ def main():
 	print ("\n")
 
 	#storing / deleting and managing patterns
+	
+	#this simple function is used for the callbackfn in the next set of examples
+	def logf(s):
+		print("callback:"+s)
+
+
 if __name__ == '__main__':
     main()
