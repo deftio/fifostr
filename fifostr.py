@@ -124,9 +124,9 @@ class fifostr(deque):
 	def testAllPatterns(self,doCallbacks=False,retnList=True): #checks all active patterns, returns result as list [index,label,<result>]
 		l = []
 		for i in self.patterns:
-			if (self.patterns[i][5]):
-				r=testPattern(self.patterns[i][0],self.patterns[i][1],self.patterns[i][2])
-				l.push(i,patterns[i][4],r)
+			if (self.patterns[i][5]): #is an active pattern 
+				r=self.testPattern(self.patterns[i][0],self.patterns[i][1],self.patterns[i][2])
+				l.append([i,self.patterns[i][4],r])
 				if (doCallbacks):
 					if r:
 						self.patterns[i][3](self[self.patterns[i][1]:self.patterns[i][2]])
@@ -134,11 +134,33 @@ class fifostr(deque):
 			return l
 		return
 
-	def addPattern(self,pattern, callbackfn, start=0,end='e',label="",active=True):
+	def addPattern(self, pattern, callbackfn, start=0,end='e',label="",active=True):
 		n = self.patternIdx
-		self.patterns[n] = [pattern,start,end,callbackfn,label,active]
+		self.patterns[n] = [pattern,start,end,callbackfn,label,active] #note order is important since used elsewhere
 		self.patternIdx += 1
 		return n
+
+	def delPattern(self,index):
+		if (index in self.patterns):
+			del self.patterns[index]
+		return self.numPatterns()
+
+	def getPattern(self,index):
+		if (index in self.patterns):
+			return list(self.patterns[index])
+		return None		
+
+	def findPatternByLabel(self,label): #allows string or compiled regex
+		r=[]
+		if self.typeStr(label)=="str":
+			for i in self.patterns:
+				if self.patterns[i][4] == label:
+					r.append(list(self.patterns[i]))
+		elif self.typeStr(label)=="regex":
+			for i in self.patterns:
+				if label.search(self.patterns[i][4]) != None:
+					r.append(list(self.patterns[i]))
+		return r
 
 	def setPatternActiveState(self,index,state):
 		if (index in self.patterns):
@@ -150,10 +172,6 @@ class fifostr(deque):
 			return self.patterns[index][5]
 		return -1 #error in index
 
-	def delPattern(self,index):
-		if (index in self.patterns):
-			del self.patterns[index]
-		return numPatterns()
 
 	def showPatterns(self):
 		return dict(self.patterns) #return shallow copy of current patterns
@@ -166,12 +184,12 @@ class fifostr(deque):
 		return len(self.patterns)
 
 """
-#see examples.py for complete examples in use.
+#see examples.py for complete examples in use, including using patterns 
 #these examples commented out below are just for getting started.
 def main():
 	#simple examples...
-	myFifoStr=FIFOStr(5)
-	print "myFifoStr=FIFOStr(5) ==>",myFifoStr
+	myFifoStr=fifostr(5) #create a fifostr of 5 characters length 
+	print "myFifoStr=fifiostr(5) ==>",myFifoStr
 	myFifoStr+='1234567'
 	print "print myFifoStr+='1234567' ==>",myFifoStr
 	print "myFifoStr.head(3)= ",myFifoStr.head(3)

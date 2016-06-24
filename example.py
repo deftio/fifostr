@@ -18,8 +18,7 @@ from __future__ import print_function #just for parenthesis wrapping in python 2
 
 	1. The origin of this software must not be misrepresented; you must not
 	claim that you wrote the original software. If you use this software
-	in a product, an acknowledgment in the product documentation would be
-	appreciated but is not required.
+	in a product, an acknowledgment in the product documentation is required.
 
 	2. Altered source versions must be plainly marked as such, and must not be
 	misrepresented as being the original software.
@@ -31,9 +30,11 @@ from __future__ import print_function #just for parenthesis wrapping in python 2
 
 from fifostr import fifostr
 import re
+import pprint
 
 
 def main():
+	pp = pprint.PrettyPrinter(depth=6) #for nice printing complex objects
 	#simple examples...
 	print("simple examples for fifostr\nA class for treatings strings as FIFO(deque) with matching abilities\n")
 	myFifoStr=fifostr(5)
@@ -104,6 +105,32 @@ def main():
 	def logf(s):
 		print("callback:"+s)
 
+	myFifoStr.addPattern("234",logf,label="234 hit")
+	myFifoStr.addPattern("67890",logf,label="67890 hit")
+	myFifoStr.addPattern(r1,logf,label="r1 hit")
+	myFifoStr.addPattern(r2,logf,label="r2 hit")
+	x1=myFifoStr.addPattern(f1,logf,label="f1 hit")
+	x2=myFifoStr.addPattern(f2,logf,label="f2 hit")
+	pp.pprint(myFifoStr.showPatterns())
 
+	print()
+	pp.pprint(myFifoStr.testAllPatterns()) #test patterns added
+
+	print()
+	myFifoStr.delPattern(x1) #show deleting a pattern from the search
+	pp.pprint(myFifoStr.showPatterns())
+
+	print() #show retrieving pattern by index
+	myFifoStr.setPatternActiveState(x2,False)
+	pp.pprint(myFifoStr.getPattern(x2))
+
+	#now show searching for stored pattern matches
+	print("find pattern by label 'foo':",myFifoStr.findPatternByLabel("foo")) #no matches returns empty list
+	print("find pattern by label '234 hit':",myFifoStr.findPatternByLabel("234 hit")) #shows match
+	print("find pattern by label using regex '[rf][0-9]':")
+	pp.pprint(myFifoStr.findPatternByLabel(re.compile("[rf][0-9]")))
+
+	#and finally demonstrate that patterns auto-trigger when items inserted in fifostr .. which afterall
+	#is the point of the whole thing! ;)
 if __name__ == '__main__':
     main()

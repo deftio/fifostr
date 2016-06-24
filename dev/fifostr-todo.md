@@ -34,9 +34,21 @@ def addPattern: (pattern, function, opt_name_string) #default is class_var "matc
 -override all __add__ etc functions so behaves correctly
 -check all functions have comments
 - usable documentation for when I forget how this works
--check patterns can use strings or regexes or function 
+(done) check patterns can use strings or regexes or function 
 	-user_func(x) --> bool 
 		e.g. []
 -check Python 2.7+ and Python 3+ compatibility with tests
 -.eqHead, .eqTail, .eq --> accept str or regex?
 -test pattern add/del/triggers
+operator overloads
+
+#features list
+head
+tail
+eqhead
+eqtail
+add/del/get pattern
+clear all patterns
+get/setPattern Active/Inactive
+operators support slicing, indexing
+
