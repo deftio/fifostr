@@ -32,6 +32,11 @@ from collections import deque
 import re 
 import itertools
 
+#Simple constant ENUM style generator used for indexing internal pattern storage array
+def enum(**enums):
+    return type('Enum', (), enums)
+PATIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used internally
+
 #Simple FIFO (First-In-First-Out) for strings --> allows rolling FIFO of last n chars seen
 #use addPattern() / delPattern() to add/delete patterns to look for in the fifo
 #patterns can be strings, regular expressions (regex), or a user-supplied-function provided that
@@ -87,6 +92,7 @@ class fifostr(deque):
 	#operators================================================================
 	def append(self,x,inc): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
 		print (x)
+		#todo do pattern handling
 		return deque.append(self,x)
 
 	def __iadd__(self,x)		:
@@ -104,16 +110,16 @@ class fifostr(deque):
 		return str(deque.__getitem__(self, index))
 
 	#pattern handling==========================================================
-	def testPattern(self, pattern, start=0,end='e'):
+	def testPattern(self, pattern, start=0,end='e'): #test if a pattern matches btw start and end positions in fifostr
 		if (end=='e'):
 			end=len(self)
 		s=self[start:end]		
 		pt = self.typeStr(pattern)
 		#cheesy dynamic type handling here...  
-		if (pt=="str"):  		#just match the string return True
+		if (pt=="str"):  		#test match if pattern is  string 
 			if pattern==s:
 				return True
-		elif (pt=="regex"): 	#if the regex matches using re.match() return True
+		elif (pt=="regex"): 	#if the regex matches using re.search() return True
 			if pattern.search(s) != None:
 				return True
 		elif (pt=="function"):  #if its a function then we pass the string to the function
@@ -124,28 +130,30 @@ class fifostr(deque):
 	def testAllPatterns(self,doCallbacks=False,retnList=True): #checks all active patterns, returns result as list [index,label,<result>]
 		l = []
 		for i in self.patterns:
-			if (self.patterns[i][5]): #is an active pattern 
-				r=self.testPattern(self.patterns[i][0],self.patterns[i][1],self.patterns[i][2])
-				l.append([i,self.patterns[i][4],r])
+			if (self.patterns[i][PATIDX.ACTIVE]): #is an active pattern 
+				r=self.testPattern(self.patterns[i][PATIDX.PATTERN],self.patterns[i][PATIDX.START],self.patterns[i][PATIDX.END])
+				l.append([i,self.patterns[i][PATIDX.LABEL],r])
 				if (doCallbacks):
 					if r:
-						self.patterns[i][3](self[self.patterns[i][1]:self.patterns[i][2]])
+						self.patterns[i][PATIDX.CALLBACKFN](self[self.patterns[i][PATIDX.START]:self.patterns[i][PATIDX.END]])
 		if retnList:
 			return l
 		return
 
-	def addPattern(self, pattern, callbackfn, start=0,end='e',label="",active=True):
+	def addPattern(self, pattern, callbackfn, start=0,end='e',label="",active=True): #returns index to stored pattern
 		n = self.patternIdx
 		self.patterns[n] = [pattern,start,end,callbackfn,label,active] #note order is important since used elsewhere
+		#PATIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5)  # see declaration above class def
 		self.patternIdx += 1
+
 		return n
 
-	def delPattern(self,index):
+	def delPattern(self,index): #remove a pattern from storage
 		if (index in self.patterns):
 			del self.patterns[index]
 		return self.numPatterns()
 
-	def getPattern(self,index):
+	def getPattern(self,index): #retrieve a pattern from storage via its index
 		if (index in self.patterns):
 			return list(self.patterns[index])
 		return None		
@@ -154,26 +162,26 @@ class fifostr(deque):
 		r=[]
 		if self.typeStr(label)=="str":
 			for i in self.patterns:
-				if self.patterns[i][4] == label:
+				if self.patterns[i][PATIDX.LABEL] == label:
 					r.append(list(self.patterns[i]))
 		elif self.typeStr(label)=="regex":
 			for i in self.patterns:
-				if label.search(self.patterns[i][4]) != None:
+				if label.search(self.patterns[i][PATIDX.LABEL]) != None:
 					r.append(list(self.patterns[i]))
 		return r
 
-	def setPatternActiveState(self,index,state):
+	def setPatternActiveState(self,index,state): #set a pattern's active state
 		if (index in self.patterns):
-			self.patterns[index][5] = state==True
+			self.patterns[index][PATIDX.ACTIVE] = state==True
 		return state==True
 
-	def getPatternActiveState(self,index):
+	def getPatternActiveState(self,index): #see if a pattern is active or not
 		if (index in self.patterns):
-			return self.patterns[index][5]
+			return self.patterns[index][PATIDX.ACTIVE]
 		return -1 #error in index
 
 
-	def showPatterns(self):
+	def showPatterns(self): #get all patterns stored
 		return dict(self.patterns) #return shallow copy of current patterns
 
 	def clearPatterns(self): #remove all patterns from pattern search dictionary
