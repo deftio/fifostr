@@ -97,7 +97,9 @@ class fifostr(deque):
 
 	def __iadd__(self,x)		:
 		#todo do pattern handling
-		return deque.__iadd__(self,x)
+		deque.__iadd__(self,x)
+		self.testAllPatterns(doCallbacks=True,retnList=False)
+		return self
 
 	def __getitem__(self, index): #add slicing support ... its a "string" after all ;)
 		#print("--->",index,type(index)) #debug
@@ -116,7 +118,7 @@ class fifostr(deque):
 		s=self[start:end]		
 		pt = self.typeStr(pattern)
 		#cheesy dynamic type handling here...  
-		if (pt=="str"):  		#test match if pattern is  string 
+		if (pt=="str"):  		#test match if pattern is == string 
 			if pattern==s:
 				return True
 		elif (pt=="regex"): 	#if the regex matches using re.search() return True
@@ -131,16 +133,19 @@ class fifostr(deque):
 		l = []
 		for i in self.patterns:
 			if (self.patterns[i][PATIDX.ACTIVE]): #is an active pattern 
-				r=self.testPattern(self.patterns[i][PATIDX.PATTERN],self.patterns[i][PATIDX.START],self.patterns[i][PATIDX.END])
+				e = self.patterns[i][PATIDX.END]
+				if e == 'e':
+					e=len(self)
+				r=self.testPattern(self.patterns[i][PATIDX.PATTERN],self.patterns[i][PATIDX.START],e)
 				l.append([i,self.patterns[i][PATIDX.LABEL],r])
 				if (doCallbacks):
 					if r:
-						self.patterns[i][PATIDX.CALLBACKFN](self[self.patterns[i][PATIDX.START]:self.patterns[i][PATIDX.END]])
+						self.patterns[i][PATIDX.CALLBACKFN](self[self.patterns[i][PATIDX.START]:e],self.patterns[i][PATIDX.LABEL])
 		if retnList:
 			return l
-		return
+		return len(l) #if not returning list, then return the # of matched patterns
 
-	def addPattern(self, pattern, callbackfn, start=0,end='e',label="",active=True): #returns index to stored pattern
+	def addPattern(self, pattern, callbackfn, start=0, end='e',label="",active=True): #returns index to stored pattern
 		n = self.patternIdx
 		self.patterns[n] = [pattern,start,end,callbackfn,label,active] #note order is important since used elsewhere
 		#PATIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5)  # see declaration above class def

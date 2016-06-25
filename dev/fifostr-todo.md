@@ -26,29 +26,24 @@ def addPattern: (pattern, function, opt_name_string) #default is class_var "matc
 	active		: whether this pattern is currently being interrogated
 
 ## Todo:
--constructor 
-	-take log-function #as in logging each event to log function
--add/del log-function
--pip install
--tests.py  #in tests directory
--override all __add__ etc functions so behaves correctly
--check all functions have comments
-- usable documentation for when I forget how this works
-(done) check patterns can use strings or regexes or function 
-	-user_func(x) --> bool 
-		e.g. []
--check Python 2.7+ and Python 3+ compatibility with tests
--.eqHead, .eqTail, .eq --> accept str or regex?
--test pattern add/del/triggers
-operator overloads
-	+
-	+=
-	append 	#with default inc=False 
-	appendl #with default inc=False
-proper markdown
+	[ ] constructor, take log-function #as in logging each event to log function
+	[ ] add/del log-function
+	[ ] pip install
+	[ ] tests.py / unit tests  #in tests directory
+	[ ] check all functions have comments
+	[ ] 
+	[x] check Python 2.7+ and Python 3+ compatibility with tests
+	[ ] .eqHead, .eqTail, .eq --> accept str or regex?
+	[ ] test pattern add/del/triggers
+	[ ]operator overloads
+		+
+		+=
+		append 	#with default inc=False 
+		appendl #with default inc=False
+	[ ]	proper markdown
+	[ ]add pydoc strings to each function
 
-
-# features list
+## features list
 	[x] head
 	[x] tail
 	[x] eqhead

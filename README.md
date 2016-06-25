@@ -1,32 +1,37 @@
 # fifostr.py
 
-a small python lib for treating strings as fifos with triggerable patterns
+a small python lib for treating strings as fifos with callback-based pattern matching
+
 (c) 2011 manu chatterjee    deftio (at) deftio.com
 
 
-fifostr (First In First Out String) is a small python originally used for combining  deque & string based operations for a embedded terminal program.  It allows pieces of a string to be treated in a mutable way with operations that you would expect from a bi-directional list such as insertion at either end and adding/removing N chars from either end.
+fifostr (First In First Out String) is a small python originally used for combining  deque & string based operations for an embedded terminal program.  It allows pieces of a string to be treated in a mutable way with operations that you would expect from a bi-directional list such as insertion at either end and adding/removing N chars from either end.
 
-fifostr also allows you to add / remove patterns which can trigger a user supplied function (E.g. if the pattern is "seen" then trigger the function).  
-    these patterns can be strings, regexes or user-supplied-functions
-    each pattern takes its pattern, an optional label, an optional start,stop index (defaults to looking at whole fifostr obj), and a callback_fn which is used if the pattern is detected
+fifostr also allows you to add / remove patterns which can trigger a user supplied function (E.g. if the pattern is "seen" then trigger the function).  Patterns can be strings, regexes or user-supplied-functions. A pattern consists of:
+  * pattern: string <or> compiled regex <or> user-supplied-parser-function
+  * label: user supplied 'name' for this pattern
+  * start index : position in fifostr to begin pattern match.  default is 0
+  * stop index : position in fifostr to end pattern match.  default is end of fifostr
+  * callback_fn : called if pattern is found, fifostr(start:end) is passed to the callback fn
+  * active : default is True, sets whether this pattern should be actively looked for
 
-There is nothing really profound here -- one can argue its not worth its own repo. Originally  this was used in a python serial terminal program dioterm (which allowed the serial terminal to parse commands sent/received by both sides).  
+There is nothing really profound here -- one can argue its not worth its own repo. Originally a lighter version of this was used in a python serial terminal program dioterm (which allowed the serial terminal to parse commands sent/received by both sides).  
 
 Cheers-
 MC
 
 ### Installation & usage
 from fifostr import fifostr  #include this statement with a path to fifostr.py
-fifostr.py is compatible (without mods) with both python 2.7+ and python 3+ as of this writing.
+fifostr.py is compatible (without mods) with both python 2.7+ and python 3.* 
 
-### Feature List
+### Functionality List
 allows a string which is treated as a deque (fifo) object with:
   * add/remove chars or strings at either end 
   * use slices, lists, or tuples to retrieve members (just like a real str object) 
   * get head/tail (as a str)
   * match head/tail  --> match a supplied string to either the head or tail
   * add/del/get patterns  --> pattern can be string | regex | user_supplied_parser any of which triggers user supplied callback_fn
-    * all patterns can look at either the whole fifostr or any subset e.g. addPattern("foo",myCallback,3,5) --> only looks for foo between positions 3 and 5 in the fifostr
+    * all patterns can look at either the whole fifostr or any subset e.g. addPattern("foo",myCallback,3,5) --> only looks for "foo" between positions 3 and 5 in the fifostr
     * all patterns have optional label which can be used for logging purposes (eg. when pattern found, in addition to callback, emit label)
   * clear all patterns --> removes patterns from processing
   * get/setPattern Active/Inactive  --> allows a stored pattern to set on or off
@@ -53,17 +58,36 @@ def main():
     myFifoStr.eqtail("4567")= True
     myFifoStr.eqtail("abc")= False
 
+    #test a  string pattern directly
+    print ("myFifoStr.testPattern('67890')",myFifoStr.testPattern('67890'))
+    
+    #test a regex pattern directly
+    r1=re.compile("[0-9]+")
+    print ("r1=re.compile([0-9]+)\nmyFifoStr.testPattern(r1)",myFifoStr.testPattern(r1))
 
+    r2=re.compile("[a-z]+")
+    print ("r2=re.compile([a-z]+)\nmyFifoStr.testPattern(r2)",myFifoStr.testPattern(r2))
+
+    #adding patterns
+    p1 = myFifoStr.addPattern("234",logf,label="234 was here") #integer index returned managing pattern 
+    p2 = myFifoStr.addPattern("67890",logf,label="67890 detected")
+    p3 = myFifoStr.addPattern(r1,logf,label="r1 detected")
+    myFifoStr.addPattern(r2,logf,label="r2 hit")
+    myFifoStr.addPattern(f1,logf,label="f1 hit")   
+    myFifoStr.addPattern(f2,logf,label="f2 hit")    
+
+    #patterns can be set active/inactive via pattern management fns 
+    myFifoStr.setPatternActiveState(p1,False) #based on index returned from addPattern
 ```
 
 ### Notes
-Absolutley *no* warranties on performance.  This is no replacement for a compiler/parser front end.  It just iterates over stored patterns every time something is added to the 
+Absolutley *no* warranties on performance.  This is not replacement for a compiler/parser front end!  It just iterates over stored patterns every time something is added to the 
 fifostr object.  If you do have a compiler front you wish to be called the just add one pattern in you pass your user-supplied-parser and let your own code do the work.
 
 ```
 #let your own parser do the work
-    myFifo = fifostr(10)
-    myFifo.addPattern(myParser,myCallback) #myParser is passed the entire fifostr (as a python string) everytime character(s) are added
+    myFifo = fifostr(20)  # make a 20 char fifostr
+    myFifo.addPattern(myParser,myCallbk) #myParser passed entire fifostr (as str) when char(s) added
 
 ```
 
@@ -71,7 +95,7 @@ fifostr object.  If you do have a compiler front you wish to be called the just 
 all source is at github:
 http://github.com/deftio/fifostr
 
-docs and other goodies at 
+docs and other projects at 
 http://deftio.com/open-source
 
 ### Tests & Coverage

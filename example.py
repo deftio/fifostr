@@ -102,11 +102,13 @@ def main():
 	#storing / deleting and managing patterns
 	
 	#this simple function is used for the callbackfn in the next set of examples
-	def logf(s):
-		print("callback:"+s)
+	def logf(s,label=""):
+		print("callback-> match_str:"+s+"  label:"+label)
 
-	myFifoStr.addPattern("234",logf,label="234 hit")
-	myFifoStr.addPattern("67890",logf,label="67890 hit")
+	myFifoStr.addPattern("234",logf,label="234 hit across whole string")
+	myFifoStr.addPattern("234",logf,start=0, end=len("234"),label="234 at start")
+	myFifoStr.addPattern("67890",logf,label="67890 hit as whole str")
+	myFifoStr.addPattern('def',logf,start=1,end=4,label="def btw 3,5")
 	myFifoStr.addPattern(r1,logf,label="r1 hit")
 	myFifoStr.addPattern(r2,logf,label="r2 hit")
 	x1=myFifoStr.addPattern(f1,logf,label="f1 hit")
@@ -114,7 +116,7 @@ def main():
 	pp.pprint(myFifoStr.showPatterns())
 
 	print()
-	pp.pprint(myFifoStr.testAllPatterns()) #test patterns added
+	pp.pprint(myFifoStr.testAllPatterns()) #test all the patterns added and are active #note pass doCallbacks=True to activate callback fns
 
 	print()
 	myFifoStr.delPattern(x1) #show deleting a pattern from the search
@@ -124,13 +126,21 @@ def main():
 	myFifoStr.setPatternActiveState(x2,False)
 	pp.pprint(myFifoStr.getPattern(x2))
 
-	#now show searching for stored pattern matches
+	#now show searching for stored pattern matchers in the pattern dict
+	#this is not searching the fifo-string itself, just the stored patterns that we have entered
 	print("find pattern by label 'foo':",myFifoStr.findPatternByLabel("foo")) #no matches returns empty list
 	print("find pattern by label '234 hit':",myFifoStr.findPatternByLabel("234 hit")) #shows match
 	print("find pattern by label using regex '[rf][0-9]':")
 	pp.pprint(myFifoStr.findPatternByLabel(re.compile("[rf][0-9]")))
 
 	#and finally demonstrate that patterns auto-trigger when items inserted in fifostr .. which afterall
-	#is the point of the whole thing! ;)
+	#is the point of the whole thing.. ;)
+	print("\n fifo operations ============")
+	for c in '01234567890abcdefghijklmnop':
+		myFifoStr += c
+
+	myFifoStr+= 'abcdefghi'
+	print (myFifoStr.all())
+
 if __name__ == '__main__':
     main()
