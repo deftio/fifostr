@@ -31,7 +31,7 @@ allows a string which is treated as a deque (fifo) object with:
   * get head/tail (as a str)
   * match head/tail  --> match a supplied string to either the head or tail
   * add/del/get patterns  --> pattern can be string | regex | user_supplied_parser any of which triggers user supplied callback_fn
-    * all patterns can look at either the whole fifostr or any subset e.g. addPattern("foo",myCallback,3,5) --> only looks for "foo" between positions 3 and 5 in the fifostr
+    * all patterns can look at either the whole fifostr or any subset e.g. addPattern("foo",myCallback,2,5) --> only looks for "foo" between positions 2 and 5 in the fifostr
     * all patterns have optional label which can be used for logging purposes (eg. when pattern found, in addition to callback, emit label)
   * clear all patterns --> removes patterns from processing
   * get/setPattern Active/Inactive  --> allows a stored pattern to set on or off
@@ -88,6 +88,7 @@ fifostr object.  If you do have a compiler front you wish to be called the just 
 #let your own parser do the work
     myFifo = fifostr(20)  # make a 20 char fifostr
     myFifo.addPattern(myParser,myCallbk) #myParser passed entire fifostr (as str) when char(s) added
+    myFifo.addPattern(myParser,myCallbk2,3,5) #myParser passed fifostr btw (3,5).  My Parser must return boolean
 
 ```
 
