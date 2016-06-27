@@ -108,7 +108,7 @@ def main():
 	myFifoStr.addPattern("234",logf,label="234 hit across whole string")
 	myFifoStr.addPattern("234",logf,start=0, end=len("234"),label="234 at start")
 	myFifoStr.addPattern("67890",logf,label="67890 hit as whole str")
-	myFifoStr.addPattern('def',logf,start=1,end=4,label="def btw 3,5")
+	myFifoStr.addPattern('def',logf,start=1,end=4,label="'def' btw 3,5")
 	myFifoStr.addPattern(r1,logf,label="r1 hit")
 	myFifoStr.addPattern(r2,logf,label="r2 hit")
 	x1=myFifoStr.addPattern(f1,logf,label="f1 hit")
@@ -122,8 +122,8 @@ def main():
 	myFifoStr.delPattern(x1) #show deleting a pattern from the search
 	pp.pprint(myFifoStr.showPatterns())
 
-	print() #show retrieving pattern by index
-	myFifoStr.setPatternActiveState(x2,False)
+	print()
+	myFifoStr.setPatternActiveState(x2,False)  #show retrieving pattern by index and setting inactive
 	pp.pprint(myFifoStr.getPattern(x2))
 
 	#now show searching for stored pattern matchers in the pattern dict

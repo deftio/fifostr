@@ -28,7 +28,7 @@
 	#for performance notes see README.md
 """
 
-from collections import deque
+from collections import deque, Iterable
 import re 
 import itertools
 
@@ -36,6 +36,7 @@ import itertools
 def enum(**enums):
     return type('Enum', (), enums)
 PATIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used internally
+
 
 #Simple FIFO (First-In-First-Out) for strings --> allows rolling FIFO of last n chars seen
 #use addPattern() / delPattern() to add/delete patterns to look for in the fifo
@@ -65,6 +66,11 @@ class fifostr(deque):
 			return t[xt]
 		return xt
 
+	#checker for iterability for some ops.  actually I was just very iterable when I realised this 
+	#wasn't a built in in the language  ;)
+	def iterable(self,obj):
+	    return isinstance(obj, collections.Iterable)
+
     #head,tail,all operations ==============================================
 	def head(self,l=1):
 		if len(self)<l: 
@@ -89,16 +95,60 @@ class fifostr(deque):
 	def eq(self,instring):
 		return self.all()==instring
 
+	#overides================================================================
+	def append(self,x,inc=False): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
+		x = str(x)
+		if inc==False: #this will append all of x at once
+			deque.append(self,x)
+			if len(self.patterns)>0:
+				self.testAllPatterns(doCallbacks=True,retnList=False)
+		else: #do each append, one at a time, so that all patterns can be checked
+			for i in range(len(x)):
+				deque.append(self,x[i])
+				#todo do inc handling
+				if len(self.patterns)>0:
+					self.testAllPatterns(doCallbacks=True,retnList=False)
+		return self
+
+	def appendleft(self,x,inc=False): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
+		x = str(x)
+		if inc==False: #this will appendleft all of x at once
+			deque.appendleft(self,x)		
+			if len(self.patterns)>0:
+				self.testAllPatterns(doCallbacks=True,retnList=False)
+		else: #do each appendleft, one at a time, so that all patterns can be checked
+			for i in range(len(x)):
+				deque.appendleft(self,x[i])		
+				if len(self.patterns)>0:
+					self.testAllPatterns(doCallbacks=True,retnList=False)		
+		return self
+
+	def rotate(self,x,inc=1): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
+		if inc==False: #this will appendleft all of x at once
+			deque.rotate(self,x)
+			if len(self.patterns)>0:
+				self.testAllPatterns(doCallbacks=True,retnList=False)
+		else:
+			for i in range(len(x)):
+				deque.rotate(self,1) #1 at a time..
+				if len(self.patterns)>0:
+					self.testAllPatterns(doCallbacks=True,retnList=False)
+		return self
+
+	def reverse(self): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
+		deque.reverse(self)
+		if len(self.patterns)>0:
+			self.testAllPatterns(doCallbacks=True,retnList=False)
+		return self
+
 	#operators================================================================
-	def append(self,x,inc): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
-		print (x)
-		#todo do pattern handling
-		return deque.append(self,x)
+	def __eq__(self,x):
+		return self.all()==x
 
 	def __iadd__(self,x)		:
-		#todo do pattern handling
 		deque.__iadd__(self,x)
-		self.testAllPatterns(doCallbacks=True,retnList=False)
+		if len(self.patterns)>0:
+			self.testAllPatterns(doCallbacks=True,retnList=False)
 		return self
 
 	def __getitem__(self, index): #add slicing support ... its a "string" after all ;)
@@ -110,6 +160,12 @@ class fifostr(deque):
 		if isinstance(index, tuple):
 			return "".join([deque.__getitem__(self, x) for x in index]			)
 		return str(deque.__getitem__(self, index))
+	
+	def __setitem__(self, key, value):
+		deque.__setitem__(self,key, value)
+		if len(self.patterns)>0:
+			self.testAllPatterns(doCallbacks=True,retnList=False)
+		return self
 
 	#pattern handling==========================================================
 	def testPattern(self, pattern, start=0,end='e'): #test if a pattern matches btw start and end positions in fifostr
@@ -196,6 +252,11 @@ class fifostr(deque):
 	def numPatterns(self):	 #show number of patterns in the search dictionary
 		return len(self.patterns)
 
+	#version info
+	def ver(self):
+		return 	{
+					"version" : "1.0"					
+				}
 """
 #see examples.py for complete examples in use, including using patterns 
 #these examples commented out below are just for getting started.

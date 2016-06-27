@@ -28,20 +28,26 @@ def addPattern: (pattern, function, opt_name_string) #default is class_var "matc
 ## Todo:
 	[ ] constructor, take log-function #as in logging each event to log function
 	[ ] add/del log-function
-	[ ] pip install
+	[ ] pip installer
 	[ ] tests.py / unit tests  #in tests directory
 	[ ] check all functions have comments
 	[ ] 
 	[x] check Python 2.7+ and Python 3+ compatibility with tests
-	[ ] .eqHead, .eqTail, .eq --> accept str or regex?
+	[0] .eqHead, .eqTail, .eq --> accept str or regex #too complicate for now.. just use .all() etc
 	[ ] test pattern add/del/triggers
-	[ ]operator overloads
-		+
-		+=
-		append 	#with default inc=False 
-		appendl #with default inc=False
+	[ ] operator overloads #all currently not fully tested
+	[ ] operators behave same as their base-class deque counter parts (e.g. see how list[] works realtive to str casting)
+	[ ] __iadd__ (+=)
+	[ ] __eq__ (=)
+	[ ] append 		#with default inc=False 
+	[ ] appendleft  #with default inc=False
+	[ ] pop
+	[ ] popleft
+	[ ] reverse
+	[ ] rotate
+	[ ] __set_item__ #directly change one item (?)
 	[ ]	proper markdown
-	[ ]add pydoc strings to each function
+	[ ] add pydoc strings to each function
 
 ## features list
 	[x] head
