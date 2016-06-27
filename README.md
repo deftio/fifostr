@@ -103,9 +103,18 @@ for quick usage see
 see __main__ in example.py file
 
 for test coverage look in the /tests directory
+to run tests you will need pytest installed.
+#### on Ubuntu:
+    pip install -U pytest # or
+    easy_install -U pytest
+    #more info at pytest.org  for installation on other OSes
+
+    cd to the tests directory
+    run
+    py.test
 
 ### Release History
-* 0.1.0 Initial release
+*1.0.0 Initial release
 
 ### License
 Opensource for all purposes as long as attribution is given. 
