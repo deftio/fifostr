@@ -171,6 +171,8 @@ class fifostr(deque):
 	def testPattern(self, pattern, start=0,end='e'): #test if a pattern matches btw start and end positions in fifostr
 		if (end=='e'):
 			end=len(self)
+		if (end < 0):
+			end = len(self)+end
 		s=self[start:end]		
 		pt = self.typeStr(pattern)
 		#cheesy dynamic type handling here...  

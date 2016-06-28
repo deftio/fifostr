@@ -53,20 +53,20 @@ def main():
     # the eqhead and eqtail functions allow string compares against
     # the head or the tail
 
-    myFifoStr.eqhead("3456")= True
-    myFifoStr.eqhead("567")= False
-    myFifoStr.eqtail("4567")= True
-    myFifoStr.eqtail("abc")= False
+    myFifoStr.eqhead("3456")    #True
+    myFifoStr.eqhead("567")     #False
+    myFifoStr.eqtail("4567")    #True
+    myFifoStr.eqtail("abc")     #False
 
     #test a  string pattern directly
-    print ("myFifoStr.testPattern('67890')",myFifoStr.testPattern('67890'))
+    myFifoStr.testPattern('67890') #False
     
     #test a regex pattern directly
     r1=re.compile("[0-9]+")
-    print ("r1=re.compile([0-9]+)\nmyFifoStr.testPattern(r1)",myFifoStr.testPattern(r1))
+    myFifoStr.testPattern(r1)   #True
 
     r2=re.compile("[a-z]+")
-    print ("r2=re.compile([a-z]+)\nmyFifoStr.testPattern(r2)",myFifoStr.testPattern(r2))
+    myFifoStr.testPattern(r2)   #False
 
     #adding patterns
     p1 = myFifoStr.addPattern("234",logf,label="234 was here") #integer index returned managing pattern 
