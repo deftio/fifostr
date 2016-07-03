@@ -5,34 +5,35 @@ a small python lib for treating strings as fifos with callback-based pattern mat
 (c) 2011 manu chatterjee    deftio (at) deftio.com
 
 
-fifostr (First In First Out String) is a small python originally used for combining  deque & string based operations for an embedded terminal program.  It allows pieces of a string to be treated in a mutable way with operations that you would expect from a bi-directional list such as insertion at either end and adding/removing N chars from either end.
+fifostr (First In First Out String) is a small python library originally used for combining deque with pattern-trigger operations for an embedded terminal program.  It allows pieces of a string to be treated in a mutable way with operations that you would expect from a bi-directional list such as insertion at either end and adding/removing N chars from either end and allows patterns
 
-fifostr also allows you to add / remove patterns which can trigger a user supplied function (E.g. if the pattern is "seen" then trigger the function).  Patterns can be strings, regexes or user-supplied-functions. A pattern consists of:
+fifostr pattern matching and triggering allow you to add / remove patterns which can call a user supplied function (E.g. if the pattern is "seen" then trigger the function).  Patterns can be strings, regexes or user-supplied-functions. A pattern consists of:
   * pattern: string <or> compiled regex <or> user-supplied-parser-function
   * label: user supplied 'name' for this pattern
   * start index : position in fifostr to begin pattern match.  default is 0
-  * stop index : position in fifostr to end pattern match.  default is end of fifostr
+  * stop index : position in fifostr to end pattern match.  default is end of fifostr.  the letter 'e' has special meaning as end of string no matter the length
   * callback_fn : called if pattern is found, fifostr(start:end) is passed to the callback fn
   * active : default is True, sets whether this pattern should be actively looked for
 
 There is nothing really profound here -- one can argue its not worth its own repo. Originally a lighter version of this was used in a python serial terminal program dioterm (which allowed the serial terminal to parse commands sent/received by both sides).  
 
 Cheers-
-MC
+Manu
 
 ### Installation & usage
 from fifostr import fifostr  #include this statement with a path to fifostr.py
-fifostr.py is compatible (without mods) with both python 2.7+ and python 3.* 
+fifostr.py is compatible (without mods) with both python 2.7+ and python 3.x and is tested against both
 
 ### Functionality List
 allows a string which is treated as a deque (fifo) object with:
   * add/remove chars or strings at either end 
   * use slices, lists, or tuples to retrieve members (just like a real str object) 
-  * get head/tail (as a str)
+  * get head/tail (returns as a str)
   * match head/tail  --> match a supplied string to either the head or tail
   * add/del/get patterns  --> pattern can be string | regex | user_supplied_parser any of which triggers user supplied callback_fn
-    * all patterns can look at either the whole fifostr or any subset e.g. addPattern("foo",myCallback,2,5) --> only looks for "foo" between positions 2 and 5 in the fifostr
+    * all patterns can look at either the whole fifostr or any subset e.g. addPattern("foo",myCallback,2,5,"bar") --> only looks for "foo" between positions 2 and 5 in the fifostr object and will call myCallback with ("foo","bar")
     * all patterns have optional label which can be used for logging purposes (eg. when pattern found, in addition to callback, emit label)
+    * user supplied callback_fn is called with both the string-match section and the label
   * clear all patterns --> removes patterns from processing
   * get/setPattern Active/Inactive  --> allows a stored pattern to set on or off
   * Python 2.7+, Python 3+ support with no mods
