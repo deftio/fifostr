@@ -32,10 +32,10 @@ from collections import deque, Iterable
 import re 
 import itertools
 
-#Simple constant ENUM style generator used for indexing internal pattern storage array
+#Simple constant ENUM style generator used for indexing internal storage array
 def enum(**enums):
     return type('Enum', (), enums)
-PATIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used internally
+PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used internally
 
 
 #Simple FIFO (First-In-First-Out) for strings --> allows rolling FIFO of last n chars seen
@@ -151,14 +151,27 @@ class fifostr(deque):
 			self.testAllPatterns(doCallbacks=True,retnList=False)
 		return self
 
-	def __getitem__(self, index): #add slicing support ... its a "string" after all ;)
+	def __getitem__(self, index): #add slicing support ... its a "string" after all ;)		
 		#print("--->",index,type(index)) #debug
 		if isinstance(index, slice):
-			return "".join(itertools.islice(self, index.start, index.stop, index.step))
+			s = index.start
+			e = index.stop
+			if (e=='$'): # the character "$" is used to specify end-of-string anchor in regex, so also allowed here
+				e=len(self)-1
+			if (e < 0):
+				e = len(self)+e  # the character "^" is used to specifiy start-of-string anchor in regex, so also allowed here
+			if (s=='^'): 
+				s=0
+			return "".join(itertools.islice(self, s, e, index.step))
 		if isinstance(index, list):
 			return "".join([deque.__getitem__(self, x) for x in index])
 		if isinstance(index, tuple):
-			return "".join([deque.__getitem__(self, x) for x in index]			)
+			return "".join([deque.__getitem__(self, x) for x in index])
+		if isinstance(index, str):
+			if index == '$':
+				index = len(self)-1
+			if index == "^":
+				index = 0
 		return str(deque.__getitem__(self, index))
 	
 	def __setitem__(self, key, value):
@@ -168,11 +181,11 @@ class fifostr(deque):
 		return self
 
 	#pattern handling==========================================================
-	def testPattern(self, pattern, start=0,end='e'): #test if a pattern matches btw start and end positions in fifostr
-		if (end=='e'):
-			end=len(self)
-		if (end < 0):
-			end = len(self)+end
+	def testPattern(self, pattern, start=0,end='$'): #test if a pattern matches btw start and end positions in fifostr
+		if start == '^':
+			start = 0
+		if end == '$':
+			end = len(self)-1
 		s=self[start:end]		
 		pt = self.typeStr(pattern)
 		#cheesy dynamic type handling here...  
@@ -189,24 +202,21 @@ class fifostr(deque):
 
 	def testAllPatterns(self,doCallbacks=False,retnList=True): #checks all active patterns, returns result as list [index,label,<result>]
 		l = []
-		for i in self.patterns:
-			if (self.patterns[i][PATIDX.ACTIVE]): #is an active pattern 
-				e = self.patterns[i][PATIDX.END]
-				if e == 'e':
-					e=len(self)
-				r=self.testPattern(self.patterns[i][PATIDX.PATTERN],self.patterns[i][PATIDX.START],e)
-				l.append([i,self.patterns[i][PATIDX.LABEL],r])
+		for i in self.patterns: #todo replace with map()
+			if (self.patterns[i][PIDX.ACTIVE]): #is an active pattern 
+				r=self.testPattern(self.patterns[i][PIDX.PATTERN],self.patterns[i][PIDX.START] ,self.patterns[i][PIDX.END])
+				l.append([i,self.patterns[i][PIDX.LABEL],r])
 				if (doCallbacks):
 					if r:
-						self.patterns[i][PATIDX.CALLBACKFN](self[self.patterns[i][PATIDX.START]:e],self.patterns[i][PATIDX.LABEL])
+						self.patterns[i][PIDX.CALLBACKFN](self[self.patterns[i][PIDX.START]:self.patterns[i][PIDX.END]],self.patterns[i][PIDX.LABEL])
 		if retnList:
 			return l
 		return len(l) #if not returning list, then return the # of matched patterns
 
-	def addPattern(self, pattern, callbackfn, start=0, end='e',label="",active=True): #returns index to stored pattern
+	def addPattern(self, pattern, callbackfn, start=0, end='$',label="",active=True): #returns index to stored pattern
 		n = self.patternIdx
 		self.patterns[n] = [pattern,start,end,callbackfn,label,active] #note order is important since used elsewhere
-		#PATIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5)  # see declaration above class def
+		#PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5)  # see declaration above class def
 		self.patternIdx += 1
 
 		return n
@@ -225,22 +235,22 @@ class fifostr(deque):
 		r=[]
 		if self.typeStr(label)=="str":
 			for i in self.patterns:
-				if self.patterns[i][PATIDX.LABEL] == label:
+				if self.patterns[i][PIDX.LABEL] == label:
 					r.append(list(self.patterns[i]))
 		elif self.typeStr(label)=="regex":
 			for i in self.patterns:
-				if label.search(self.patterns[i][PATIDX.LABEL]) != None:
+				if label.search(self.patterns[i][PIDX.LABEL]) != None:
 					r.append(list(self.patterns[i]))
 		return r
 
 	def setPatternActiveState(self,index,state): #set a pattern's active state
 		if (index in self.patterns):
-			self.patterns[index][PATIDX.ACTIVE] = state==True
+			self.patterns[index][PIDX.ACTIVE] = state==True
 		return state==True
 
 	def getPatternActiveState(self,index): #see if a pattern is active or not
 		if (index in self.patterns):
-			return self.patterns[index][PATIDX.ACTIVE]
+			return self.patterns[index][PIDX.ACTIVE]
 		return -1 #error in index
 
 
@@ -259,32 +269,3 @@ class fifostr(deque):
 		return 	{
 					"version" : "1.0"					
 				}
-"""
-#see examples.py for complete examples in use, including using patterns 
-#these examples commented out below are just for getting started.
-def main():
-	#simple examples...
-	myFifoStr=fifostr(5) #create a fifostr of 5 characters length 
-	print "myFifoStr=fifiostr(5) ==>",myFifoStr
-	myFifoStr+='1234567'
-	print "print myFifoStr+='1234567' ==>",myFifoStr
-	print "myFifoStr.head(3)= ",myFifoStr.head(3)
-	print "myFifoStr.tail(4)= ",myFifoStr.tail(4)
-	print "myFifoStr.head(10)=",myFifoStr.head(10)
-	print "myFifoStr.tail(10)=",myFifoStr.tail(10)
-	print "len(myFifoStr)=",len(myFifoStr)
-	print "myFifoStr.eqhead(\"3456\")=",myFifoStr.eqhead("3456")
-	print "myFifoStr.eqhead(\"567\")=",myFifoStr.eqhead("567")
-	print "myFifoStr.eqtail(\"4567\")=",myFifoStr.eqtail("4567")
-	print "myFifoStr.eqtail(\"abc\")=",myFifoStr.eqtail("abc")
-	myFifoStr+='890'
-	print "myFifoStr+='890 ===>'",myFifoStr
-	print "myFifoStr.head(3)= ",myFifoStr.head(3)
-	print "myFifoStr.tail(4)= ",myFifoStr.tail(4)
-	print "myFifoStr.head(10)=",myFifoStr.head(10)
-	print "myFifoStr.tail(10)=",myFifoStr.tail(10)
-	
-
-if __name__ == '__main__':
-    main()
-"""

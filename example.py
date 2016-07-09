@@ -136,7 +136,7 @@ def main():
 	#and finally demonstrate that patterns auto-trigger when items inserted in fifostr .. which afterall
 	#is the point of the whole thing.. ;)
 	print("\n fifo operations ============")
-	for c in '01234567890abcdefghijklmnop':
+	for c in '01234567890abcdefghijklmnop':  #show using inc which accomplishes same thing
 		myFifoStr += c
 
 	myFifoStr+= 'abcdefghi'
