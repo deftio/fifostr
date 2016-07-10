@@ -4,9 +4,9 @@ a small python lib for treating strings as fifos with callback-based pattern mat
 
 (c) 2011 manu chatterjee    deftio (at) deftio.com
 
-fifostr (First In First Out String) is a small python library originally used for combining deque with pattern-trigger operations for an embedded terminal program.  It allows pieces of a string to be treated in a mutable way with operations that you would expect from a bi-directional list such as insertion at either end and adding/removing N chars from either end and allows patterns
+fifostr (First In First Out String) is a small python library originally used for combining deque with pattern-trigger operations for an embedded terminal program.  It allows pieces of a string to be treated in a mutable way with operations that you would expect from a bi-directional list such as insertion at either end and adding/removing N chars from either end.  
 
-fifostr pattern matching and triggering allow you to add / remove patterns which can call a user supplied function (E.g. if the pattern is "seen" then trigger the function).  Patterns can be strings, regexes or user-supplied-functions. A pattern consists of:  
+fifostr has built-in pattern matching and triggering.  Simply add / remove patterns which can call a user supplied function (E.g. if the pattern is "seen" then trigger the function).  Patterns can be strings, regexes or user-supplied-functions. A pattern consists of:  
   * pattern: string <or> compiled regex <or> user-supplied-parser-function  
   * label: user supplied 'name' for this pattern  
   * start index : position in fifostr to begin pattern match.  default is 0  
@@ -36,6 +36,7 @@ allows a string which is treated as a deque (fifo) object with:
         --> only looks for "foo" between positions 2 and 5 in the fifostr   object and will call myCallback with ("foo","bar")  
     * all patterns have optional label which can be used for logging purposes (eg. when pattern found, in addition to callback, emit label)  
     * user supplied callback_fn is called with both the string-match section and the label  
+    * patterns can be added/deleted from the list of patterns "watching" the fifostr content
   * clear all patterns --> removes patterns from processing  
   * get/setPattern Active/Inactive  --> allows a stored pattern to set on or off  
   * Python 2.7+, Python 3+ support with no mods  
@@ -74,7 +75,7 @@ def main():
 
     #more generally we can add (and remove) patterns which will scan and trigger a call back everytime the fifostr 
     #internal content changes (whether adding or deleting chars from either end or even rotating/reversing the fifstr object)
-      
+
     #adding patterns
     p1 = myFifoStr.addPattern("234",logf,label="234 was here") #integer index returned managing pattern 
     p2 = myFifoStr.addPattern("67890",logf,label="67890 detected")

@@ -44,6 +44,7 @@ PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used in
 #the function takes a string, returns a bool
 
 class fifostr(deque):
+
 	def __init__(self, size=None):
 		super( fifostr, self ).__init__(maxlen=size) #inheritance from deque
 		self.patterns 	= {} #dict of patterns to search for
@@ -124,7 +125,7 @@ class fifostr(deque):
 		return self
 
 	def rotate(self,x,inc=1): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
-		if inc==False: #this will appendleft all of x at once
+		if inc==False: #this will rotate all of x at once
 			deque.rotate(self,x)
 			if len(self.patterns)>0:
 				self.testAllPatterns(doCallbacks=True,retnList=False)
@@ -133,6 +134,18 @@ class fifostr(deque):
 				deque.rotate(self,1) #1 at a time..
 				if len(self.patterns)>0:
 					self.testAllPatterns(doCallbacks=True,retnList=False)
+		return self
+
+	def pop(self): 
+		deque.pop(self)
+		if len(self.patterns)>0:
+			self.testAllPatterns(doCallbacks=True,retnList=False)
+		return self
+
+	def popleft(self): 
+		deque.popleft(self)
+		if len(self.patterns)>0:
+			self.testAllPatterns(doCallbacks=True,retnList=False)
 		return self
 
 	def reverse(self): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
@@ -175,6 +188,7 @@ class fifostr(deque):
 		return str(deque.__getitem__(self, index))
 	
 	def __setitem__(self, key, value):
+		value = str(value)
 		deque.__setitem__(self,key, value)
 		if len(self.patterns)>0:
 			self.testAllPatterns(doCallbacks=True,retnList=False)
