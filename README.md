@@ -86,6 +86,23 @@ def main():
 
     #patterns can be set active/inactive via pattern management fns 
     myFifoStr.setPatternActiveState(p1,False) #based on index returned from addPattern
+
+    #now show searching for stored pattern matchers in the pattern dict
+    #this is not searching the fifo-string itself, just the stored patterns that we have entered
+    print("find pattern by label 'foo':",myFifoStr.findPatternByLabel("foo")) #no matches returns empty list
+    print("find pattern by label '234 hit':",myFifoStr.findPatternByLabel("234 hit")) #shows match
+    print("find pattern by label using regex '[rf][0-9]':")
+    pp.pprint(myFifoStr.findPatternByLabel(re.compile("[rf][0-9]")))
+
+    #and finally demonstrate that patterns auto-trigger when items inserted in fifostr .. which afterall
+    #is the point of the whole thing.. ;)
+    print("\n fifo operations ============")
+    for c in '01234567890abcdefghijklmnop':  #show using inc which accomplishes same thing
+        myFifoStr += c
+
+    myFifoStr+= 'abcdefghi'
+    print (myFifoStr.all())
+
 ```
 
 ### Notes  

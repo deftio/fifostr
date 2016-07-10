@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-	fifostr.py - A FIFO for strings derived from deque
+	fifostr.py - A FIFO for strings derived from deque with pattern match trigger capability
 	
 	@copy Copyright (C) <2012>  <M. A. Chatterjee>
 	
@@ -124,7 +124,7 @@ class fifostr(deque):
 					self.testAllPatterns(doCallbacks=True,retnList=False)		
 		return self
 
-	def rotate(self,x,inc=1): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
+	def rotate(self,x,inc=False): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
 		if inc==False: #this will rotate all of x at once
 			deque.rotate(self,x)
 			if len(self.patterns)>0:
@@ -144,6 +144,12 @@ class fifostr(deque):
 
 	def popleft(self): 
 		deque.popleft(self)
+		if len(self.patterns)>0:
+			self.testAllPatterns(doCallbacks=True,retnList=False)
+		return self
+
+	def remove(self,value): 
+		deque.remove(self,value)
 		if len(self.patterns)>0:
 			self.testAllPatterns(doCallbacks=True,retnList=False)
 		return self
