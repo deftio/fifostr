@@ -44,7 +44,7 @@ PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used in
 #the function takes a string, returns a bool
 
 class fifostr(deque):
-	def __init__(self, size):
+	def __init__(self, size=None):
 		super( fifostr, self ).__init__(maxlen=size) #inheritance from deque
 		self.patterns 	= {} #dict of patterns to search for
 		self.patternIdx = 0
@@ -156,11 +156,11 @@ class fifostr(deque):
 		if isinstance(index, slice):
 			s = index.start
 			e = index.stop
-			if (e=='$'): # the character "$" is used to specify end-of-string anchor in regex, so also allowed here
-				e=len(self)-1
+			if (e=='$') or (e== None): # the character "$" is used to specify end-of-string anchor in regex, so also allowed here
+				e=len(self)
 			if (e < 0):
 				e = len(self)+e  # the character "^" is used to specifiy start-of-string anchor in regex, so also allowed here
-			if (s=='^'): 
+			if (s=='^') or (s==None): 
 				s=0
 			return "".join(itertools.islice(self, s, e, index.step))
 		if isinstance(index, list):
@@ -169,7 +169,7 @@ class fifostr(deque):
 			return "".join([deque.__getitem__(self, x) for x in index])
 		if isinstance(index, str):
 			if index == '$':
-				index = len(self)-1
+				index = len(self)
 			if index == "^":
 				index = 0
 		return str(deque.__getitem__(self, index))

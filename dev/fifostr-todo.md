@@ -26,7 +26,7 @@
 	[x] operators support slicing, indexing
 	[0] typeStr operator is "hidden" feature ## Todo: move test from example.py to tests dir
 	[ ] constructor, take log-function #as in logging each event to log function
-	[ ] length indefinite support
+	[x] length indefinite support  #eg z=fifostr()  produces a fifostr of indefinite length
 	[ ] add/del log-function
 	[ ] pip installer
 	[ ] tests.py / unit tests  #in tests directory
@@ -36,8 +36,8 @@
 	[x] test pattern add/del/triggers
 	[ ] operator overloads #all currently not fully tested
 	[ ] operators behave same as their base-class deque counter parts (e.g. see how list[] works realtive to str casting)
-	[ ] __iadd__ (+=)
-	[ ] __eq__ (==)
+	[x] __iadd__ (+=)
+	[x] __eq__ (==)
 	[ ] append 		#with default inc=False  (increases fifostr by adding item on right)
 	[ ] appendleft  #with default inc=False  (increases fifostr by adding item on left)
 	[ ] pop 		#removes item from right (returns right-most item, decreases fifostr by 1 item)
@@ -50,8 +50,8 @@
 	[ ] add pydoc strings to each function  
 	[ ] add,rotate, etc accept case where Inc=True and item is not iterable?  
 	[ ] document callback function parameters (e.g. match str passed, label passed)  
-	[ ] add bitbuck compliant double spaces at end of each line in readme  
-	[ ] allow ^ and $ to be used as anchors for any pattern 
+	[x] add bitbuck compliant double spaces at end of each line in readme  
+	[x] allow ^ and $ to be used as anchors for any pattern 
 	
 
 
