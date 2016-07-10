@@ -16,8 +16,9 @@ fifostr has built-in pattern matching and triggering.  Simply add / remove patte
 
 There is nothing really profound here -- one can argue its not worth its own repo. Originally a lighter version of this was used in a python serial terminal program dioterm (which allowed the serial terminal to parse commands sent/received by both sides).  
 
-Cheers-
-Manu
+cheers-
+manu
+
 
 ### Installation
 ```
@@ -25,7 +26,7 @@ pip install fifostr # or just pull fifostr.py from the source repository and put
 ```
 
 
-### Functionality List  
+### Functionality   
 allows a string which is treated as a deque (fifo) object with:  
   * add/remove chars or strings at either end   
   * use slices, lists, or tuples to retrieve members (just like a real str object)   

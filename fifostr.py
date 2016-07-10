@@ -44,14 +44,39 @@ PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used in
 #the function takes a string, returns a bool
 
 class fifostr(deque):
-
 	def __init__(self, size=None):
+		"""
+		fifostr is a deque derived string class which has pattern matching abilities when new chars
+		are added to its internal storage.
+
+		fifostr may be unbounded in length as in 
+		myFifoStr = fifostr()
+
+		or may be set to a fixed length as in
+		myFifoStr = fifostr(10)   #sets a fifostr object with a fixed length of 10 chars
+
+		patterns can be strings, regular expressions, or user supplied parsers.  when a character is added to 
+		fifostr each stored pattern is checked to see if a match is found.  If a match is found then a user supplied
+		callback function is invoked.  Any number of patterns (which can be overlapping) can trigger the supplied
+		callback functions.
+
+		Args:
+		    size (int, optional): set size of the fifostr object.  unbounded if omitted.
+		"""
 		super( fifostr, self ).__init__(maxlen=size) #inheritance from deque
 		self.patterns 	= {} #dict of patterns to search for
 		self.patternIdx = 0
 
-	#hackish internal typeOf Operator... takes certain types and returns string equivalent
 	def typeStr(self,x):
+		"""
+		returns the type of an entity as a str.  used internally for pattern match storage and logic
+
+		Args:
+			x: entity to find the type of
+
+		Returns:
+			str: entity type as a string
+		"""
 		xt = str(type(x))
 		def f(): return
 		t = {
@@ -67,37 +92,109 @@ class fifostr(deque):
 			return t[xt]
 		return xt
 
-	#checker for iterability for some ops.  actually I was just very iterable when I realised this 
-	#wasn't a built in in the language  ;)
 	def iterable(self,obj):
-	    return isinstance(obj, collections.Iterable)
+		"""
+		checker for iterability for some ops.  actually I was just very iterable when I realised this 
+		wasn't a built in in the language  ;)
+
+		Args:
+			obj : object to make iterable
+
+		Returns:
+			bool: whether object is iterable
+		"""
+		return isinstance(obj, collections.Iterable)
 
     #head,tail,all operations ==============================================
 	def head(self,l=1):
+		"""
+		fetch beginning n chars of fifostr
+
+		Args:
+			l (int, optional) : number of chars of beginning of string to get. defaults to 1
+		Returns:
+			str
+		"""
 		if len(self)<l: 
 		    l=len(self)
 		return "".join([self[i] for i in range(l)])
     
 	def tail(self,l=1):
+		"""
+		get last n chars of fifostr
+
+		Args:
+			l (int, optional) : number of chars of beginning of string to get. defaults to 1
+
+		Returns:
+			str
+		"""
 		if len(self)<l: 
 		    l=len(self)
 		return "".join([self[i] for i in range(len(self)-l,len(self))])
     
 	def all(self):
+		"""
+		get all chars of fifostr as a str
+
+		Args:
+			none
+
+		Returns:
+			str
+		"""
 		return "".join(self)
 
 	#simple tests for equality at head/tail/all given a string ===============
 	def eqhead(self,instring):
+		"""
+		test if a string matches the beginning chars of the fifostr
+
+		Args:
+			instring (str) : str to compare head to
+
+		Returns:
+			bool: True if exact match else False
+		"""		
 		return self.head(len(instring))==instring    
     
 	def eqtail(self,instring):
+		"""
+		test if a string matches the end chars of the fifostr
+
+		Args:
+			instring (str) : str to compare tail to
+
+		Returns:
+			bool: True if exact match else False
+		"""				
 		return self.tail(len(instring))==instring
 
 	def eq(self,instring):
+		"""
+		test if a string matches entire fifostr
+
+		Args:
+			instring (str) : str to compare entire fifostr to
+
+		Returns:
+			bool: True if exact match else False
+		"""				
 		return self.all()==instring
 
 	#overides================================================================
-	def append(self,x,inc=False): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
+	def append(self,x,inc=False): 
+		"""
+		add char(s) to the right end of the fifostr
+
+		Args:
+			x (str) : str to add
+			inc (bool) : whether to ingest all of x at once (default) or if True add each char in x one at a time.
+				this allows each permutation of fifostr to be tested against all active stored patterns
+
+		Returns:
+			fifostr object (mutable)
+		"""		
 		x = str(x)
 		if inc==False: #this will append all of x at once
 			deque.append(self,x)
@@ -111,7 +208,18 @@ class fifostr(deque):
 					self.testAllPatterns(doCallbacks=True,retnList=False)
 		return self
 
-	def appendleft(self,x,inc=False): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
+	def appendleft(self,x,inc=False): 
+		"""
+		add char(s) to the left end of the fifostr
+
+		Args:
+			x (str) : str to add
+			inc (bool) : whether to ingest all of x at once (default) or if True add each char in x one at a time.
+				this allows each permutation of fifostr to be tested against all active stored patterns
+
+		Returns:
+			fifostr object (mutable)
+		"""
 		x = str(x)
 		if inc==False: #this will appendleft all of x at once
 			deque.appendleft(self,x)		
@@ -124,7 +232,18 @@ class fifostr(deque):
 					self.testAllPatterns(doCallbacks=True,retnList=False)		
 		return self
 
-	def rotate(self,x,inc=False): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
+	def rotate(self,x,inc=False): 
+		"""
+		rotate the chars in fifostr by x positions.  chars moved off the right end are put back on the left.
+
+		Args:
+			x (int) : number of positions to rotate
+			inc (bool) : whether to rorate all of x at once (default) or if True rorate each char one at a time.
+				this allows each permutation of fifostr to be tested against all active stored patterns
+
+		Returns:
+			fifostr object (mutable)
+		"""
 		if inc==False: #this will rotate all of x at once
 			deque.rotate(self,x)
 			if len(self.patterns)>0:
@@ -137,24 +256,63 @@ class fifostr(deque):
 		return self
 
 	def pop(self): 
+		"""
+		return the right most char from fifostr and shorten fifostr by 1 entry
+		after pop() all active stored patterns are checked for matches
+
+		Args:
+			None
+
+		Returns:
+			fifostr object (mutable)
+		"""
 		deque.pop(self)
 		if len(self.patterns)>0:
 			self.testAllPatterns(doCallbacks=True,retnList=False)
 		return self
 
 	def popleft(self): 
+		"""
+		return the left most char from fifostr and shorten fifostr by 1 entry
+		after pop() all active stored patterns are checked for matches
+
+		Args:
+			None
+
+		Returns:
+			fifostr object (mutable)
+		"""		
 		deque.popleft(self)
 		if len(self.patterns)>0:
 			self.testAllPatterns(doCallbacks=True,retnList=False)
 		return self
 
 	def remove(self,value): 
+		"""
+		remove all occurences of the a specific value from fifostr and shorten length by number of occurrences found
+
+		Args:
+			value (str) : value to remove (string of length 1 char)
+
+		Returns:
+			fifostr object (mutable)
+		"""		
 		deque.remove(self,value)
 		if len(self.patterns)>0:
 			self.testAllPatterns(doCallbacks=True,retnList=False)
 		return self
 
-	def reverse(self): #inc is bool, whether to ingest all of x at once (normal) or 1 at a time
+	def reverse(self): 
+		"""
+		flip fifostr about its center
+		after reversing all active stored patterns are checked for matches
+
+		Args:
+			None
+
+		Returns:
+			fifostr object (mutable)
+		"""		
 		deque.reverse(self)
 		if len(self.patterns)>0:
 			self.testAllPatterns(doCallbacks=True,retnList=False)
@@ -162,16 +320,42 @@ class fifostr(deque):
 
 	#operators================================================================
 	def __eq__(self,x):
+		"""
+		test if a string matches fifostr
+
+		Args:
+			x (str): string to match
+
+		Returns:
+			True if match, else False
+		"""	
 		return self.all()==x
 
-	def __iadd__(self,x)		:
+	def __iadd__(self,x):
+		"""
+		add a string via the += operator
+
+		Args:
+			x (str): string to add
+
+		Returns:
+			fifostr object (mutable)
+		"""			
 		deque.__iadd__(self,x)
 		if len(self.patterns)>0:
 			self.testAllPatterns(doCallbacks=True,retnList=False)
 		return self
 
-	def __getitem__(self, index): #add slicing support ... its a "string" after all ;)		
-		#print("--->",index,type(index)) #debug
+	def __getitem__(self, index): 
+		"""
+		get a substring from fifostr operator.  supports int index, slices, and lists
+
+		Args:
+			index (str): string to match
+
+		Returns:
+			str
+		"""	
 		if isinstance(index, slice):
 			s = index.start
 			e = index.stop
@@ -194,6 +378,18 @@ class fifostr(deque):
 		return str(deque.__getitem__(self, index))
 	
 	def __setitem__(self, key, value):
+		"""
+		set char in fifostr supplied position
+		myFifostr[5] = 'm' #set fifostr position 5 to the character 'm'
+
+		Args:
+			key (int): index of char to set
+			value (str): character value for fifostr[key] to be set to
+
+
+		Returns:
+			fifostr (mutable)
+		"""	
 		value = str(value)
 		deque.__setitem__(self,key, value)
 		if len(self.patterns)>0:
@@ -201,7 +397,22 @@ class fifostr(deque):
 		return self
 
 	#pattern handling==========================================================
-	def testPattern(self, pattern, start=0,end='$'): #test if a pattern matches btw start and end positions in fifostr
+	def testPattern(self, pattern, start=0,end='$'):
+		"""
+		test if a pattern matches fifostr between supplied indeces
+
+		Args:
+			pattern (str or regex or function): pattern to match.  if str then it looks for an exact match. if
+			regex then it looks to see if there is atleast one match.  if function it passes fifstr (as a str)
+			to the function and expects function to equate to a boolean value.
+
+			start (int or '^'): beginning position to look for matches.  default is 0.  the "^" means start of fifostr 
+			end (int or '$'): end position to look for matches.  default is $.  the "$" means start of fifostr. $ is useful since if the fifostr maxlen is changed
+			the $ param will still insure end-matching is still completed.
+
+		Returns:
+			True if match, else False
+		"""		
 		if start == '^':
 			start = 0
 		if end == '$':
@@ -220,7 +431,19 @@ class fifostr(deque):
 		#else pattern is not allowable type...
 		return False
 
-	def testAllPatterns(self,doCallbacks=False,retnList=True): #checks all active patterns, returns result as list [index,label,<result>]
+	def testAllPatterns(self,doCallbacks=False,retnList=True): 
+		"""
+		test all patterns stored in fifostr object for matches.
+
+		Args:
+			doCallbacks (bool, optional) : test each pattern and call the associated callback function if the pattern matches.
+				default is False
+
+			retnList (bool, optional) : return a list of which patterns matched.
+
+		Returns:
+			if retnList is True returns list of matches else returns number of matches as int.
+		"""			
 		l = []
 		for i in self.patterns: #todo replace with map()
 			if (self.patterns[i][PIDX.ACTIVE]): #is an active pattern 
@@ -233,7 +456,31 @@ class fifostr(deque):
 			return l
 		return len(l) #if not returning list, then return the # of matched patterns
 
-	def addPattern(self, pattern, callbackfn, start=0, end='$',label="",active=True): #returns index to stored pattern
+	def addPattern(self, pattern, callbackfn, start=0, end='$',label="",active=True): 
+		"""
+		add a pattern to the fifostr internal pattern storage.
+
+		Args:
+			pattern (str or regex or function): pattern to match.  if str then it looks for an exact match. if
+			regex then it looks to see if there is atleast one match.  if function it passes fifstr (as a str)
+			to the function and expects function to equate to a boolean value.
+
+			callbackfn: a function to call when the supplied pattern is detected in fifostr object.  callback is passed the matching string (between start,end) and
+				the label (if any)
+
+			start (int or '^'): beginning position to look for matches.  default is 0.  the "^" means start of fifostr 
+			
+			end (int or '$'): end position to look for matches.  default is $.  the "$" means start of fifostr. $ is useful since if the fifostr maxlen is changed
+			the $ param will still insure end-matching is still completed.
+
+			label (str) : a label to call this match.  this label is passed to the callback_function when a match is found.
+
+			active (boolean, optional) : whether this pattern is to tested each time fifostr is modified.  default is True.
+
+
+		Returns:
+			int : index of pattern stored.  this can be used to setActiveState or to delete the pattern later.
+		"""				
 		n = self.patternIdx
 		self.patterns[n] = [pattern,start,end,callbackfn,label,active] #note order is important since used elsewhere
 		#PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5)  # see declaration above class def
@@ -241,17 +488,46 @@ class fifostr(deque):
 
 		return n
 
-	def delPattern(self,index): #remove a pattern from storage
-		if (index in self.patterns):
-			del self.patterns[index]
-		return self.numPatterns()
+	def delPattern(self,index): 
+		"""
+		delete a pattern from fifostr pattern storage
 
-	def getPattern(self,index): #retrieve a pattern from storage via its index
+		Args:
+			index (int) : id of pattern to be removed.
+
+		Returns:
+			None
+		"""
+		if (index in self.patterns):
+			#del self.patterns[index] # don't do this --> this will mess up indexes to existing patterns the user may have
+			self.patterns[index][PIDX.PATTERN]=""
+			self.patterns[index][PIDX.ACTIVE]=False
+		return None
+
+	def getPattern(self,index): 
+		"""
+		get a stored pattern 
+
+		Args:
+			index (int): index for pattern to get.  index is the one returned from
+
+		Returns:
+			True if match, else False
+		"""		
 		if (index in self.patterns):
 			return list(self.patterns[index])
 		return None		
 
 	def findPatternByLabel(self,label): #allows string or compiled regex
+		"""
+		find a pattern from fifostr pattern storage by its label
+
+		Args:
+			label (str) : label of pattern(s) to find
+
+		Returns:
+			list of matching patterns or None if not found
+		"""
 		r=[]
 		if self.typeStr(label)=="str":
 			for i in self.patterns:
@@ -263,29 +539,84 @@ class fifostr(deque):
 					r.append(list(self.patterns[i]))
 		return r
 
-	def setPatternActiveState(self,index,state): #set a pattern's active state
+	def setPatternActiveState(self,index,state): 
+		"""
+		set a pattern's active state.  If a pattern is active it will be test each time character(s) are added to fifostr else the pattern is skipped.
+
+		Args:
+			index (int) : id of pattern to set active state
+			state (bool) : True for active, False for inactive
+
+		Returns:
+			current pattern state after setting
+		"""
 		if (index in self.patterns):
 			self.patterns[index][PIDX.ACTIVE] = state==True
 		return state==True
 
-	def getPatternActiveState(self,index): #see if a pattern is active or not
+	def getPatternActiveState(self,index): 
+		"""
+		get a pattern's active state.  If a pattern is active it will be test each time character(s) are added to fifostr else the pattern is skipped.
+
+		Args:
+			index (int) : id of pattern to set active state
+
+		Returns:
+			bool: current pattern state
+		"""
 		if (index in self.patterns):
 			return self.patterns[index][PIDX.ACTIVE]
 		return -1 #error in index
 
 
 	def showPatterns(self): #get all patterns stored
+		"""
+		get a list of all the current stored patterns
+
+		Args:
+			None
+
+		Returns:
+			list of any stored patterns
+		"""
 		return dict(self.patterns) #return shallow copy of current patterns
 
-	def clearPatterns(self): #remove all patterns from pattern search dictionary
+	def clearPatterns(self): 
+		"""
+		remove all patterns from fifostr pattern storage
+
+		Args:
+			None
+
+		Returns:
+			0
+		"""
 		self.patterns={}
 		return numPatterns()
 
 	def numPatterns(self):	 #show number of patterns in the search dictionary
+		"""
+		return number of active patterns
+
+		Args:
+			None
+
+		Returns:
+			int : number of stored patterns
+		"""
 		return len(self.patterns)
 
 	#version info
 	def ver(self):
+		"""
+		ver returns the version number of this library
+
+		Args:
+			None
+
+		Returns:
+			dict: containing current version
+		"""
 		return 	{
 					"version" : "1.0"					
 				}
