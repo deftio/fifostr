@@ -19,10 +19,10 @@ There is nothing really profound here -- one can argue its not worth its own rep
 Cheers-
 Manu
 
-### Installation & usage
-pip install fifostr # or just pull fifostr.py from the source repository
-from fifostr import *  #include this statement with a path to fifostr.py  
-...your code...  
+### Installation
+```
+pip install fifostr # or just pull fifostr.py from the source repository and put in your source path  
+```
 
 
 ### Functionality List  
@@ -31,7 +31,7 @@ allows a string which is treated as a deque (fifo) object with:
   * use slices, lists, or tuples to retrieve members (just like a real str object)   
   * get head/tail (returns as a str)  
   * match head/tail  --> match a supplied string to either the head or tail  
-  * add/del/get patterns  --> pattern can be string | regex | user_supplied_parser any of which triggers user supplied callback_fn  
+  * use patterns to trigger callbacks  --> pattern can be string | regex | user_supplied_parser any of which triggers user supplied callback_fn  
     * all patterns can look at either the whole fifostr or any subset e.g. addPattern("foo",myCallback,2,5,"bar") 
         --> only looks for "foo" between positions 2 and 5 in the fifostr   object and will call myCallback with ("foo","bar")  
     * all patterns have optional label which can be used for logging purposes (eg. when pattern found, in addition to callback, emit label)  
@@ -46,7 +46,7 @@ See example.py -- same examples as here but more comments, more use cases
 ```
 from fifostr import *
 def main():
-    myFifoStr=fifostr(5) #make a fifostr of length 5
+    myFifoStr=fifostr(5) #make a fifostr of length 5 (for unlimited length omit number)
     myFifoStr+='1234567' #adds 1234567 to fifostr ... but len of fifostr is 5
                          # so only 34567 is retained
    
@@ -61,6 +61,7 @@ def main():
     myFifoStr.eqtail("4567")    #True
     myFifoStr.eqtail("abc")     #False
 
+    #fifostr.testPattern() allows you to test if the pattern is present in the fifostr object
     #test a  string pattern directly
     myFifoStr.testPattern('67890') #False
     
@@ -71,6 +72,9 @@ def main():
     r2=re.compile("[a-z]+")
     myFifoStr.testPattern(r2)   #False
 
+    #more generally we can add (and remove) patterns which will scan and trigger a call back everytime the fifostr 
+    #internal content changes (whether adding or deleting chars from either end or even rotating/reversing the fifstr object)
+      
     #adding patterns
     p1 = myFifoStr.addPattern("234",logf,label="234 was here") #integer index returned managing pattern 
     p2 = myFifoStr.addPattern("67890",logf,label="67890 detected")
