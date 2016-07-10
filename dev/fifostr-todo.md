@@ -33,7 +33,7 @@
 	[x] check Python 2.7+ and Python 3+ compatibility with tests
 	[x] .eqHead, .eqTail, .eq --> accept str or regex #too complicate for now.. just use .all() etc
 	[x] test pattern add/del/triggers
-	[ ] operator overloads #all currently not fully tested
+	[o] operator overloads #all currently not fully tested
 	[ ] operators behave same as their base-class deque counter parts (e.g. see how list[] works realtive to str casting)
 	[x] __iadd__ (+=)
 	[x] __eq__ (==)
@@ -43,7 +43,8 @@
 	[x] popleft		#removes an item from left with default inc=False  (returns left-most item, decreases fifostr by 1 item)
 	[x] reverse     #transposes each element around center
 	[x] rotate		#with default inc=False
-	[x] __set_item__ #directly change one item (?)
+	[x] remove      #remove item(s) with the supplied value
+	[x] __set_item__ #directly change one item 
 	[ ]	proper markdown for README.md
 	[ ] test and finish & fix example  portion in README.md, perhaps use example from python interpreter  
 	[ ] add pydoc strings to each function  
