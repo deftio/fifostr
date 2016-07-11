@@ -1,18 +1,22 @@
-## fifostr todo list  
-(c) 2011 manu chatterjee  
- 
-  
-## pattern consists of:
-	pattern 	: regex | str | function of pattern to trigger on
-	callbackfn 	: function to call back when pattern found
-		params are (matching_string_section) 
-	optname 	: an optional label for when the pattern is found
-	optlog		: optional to call logging fn when pattern hit (not-logged is default)
-	pos_s		: start substring position to look for in fifostr (0 is default)
-	pos_e		: end substring position to look for in fifostr (maxlen-1 is default)
-	active		: whether this pattern is currently being interrogated
+# fifostr todo list  
+(c) 2011 manu chatterjee  packaged in 2016 
 
-## features list
+this file contains some free form thinking of things needed before fifostr can be 'published' via github or pip
+
+much of the notes here are my internal thinking about what makes either a decent-enough complete module or good publishing hygene:
+e.g
+
+	- docs
+	- tests
+	- interface completeness
+	- examples
+	- lic & packaging
+
+
+
+
+ 
+## features checklist (1.0.0)
 	[x] head
 	[x] tail
 	[x] eqhead
@@ -25,16 +29,16 @@
 	[x] pattern can be user parser function
 	[x] operators support slicing, indexing
 	[0] typeStr operator is "hidden" feature ## Todo: move test from example.py to tests dir
-	
+	[ ] license.txt file
 	[x] length indefinite support  #eg z=fifostr()  produces a fifostr of indefinite length
 	[ ] pip installer
 	[ ] tests.py / unit tests  #in tests directory
-	[ ] check all functions have """docstring""" comments
+	[x] check all functions have """docstring""" comments
 	[x] check Python 2.7+ and Python 3+ compatibility with tests
 	[x] .eqHead, .eqTail, .eq --> accept str or regex #too complicate for now.. just use .all() etc
 	[x] test pattern add/del/triggers
 	[o] operator overloads #all currently not fully tested
-	[ ] operators behave same as their base-class deque counter parts (e.g. see how list[] works realtive to str casting)
+	[ ] operators behave same as their base-class deque counter parts (e.g. see how list[] etc works realtive to str casting)
 	[x] __iadd__ (+=)
 	[x] __eq__ (==)
 	[x] append 		#with default inc=False  (increases fifostr by adding item on right)
@@ -45,13 +49,21 @@
 	[x] rotate		#with default inc=False
 	[x] remove      #remove item(s) with the supplied value
 	[x] __set_item__ #directly change one item 
-	[ ]	proper markdown for README.md
+	[x]	proper markdown for README.md
 	[ ] test and finish & fix example  portion in README.md, perhaps use example from python interpreter  
-	[ ] add pydoc strings to each function  
-	[ ] document callback function parameters (e.g. match str(s,e) passed, label passed)  
+	[ ] document and check callback function parameters (e.g. match str(s,e) passed, label passed)  
 	[x] add bitbuck compliant double spaces at end of each line in readme  
 	[x] allow ^ and $ to be used as anchors for any pattern 
-	
+
+### fundamental pattern consists of:
+	pattern 	: regex | str | function of pattern to trigger on
+	callbackfn 	: function to call back when pattern found
+		params are (matching_string_section) 
+	optname 	: an optional label for when the pattern is found
+	optlog		: optional to call logging fn when pattern hit (not-logged is default)
+	pos_s		: start substring position to look for in fifostr (0 is default)
+	pos_e		: end substring position to look for in fifostr (maxlen-1 is default)
+	active		: whether this pattern is currently being interrogated
 
 
 ## future

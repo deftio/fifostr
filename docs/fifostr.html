@@ -1,0 +1,476 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module fifostr</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>fifostr</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/manu/repos/deftio-projects/fifostr/fifostr.py">/home/manu/repos/deftio-projects/fifostr/fifostr.py</a></font></td></tr></table>
+    <p><tt><a href="#fifostr">fifostr</a>.py&nbsp;-&nbsp;A&nbsp;FIFO&nbsp;for&nbsp;strings&nbsp;derived&nbsp;from&nbsp;<a href="collections.html#deque">deque</a>&nbsp;with&nbsp;pattern&nbsp;match&nbsp;trigger&nbsp;capability<br>
+&nbsp;<br>
+@copy&nbsp;Copyright&nbsp;(C)&nbsp;&lt;2012&gt;&nbsp;&nbsp;&lt;M.&nbsp;A.&nbsp;Chatterjee&gt;<br>
+&nbsp;<br>
+@author&nbsp;M&nbsp;A&nbsp;Chatterjee,&nbsp;deftio&nbsp;[at]&nbsp;deftio&nbsp;[dot]&nbsp;com<br>
+&nbsp;<br>
+This&nbsp;software&nbsp;is&nbsp;provided&nbsp;'as-is',&nbsp;without&nbsp;any&nbsp;express&nbsp;or&nbsp;implied<br>
+warranty.&nbsp;In&nbsp;no&nbsp;event&nbsp;will&nbsp;the&nbsp;authors&nbsp;be&nbsp;held&nbsp;liable&nbsp;for&nbsp;any&nbsp;damages<br>
+arising&nbsp;from&nbsp;the&nbsp;use&nbsp;of&nbsp;this&nbsp;software.<br>
+&nbsp;<br>
+Permission&nbsp;is&nbsp;granted&nbsp;to&nbsp;anyone&nbsp;to&nbsp;use&nbsp;this&nbsp;software&nbsp;for&nbsp;any&nbsp;purpose,<br>
+including&nbsp;commercial&nbsp;applications,&nbsp;and&nbsp;to&nbsp;alter&nbsp;it&nbsp;and&nbsp;redistribute&nbsp;it<br>
+freely,&nbsp;subject&nbsp;to&nbsp;the&nbsp;following&nbsp;restrictions:<br>
+&nbsp;<br>
+1.&nbsp;The&nbsp;origin&nbsp;of&nbsp;this&nbsp;software&nbsp;must&nbsp;not&nbsp;be&nbsp;misrepresented;&nbsp;you&nbsp;must&nbsp;not<br>
+claim&nbsp;that&nbsp;you&nbsp;wrote&nbsp;the&nbsp;original&nbsp;software.&nbsp;If&nbsp;you&nbsp;use&nbsp;this&nbsp;software<br>
+in&nbsp;a&nbsp;product,&nbsp;an&nbsp;acknowledgment&nbsp;in&nbsp;the&nbsp;product&nbsp;documentation&nbsp;is&nbsp;required.<br>
+&nbsp;<br>
+2.&nbsp;Altered&nbsp;source&nbsp;versions&nbsp;must&nbsp;be&nbsp;plainly&nbsp;marked&nbsp;as&nbsp;such,&nbsp;and&nbsp;must&nbsp;not&nbsp;be<br>
+misrepresented&nbsp;as&nbsp;being&nbsp;the&nbsp;original&nbsp;software.<br>
+&nbsp;<br>
+3.&nbsp;This&nbsp;notice&nbsp;may&nbsp;not&nbsp;be&nbsp;removed&nbsp;or&nbsp;altered&nbsp;from&nbsp;any&nbsp;source<br>
+distribution.<br>
+&nbsp;<br>
+#this&nbsp;class&nbsp;should&nbsp;work&nbsp;on&nbsp;either&nbsp;python&nbsp;2.7+&nbsp;or&nbsp;python&nbsp;3+&nbsp;distributions<br>
+#for&nbsp;performance&nbsp;notes&nbsp;see&nbsp;README.md</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="itertools.html">itertools</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial">Enum
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="collections.html#deque">collections.deque</a>(<a href="__builtin__.html#object">__builtin__.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="fifostr.html#fifostr">fifostr</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><strong>PIDX</strong> = <a name="PIDX">class Enum</a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>ACTIVE</strong> = 5</dl>
+
+<dl><dt><strong>CALLBACKFN</strong> = 3</dl>
+
+<dl><dt><strong>END</strong> = 2</dl>
+
+<dl><dt><strong>LABEL</strong> = 4</dl>
+
+<dl><dt><strong>PATTERN</strong> = 0</dl>
+
+<dl><dt><strong>START</strong> = 1</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="fifostr">class <strong>fifostr</strong></a>(<a href="collections.html#deque">collections.deque</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="fifostr.html#fifostr">fifostr</a></dd>
+<dd><a href="collections.html#deque">collections.deque</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="fifostr-__eq__"><strong>__eq__</strong></a>(self, x)</dt><dd><tt>test&nbsp;if&nbsp;a&nbsp;string&nbsp;matches&nbsp;<a href="#fifostr">fifostr</a><br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;(str):&nbsp;string&nbsp;to&nbsp;match<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True&nbsp;if&nbsp;match,&nbsp;else&nbsp;False</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__getitem__"><strong>__getitem__</strong></a>(self, index)</dt><dd><tt>get&nbsp;a&nbsp;substring&nbsp;from&nbsp;<a href="#fifostr">fifostr</a>&nbsp;operator.&nbsp;&nbsp;supports&nbsp;int&nbsp;index,&nbsp;slices,&nbsp;and&nbsp;lists<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;(str):&nbsp;string&nbsp;to&nbsp;match<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__iadd__"><strong>__iadd__</strong></a>(self, x)</dt><dd><tt>add&nbsp;a&nbsp;string&nbsp;via&nbsp;the&nbsp;+=&nbsp;operator<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;(str):&nbsp;string&nbsp;to&nbsp;add<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(mutable)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__init__"><strong>__init__</strong></a>(self, size<font color="#909090">=None</font>)</dt><dd><tt><a href="#fifostr">fifostr</a>&nbsp;is&nbsp;a&nbsp;<a href="collections.html#deque">deque</a>&nbsp;derived&nbsp;string&nbsp;class&nbsp;which&nbsp;has&nbsp;pattern&nbsp;matching&nbsp;abilities&nbsp;when&nbsp;new&nbsp;chars<br>
+are&nbsp;added&nbsp;to&nbsp;its&nbsp;internal&nbsp;storage.<br>
+&nbsp;<br>
+<a href="#fifostr">fifostr</a>&nbsp;may&nbsp;be&nbsp;unbounded&nbsp;in&nbsp;length&nbsp;as&nbsp;in&nbsp;<br>
+myFifoStr&nbsp;=&nbsp;<a href="#fifostr">fifostr</a>()<br>
+&nbsp;<br>
+or&nbsp;may&nbsp;be&nbsp;set&nbsp;to&nbsp;a&nbsp;fixed&nbsp;length&nbsp;as&nbsp;in<br>
+myFifoStr&nbsp;=&nbsp;<a href="#fifostr">fifostr</a>(10)&nbsp;&nbsp;&nbsp;#sets&nbsp;a&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;with&nbsp;a&nbsp;fixed&nbsp;length&nbsp;of&nbsp;10&nbsp;chars<br>
+&nbsp;<br>
+patterns&nbsp;can&nbsp;be&nbsp;strings,&nbsp;regular&nbsp;expressions,&nbsp;or&nbsp;user&nbsp;supplied&nbsp;parsers.&nbsp;&nbsp;when&nbsp;a&nbsp;character&nbsp;is&nbsp;added&nbsp;to&nbsp;<br>
+<a href="#fifostr">fifostr</a>&nbsp;each&nbsp;stored&nbsp;pattern&nbsp;is&nbsp;checked&nbsp;to&nbsp;see&nbsp;if&nbsp;a&nbsp;match&nbsp;is&nbsp;found.&nbsp;&nbsp;If&nbsp;a&nbsp;match&nbsp;is&nbsp;found&nbsp;then&nbsp;a&nbsp;user&nbsp;supplied<br>
+callback&nbsp;function&nbsp;is&nbsp;invoked.&nbsp;&nbsp;Any&nbsp;number&nbsp;of&nbsp;patterns&nbsp;(which&nbsp;can&nbsp;be&nbsp;overlapping)&nbsp;can&nbsp;trigger&nbsp;the&nbsp;supplied<br>
+callback&nbsp;functions.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;size&nbsp;(int,&nbsp;optional):&nbsp;set&nbsp;size&nbsp;of&nbsp;the&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>.&nbsp;&nbsp;unbounded&nbsp;if&nbsp;omitted.</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt><dd><tt>set&nbsp;char&nbsp;in&nbsp;<a href="#fifostr">fifostr</a>&nbsp;supplied&nbsp;position<br>
+myFifostr[5]&nbsp;=&nbsp;'m'&nbsp;#set&nbsp;<a href="#fifostr">fifostr</a>&nbsp;position&nbsp;5&nbsp;to&nbsp;the&nbsp;character&nbsp;'m'<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key&nbsp;(int):&nbsp;index&nbsp;of&nbsp;char&nbsp;to&nbsp;set<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;(str):&nbsp;character&nbsp;value&nbsp;for&nbsp;<a href="#fifostr">fifostr</a>[key]&nbsp;to&nbsp;be&nbsp;set&nbsp;to<br>
+&nbsp;<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fifostr">fifostr</a>&nbsp;(mutable)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-addPattern"><strong>addPattern</strong></a>(self, pattern, callbackfn, start<font color="#909090">=0</font>, end<font color="#909090">='$'</font>, label<font color="#909090">=''</font>, active<font color="#909090">=True</font>)</dt><dd><tt>add&nbsp;a&nbsp;pattern&nbsp;to&nbsp;the&nbsp;<a href="#fifostr">fifostr</a>&nbsp;internal&nbsp;pattern&nbsp;storage.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pattern&nbsp;(str&nbsp;or&nbsp;regex&nbsp;or&nbsp;function):&nbsp;pattern&nbsp;to&nbsp;match.&nbsp;&nbsp;if&nbsp;str&nbsp;then&nbsp;it&nbsp;looks&nbsp;for&nbsp;an&nbsp;exact&nbsp;match.&nbsp;if<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;regex&nbsp;then&nbsp;it&nbsp;looks&nbsp;to&nbsp;see&nbsp;if&nbsp;there&nbsp;is&nbsp;atleast&nbsp;one&nbsp;match.&nbsp;&nbsp;if&nbsp;function&nbsp;it&nbsp;passes&nbsp;fifstr&nbsp;(as&nbsp;a&nbsp;str)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;the&nbsp;function&nbsp;and&nbsp;expects&nbsp;function&nbsp;to&nbsp;equate&nbsp;to&nbsp;a&nbsp;boolean&nbsp;value.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callbackfn:&nbsp;a&nbsp;function&nbsp;to&nbsp;call&nbsp;when&nbsp;the&nbsp;supplied&nbsp;pattern&nbsp;is&nbsp;detected&nbsp;in&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>.&nbsp;&nbsp;callback&nbsp;is&nbsp;passed&nbsp;the&nbsp;matching&nbsp;string&nbsp;(between&nbsp;start,end)&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;label&nbsp;(if&nbsp;any)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start&nbsp;(int&nbsp;or&nbsp;'^'):&nbsp;beginning&nbsp;position&nbsp;to&nbsp;look&nbsp;for&nbsp;matches.&nbsp;&nbsp;default&nbsp;is&nbsp;0.&nbsp;&nbsp;the&nbsp;"^"&nbsp;means&nbsp;start&nbsp;of&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;(int&nbsp;or&nbsp;'$'):&nbsp;end&nbsp;position&nbsp;to&nbsp;look&nbsp;for&nbsp;matches.&nbsp;&nbsp;default&nbsp;is&nbsp;$.&nbsp;&nbsp;the&nbsp;"$"&nbsp;means&nbsp;start&nbsp;of&nbsp;<a href="#fifostr">fifostr</a>.&nbsp;$&nbsp;is&nbsp;useful&nbsp;since&nbsp;if&nbsp;the&nbsp;<a href="#fifostr">fifostr</a>&nbsp;maxlen&nbsp;is&nbsp;changed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;$&nbsp;param&nbsp;will&nbsp;still&nbsp;insure&nbsp;end-matching&nbsp;is&nbsp;still&nbsp;completed.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;label&nbsp;(str)&nbsp;:&nbsp;a&nbsp;label&nbsp;to&nbsp;call&nbsp;this&nbsp;match.&nbsp;&nbsp;this&nbsp;label&nbsp;is&nbsp;passed&nbsp;to&nbsp;the&nbsp;callback_function&nbsp;when&nbsp;a&nbsp;match&nbsp;is&nbsp;found.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;active&nbsp;(boolean,&nbsp;optional)&nbsp;:&nbsp;whether&nbsp;this&nbsp;pattern&nbsp;is&nbsp;to&nbsp;tested&nbsp;each&nbsp;time&nbsp;<a href="#fifostr">fifostr</a>&nbsp;is&nbsp;modified.&nbsp;&nbsp;default&nbsp;is&nbsp;True.<br>
+&nbsp;<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;:&nbsp;index&nbsp;of&nbsp;pattern&nbsp;stored.&nbsp;&nbsp;this&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;setActiveState&nbsp;or&nbsp;to&nbsp;delete&nbsp;the&nbsp;pattern&nbsp;later.</tt></dd></dl>
+
+<dl><dt><a name="fifostr-all"><strong>all</strong></a>(self)</dt><dd><tt>get&nbsp;all&nbsp;chars&nbsp;of&nbsp;<a href="#fifostr">fifostr</a>&nbsp;as&nbsp;a&nbsp;str<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;none<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str</tt></dd></dl>
+
+<dl><dt><a name="fifostr-append"><strong>append</strong></a>(self, x, inc<font color="#909090">=False</font>)</dt><dd><tt>add&nbsp;char(s)&nbsp;to&nbsp;the&nbsp;right&nbsp;end&nbsp;of&nbsp;the&nbsp;<a href="#fifostr">fifostr</a><br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;(str)&nbsp;:&nbsp;str&nbsp;to&nbsp;add<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inc&nbsp;(bool)&nbsp;:&nbsp;whether&nbsp;to&nbsp;ingest&nbsp;all&nbsp;of&nbsp;x&nbsp;at&nbsp;once&nbsp;(default)&nbsp;or&nbsp;if&nbsp;True&nbsp;add&nbsp;each&nbsp;char&nbsp;in&nbsp;x&nbsp;one&nbsp;at&nbsp;a&nbsp;time.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this&nbsp;allows&nbsp;each&nbsp;permutation&nbsp;of&nbsp;<a href="#fifostr">fifostr</a>&nbsp;to&nbsp;be&nbsp;tested&nbsp;against&nbsp;all&nbsp;active&nbsp;stored&nbsp;patterns<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(mutable)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-appendleft"><strong>appendleft</strong></a>(self, x, inc<font color="#909090">=False</font>)</dt><dd><tt>add&nbsp;char(s)&nbsp;to&nbsp;the&nbsp;left&nbsp;end&nbsp;of&nbsp;the&nbsp;<a href="#fifostr">fifostr</a><br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;(str)&nbsp;:&nbsp;str&nbsp;to&nbsp;add<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inc&nbsp;(bool)&nbsp;:&nbsp;whether&nbsp;to&nbsp;ingest&nbsp;all&nbsp;of&nbsp;x&nbsp;at&nbsp;once&nbsp;(default)&nbsp;or&nbsp;if&nbsp;True&nbsp;add&nbsp;each&nbsp;char&nbsp;in&nbsp;x&nbsp;one&nbsp;at&nbsp;a&nbsp;time.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this&nbsp;allows&nbsp;each&nbsp;permutation&nbsp;of&nbsp;<a href="#fifostr">fifostr</a>&nbsp;to&nbsp;be&nbsp;tested&nbsp;against&nbsp;all&nbsp;active&nbsp;stored&nbsp;patterns<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(mutable)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-clearPatterns"><strong>clearPatterns</strong></a>(self)</dt><dd><tt>remove&nbsp;all&nbsp;patterns&nbsp;from&nbsp;<a href="#fifostr">fifostr</a>&nbsp;pattern&nbsp;storage<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0</tt></dd></dl>
+
+<dl><dt><a name="fifostr-delPattern"><strong>delPattern</strong></a>(self, index)</dt><dd><tt>delete&nbsp;a&nbsp;pattern&nbsp;from&nbsp;<a href="#fifostr">fifostr</a>&nbsp;pattern&nbsp;storage<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;(int)&nbsp;:&nbsp;id&nbsp;of&nbsp;pattern&nbsp;to&nbsp;be&nbsp;removed.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="fifostr-eq"><strong>eq</strong></a>(self, instring)</dt><dd><tt>test&nbsp;if&nbsp;a&nbsp;string&nbsp;matches&nbsp;entire&nbsp;<a href="#fifostr">fifostr</a><br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instring&nbsp;(str)&nbsp;:&nbsp;str&nbsp;to&nbsp;compare&nbsp;entire&nbsp;<a href="#fifostr">fifostr</a>&nbsp;to<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;True&nbsp;if&nbsp;exact&nbsp;match&nbsp;else&nbsp;False</tt></dd></dl>
+
+<dl><dt><a name="fifostr-eqhead"><strong>eqhead</strong></a>(self, instring)</dt><dd><tt>test&nbsp;if&nbsp;a&nbsp;string&nbsp;matches&nbsp;the&nbsp;beginning&nbsp;chars&nbsp;of&nbsp;the&nbsp;<a href="#fifostr">fifostr</a><br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instring&nbsp;(str)&nbsp;:&nbsp;str&nbsp;to&nbsp;compare&nbsp;head&nbsp;to<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;True&nbsp;if&nbsp;exact&nbsp;match&nbsp;else&nbsp;False</tt></dd></dl>
+
+<dl><dt><a name="fifostr-eqtail"><strong>eqtail</strong></a>(self, instring)</dt><dd><tt>test&nbsp;if&nbsp;a&nbsp;string&nbsp;matches&nbsp;the&nbsp;end&nbsp;chars&nbsp;of&nbsp;the&nbsp;<a href="#fifostr">fifostr</a><br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instring&nbsp;(str)&nbsp;:&nbsp;str&nbsp;to&nbsp;compare&nbsp;tail&nbsp;to<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;True&nbsp;if&nbsp;exact&nbsp;match&nbsp;else&nbsp;False</tt></dd></dl>
+
+<dl><dt><a name="fifostr-findPatternByLabel"><strong>findPatternByLabel</strong></a>(self, label)</dt><dd><tt>find&nbsp;a&nbsp;pattern&nbsp;from&nbsp;<a href="#fifostr">fifostr</a>&nbsp;pattern&nbsp;storage&nbsp;by&nbsp;its&nbsp;label<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;label&nbsp;(str)&nbsp;:&nbsp;label&nbsp;of&nbsp;pattern(s)&nbsp;to&nbsp;find<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list&nbsp;of&nbsp;matching&nbsp;patterns&nbsp;or&nbsp;None&nbsp;if&nbsp;not&nbsp;found</tt></dd></dl>
+
+<dl><dt><a name="fifostr-getPattern"><strong>getPattern</strong></a>(self, index)</dt><dd><tt>get&nbsp;a&nbsp;stored&nbsp;pattern&nbsp;<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;(int):&nbsp;index&nbsp;for&nbsp;pattern&nbsp;to&nbsp;get.&nbsp;&nbsp;index&nbsp;is&nbsp;the&nbsp;one&nbsp;returned&nbsp;from<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True&nbsp;if&nbsp;match,&nbsp;else&nbsp;False</tt></dd></dl>
+
+<dl><dt><a name="fifostr-getPatternActiveState"><strong>getPatternActiveState</strong></a>(self, index)</dt><dd><tt>get&nbsp;a&nbsp;pattern's&nbsp;active&nbsp;state.&nbsp;&nbsp;If&nbsp;a&nbsp;pattern&nbsp;is&nbsp;active&nbsp;it&nbsp;will&nbsp;be&nbsp;test&nbsp;each&nbsp;time&nbsp;character(s)&nbsp;are&nbsp;added&nbsp;to&nbsp;<a href="#fifostr">fifostr</a>&nbsp;else&nbsp;the&nbsp;pattern&nbsp;is&nbsp;skipped.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;(int)&nbsp;:&nbsp;id&nbsp;of&nbsp;pattern&nbsp;to&nbsp;set&nbsp;active&nbsp;state<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;current&nbsp;pattern&nbsp;state</tt></dd></dl>
+
+<dl><dt><a name="fifostr-head"><strong>head</strong></a>(self, l<font color="#909090">=1</font>)</dt><dd><tt>fetch&nbsp;beginning&nbsp;n&nbsp;chars&nbsp;of&nbsp;<a href="#fifostr">fifostr</a><br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l&nbsp;(int,&nbsp;optional)&nbsp;:&nbsp;number&nbsp;of&nbsp;chars&nbsp;of&nbsp;beginning&nbsp;of&nbsp;string&nbsp;to&nbsp;get.&nbsp;defaults&nbsp;to&nbsp;1<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str</tt></dd></dl>
+
+<dl><dt><a name="fifostr-iterable"><strong>iterable</strong></a>(self, obj)</dt><dd><tt>checker&nbsp;for&nbsp;iterability&nbsp;for&nbsp;some&nbsp;ops.&nbsp;&nbsp;actually&nbsp;I&nbsp;was&nbsp;just&nbsp;very&nbsp;iterable&nbsp;when&nbsp;I&nbsp;realised&nbsp;this&nbsp;<br>
+wasn't&nbsp;a&nbsp;built&nbsp;in&nbsp;in&nbsp;the&nbsp;language&nbsp;&nbsp;;)<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;obj&nbsp;:&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;to&nbsp;make&nbsp;iterable<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;whether&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;is&nbsp;iterable</tt></dd></dl>
+
+<dl><dt><a name="fifostr-numPatterns"><strong>numPatterns</strong></a>(self)</dt><dd><tt>return&nbsp;number&nbsp;of&nbsp;active&nbsp;patterns<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;:&nbsp;number&nbsp;of&nbsp;stored&nbsp;patterns</tt></dd></dl>
+
+<dl><dt><a name="fifostr-pop"><strong>pop</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;right&nbsp;most&nbsp;char&nbsp;from&nbsp;<a href="#fifostr">fifostr</a>&nbsp;and&nbsp;shorten&nbsp;<a href="#fifostr">fifostr</a>&nbsp;by&nbsp;1&nbsp;entry<br>
+after&nbsp;<a href="#fifostr-pop">pop</a>()&nbsp;all&nbsp;active&nbsp;stored&nbsp;patterns&nbsp;are&nbsp;checked&nbsp;for&nbsp;matches<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(mutable)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-popleft"><strong>popleft</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;left&nbsp;most&nbsp;char&nbsp;from&nbsp;<a href="#fifostr">fifostr</a>&nbsp;and&nbsp;shorten&nbsp;<a href="#fifostr">fifostr</a>&nbsp;by&nbsp;1&nbsp;entry<br>
+after&nbsp;<a href="#fifostr-pop">pop</a>()&nbsp;all&nbsp;active&nbsp;stored&nbsp;patterns&nbsp;are&nbsp;checked&nbsp;for&nbsp;matches<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(mutable)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-remove"><strong>remove</strong></a>(self, value)</dt><dd><tt>remove&nbsp;all&nbsp;occurences&nbsp;of&nbsp;the&nbsp;a&nbsp;specific&nbsp;value&nbsp;from&nbsp;<a href="#fifostr">fifostr</a>&nbsp;and&nbsp;shorten&nbsp;length&nbsp;by&nbsp;number&nbsp;of&nbsp;occurrences&nbsp;found<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;(str)&nbsp;:&nbsp;value&nbsp;to&nbsp;remove&nbsp;(string&nbsp;of&nbsp;length&nbsp;1&nbsp;char)<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(mutable)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-reverse"><strong>reverse</strong></a>(self)</dt><dd><tt>flip&nbsp;<a href="#fifostr">fifostr</a>&nbsp;about&nbsp;its&nbsp;center<br>
+after&nbsp;reversing&nbsp;all&nbsp;active&nbsp;stored&nbsp;patterns&nbsp;are&nbsp;checked&nbsp;for&nbsp;matches<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(mutable)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-rotate"><strong>rotate</strong></a>(self, x, inc<font color="#909090">=False</font>)</dt><dd><tt>rotate&nbsp;the&nbsp;chars&nbsp;in&nbsp;<a href="#fifostr">fifostr</a>&nbsp;by&nbsp;x&nbsp;positions.&nbsp;&nbsp;chars&nbsp;moved&nbsp;off&nbsp;the&nbsp;right&nbsp;end&nbsp;are&nbsp;put&nbsp;back&nbsp;on&nbsp;the&nbsp;left.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;(int)&nbsp;:&nbsp;number&nbsp;of&nbsp;positions&nbsp;to&nbsp;rotate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inc&nbsp;(bool)&nbsp;:&nbsp;whether&nbsp;to&nbsp;rorate&nbsp;all&nbsp;of&nbsp;x&nbsp;at&nbsp;once&nbsp;(default)&nbsp;or&nbsp;if&nbsp;True&nbsp;rorate&nbsp;each&nbsp;char&nbsp;one&nbsp;at&nbsp;a&nbsp;time.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this&nbsp;allows&nbsp;each&nbsp;permutation&nbsp;of&nbsp;<a href="#fifostr">fifostr</a>&nbsp;to&nbsp;be&nbsp;tested&nbsp;against&nbsp;all&nbsp;active&nbsp;stored&nbsp;patterns<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(mutable)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-setPatternActiveState"><strong>setPatternActiveState</strong></a>(self, index, state)</dt><dd><tt>set&nbsp;a&nbsp;pattern's&nbsp;active&nbsp;state.&nbsp;&nbsp;If&nbsp;a&nbsp;pattern&nbsp;is&nbsp;active&nbsp;it&nbsp;will&nbsp;be&nbsp;test&nbsp;each&nbsp;time&nbsp;character(s)&nbsp;are&nbsp;added&nbsp;to&nbsp;<a href="#fifostr">fifostr</a>&nbsp;else&nbsp;the&nbsp;pattern&nbsp;is&nbsp;skipped.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;(int)&nbsp;:&nbsp;id&nbsp;of&nbsp;pattern&nbsp;to&nbsp;set&nbsp;active&nbsp;state<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state&nbsp;(bool)&nbsp;:&nbsp;True&nbsp;for&nbsp;active,&nbsp;False&nbsp;for&nbsp;inactive<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current&nbsp;pattern&nbsp;state&nbsp;after&nbsp;setting</tt></dd></dl>
+
+<dl><dt><a name="fifostr-showPatterns"><strong>showPatterns</strong></a>(self)</dt><dd><tt>get&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;the&nbsp;current&nbsp;stored&nbsp;patterns<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list&nbsp;of&nbsp;any&nbsp;stored&nbsp;patterns</tt></dd></dl>
+
+<dl><dt><a name="fifostr-tail"><strong>tail</strong></a>(self, l<font color="#909090">=1</font>)</dt><dd><tt>get&nbsp;last&nbsp;n&nbsp;chars&nbsp;of&nbsp;<a href="#fifostr">fifostr</a><br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l&nbsp;(int,&nbsp;optional)&nbsp;:&nbsp;number&nbsp;of&nbsp;chars&nbsp;of&nbsp;beginning&nbsp;of&nbsp;string&nbsp;to&nbsp;get.&nbsp;defaults&nbsp;to&nbsp;1<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str</tt></dd></dl>
+
+<dl><dt><a name="fifostr-testAllPatterns"><strong>testAllPatterns</strong></a>(self, doCallbacks<font color="#909090">=False</font>, retnList<font color="#909090">=True</font>)</dt><dd><tt>test&nbsp;all&nbsp;patterns&nbsp;stored&nbsp;in&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;for&nbsp;matches.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doCallbacks&nbsp;(bool,&nbsp;optional)&nbsp;:&nbsp;test&nbsp;each&nbsp;pattern&nbsp;and&nbsp;call&nbsp;the&nbsp;associated&nbsp;callback&nbsp;function&nbsp;if&nbsp;the&nbsp;pattern&nbsp;matches.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default&nbsp;is&nbsp;False<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retnList&nbsp;(bool,&nbsp;optional)&nbsp;:&nbsp;return&nbsp;a&nbsp;list&nbsp;of&nbsp;which&nbsp;patterns&nbsp;matched.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;retnList&nbsp;is&nbsp;True&nbsp;returns&nbsp;list&nbsp;of&nbsp;matches&nbsp;else&nbsp;returns&nbsp;number&nbsp;of&nbsp;matches&nbsp;as&nbsp;int.</tt></dd></dl>
+
+<dl><dt><a name="fifostr-testPattern"><strong>testPattern</strong></a>(self, pattern, start<font color="#909090">=0</font>, end<font color="#909090">='$'</font>)</dt><dd><tt>test&nbsp;if&nbsp;a&nbsp;pattern&nbsp;matches&nbsp;<a href="#fifostr">fifostr</a>&nbsp;between&nbsp;supplied&nbsp;indeces<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pattern&nbsp;(str&nbsp;or&nbsp;regex&nbsp;or&nbsp;function):&nbsp;pattern&nbsp;to&nbsp;match.&nbsp;&nbsp;if&nbsp;str&nbsp;then&nbsp;it&nbsp;looks&nbsp;for&nbsp;an&nbsp;exact&nbsp;match.&nbsp;if<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;regex&nbsp;then&nbsp;it&nbsp;looks&nbsp;to&nbsp;see&nbsp;if&nbsp;there&nbsp;is&nbsp;atleast&nbsp;one&nbsp;match.&nbsp;&nbsp;if&nbsp;function&nbsp;it&nbsp;passes&nbsp;fifstr&nbsp;(as&nbsp;a&nbsp;str)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;the&nbsp;function&nbsp;and&nbsp;expects&nbsp;function&nbsp;to&nbsp;equate&nbsp;to&nbsp;a&nbsp;boolean&nbsp;value.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start&nbsp;(int&nbsp;or&nbsp;'^'):&nbsp;beginning&nbsp;position&nbsp;to&nbsp;look&nbsp;for&nbsp;matches.&nbsp;&nbsp;default&nbsp;is&nbsp;0.&nbsp;&nbsp;the&nbsp;"^"&nbsp;means&nbsp;start&nbsp;of&nbsp;<a href="#fifostr">fifostr</a>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end&nbsp;(int&nbsp;or&nbsp;'$'):&nbsp;end&nbsp;position&nbsp;to&nbsp;look&nbsp;for&nbsp;matches.&nbsp;&nbsp;default&nbsp;is&nbsp;$.&nbsp;&nbsp;the&nbsp;"$"&nbsp;means&nbsp;start&nbsp;of&nbsp;<a href="#fifostr">fifostr</a>.&nbsp;$&nbsp;is&nbsp;useful&nbsp;since&nbsp;if&nbsp;the&nbsp;<a href="#fifostr">fifostr</a>&nbsp;maxlen&nbsp;is&nbsp;changed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;$&nbsp;param&nbsp;will&nbsp;still&nbsp;insure&nbsp;end-matching&nbsp;is&nbsp;still&nbsp;completed.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;True&nbsp;if&nbsp;match,&nbsp;else&nbsp;False</tt></dd></dl>
+
+<dl><dt><a name="fifostr-typeStr"><strong>typeStr</strong></a>(self, x)</dt><dd><tt>returns&nbsp;the&nbsp;type&nbsp;of&nbsp;an&nbsp;entity&nbsp;as&nbsp;a&nbsp;str.&nbsp;&nbsp;used&nbsp;internally&nbsp;for&nbsp;pattern&nbsp;match&nbsp;storage&nbsp;and&nbsp;logic<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x:&nbsp;entity&nbsp;to&nbsp;find&nbsp;the&nbsp;type&nbsp;of<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;entity&nbsp;type&nbsp;as&nbsp;a&nbsp;string</tt></dd></dl>
+
+<dl><dt><a name="fifostr-ver"><strong>ver</strong></a>(self)</dt><dd><tt>ver&nbsp;returns&nbsp;the&nbsp;version&nbsp;number&nbsp;of&nbsp;this&nbsp;library<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict:&nbsp;containing&nbsp;current&nbsp;version</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Methods inherited from <a href="collections.html#deque">collections.deque</a>:<br>
+<dl><dt><a name="fifostr-__copy__"><strong>__copy__</strong></a>(...)</dt><dd><tt>Return&nbsp;a&nbsp;shallow&nbsp;copy&nbsp;of&nbsp;a&nbsp;<a href="collections.html#deque">deque</a>.</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__delitem__"><strong>__delitem__</strong></a>(...)</dt><dd><tt>x.<a href="#fifostr-__delitem__">__delitem__</a>(y)&nbsp;&lt;==&gt;&nbsp;del&nbsp;x[y]</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__ge__"><strong>__ge__</strong></a>(...)</dt><dd><tt>x.<a href="#fifostr-__ge__">__ge__</a>(y)&nbsp;&lt;==&gt;&nbsp;x&gt;=y</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#fifostr-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__gt__"><strong>__gt__</strong></a>(...)</dt><dd><tt>x.<a href="#fifostr-__gt__">__gt__</a>(y)&nbsp;&lt;==&gt;&nbsp;x&gt;y</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__iter__"><strong>__iter__</strong></a>(...)</dt><dd><tt>x.<a href="#fifostr-__iter__">__iter__</a>()&nbsp;&lt;==&gt;&nbsp;iter(x)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__le__"><strong>__le__</strong></a>(...)</dt><dd><tt>x.<a href="#fifostr-__le__">__le__</a>(y)&nbsp;&lt;==&gt;&nbsp;x&lt;=y</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__len__"><strong>__len__</strong></a>(...)</dt><dd><tt>x.<a href="#fifostr-__len__">__len__</a>()&nbsp;&lt;==&gt;&nbsp;len(x)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__lt__"><strong>__lt__</strong></a>(...)</dt><dd><tt>x.<a href="#fifostr-__lt__">__lt__</a>(y)&nbsp;&lt;==&gt;&nbsp;x&lt;y</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__ne__"><strong>__ne__</strong></a>(...)</dt><dd><tt>x.<a href="#fifostr-__ne__">__ne__</a>(y)&nbsp;&lt;==&gt;&nbsp;x!=y</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>Return&nbsp;state&nbsp;information&nbsp;for&nbsp;pickling.</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#fifostr-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="fifostr-__reversed__"><strong>__reversed__</strong></a>(...)</dt><dd><tt>D.<a href="#fifostr-__reversed__">__reversed__</a>()&nbsp;--&nbsp;return&nbsp;a&nbsp;reverse&nbsp;iterator&nbsp;over&nbsp;the&nbsp;<a href="collections.html#deque">deque</a></tt></dd></dl>
+
+<dl><dt><a name="fifostr-__sizeof__"><strong>__sizeof__</strong></a>(...)</dt><dd><tt>D.<a href="#fifostr-__sizeof__">__sizeof__</a>()&nbsp;--&nbsp;size&nbsp;of&nbsp;D&nbsp;in&nbsp;memory,&nbsp;in&nbsp;bytes</tt></dd></dl>
+
+<dl><dt><a name="fifostr-clear"><strong>clear</strong></a>(...)</dt><dd><tt>Remove&nbsp;all&nbsp;elements&nbsp;from&nbsp;the&nbsp;<a href="collections.html#deque">deque</a>.</tt></dd></dl>
+
+<dl><dt><a name="fifostr-count"><strong>count</strong></a>(...)</dt><dd><tt>D.<a href="#fifostr-count">count</a>(value)&nbsp;-&gt;&nbsp;integer&nbsp;--&nbsp;return&nbsp;number&nbsp;of&nbsp;occurrences&nbsp;of&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="fifostr-extend"><strong>extend</strong></a>(...)</dt><dd><tt>Extend&nbsp;the&nbsp;right&nbsp;side&nbsp;of&nbsp;the&nbsp;<a href="collections.html#deque">deque</a>&nbsp;with&nbsp;elements&nbsp;from&nbsp;the&nbsp;iterable</tt></dd></dl>
+
+<dl><dt><a name="fifostr-extendleft"><strong>extendleft</strong></a>(...)</dt><dd><tt>Extend&nbsp;the&nbsp;left&nbsp;side&nbsp;of&nbsp;the&nbsp;<a href="collections.html#deque">deque</a>&nbsp;with&nbsp;elements&nbsp;from&nbsp;the&nbsp;iterable</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="collections.html#deque">collections.deque</a>:<br>
+<dl><dt><strong>maxlen</strong></dt>
+<dd><tt>maximum&nbsp;size&nbsp;of&nbsp;a&nbsp;deque&nbsp;or&nbsp;None&nbsp;if&nbsp;unbounded</tt></dd>
+</dl>
+<hr>
+Data and other attributes inherited from <a href="collections.html#deque">collections.deque</a>:<br>
+<dl><dt><strong>__hash__</strong> = None</dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#fifostr-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-enum"><strong>enum</strong></a>(**enums)</dt><dd><tt>#Simple&nbsp;constant&nbsp;ENUM&nbsp;style&nbsp;generator&nbsp;used&nbsp;for&nbsp;indexing&nbsp;internal&nbsp;storage&nbsp;array</tt></dd></dl>
+</td></tr></table>
+</body></html>
