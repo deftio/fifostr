@@ -13,10 +13,8 @@ e.g
 	- lic & packaging
 
 
-
-
  
-## features checklist (1.0.0)
+## features checklist (1.0.0)  -- what the module should do
 	[x] head
 	[x] tail
 	[x] eqhead
@@ -28,17 +26,7 @@ e.g
 	[x] pattern can be compiled regex
 	[x] pattern can be user parser function
 	[x] operators support slicing, indexing
-	[0] typeStr operator is "hidden" feature ## Todo: move test from example.py to tests dir
-	[x] license.txt file -- chose FreeBSD
-	[x] length indefinite support  #eg z=fifostr()  produces a fifostr of indefinite length
-	[ ] pip installer
-	[ ] tests.py / unit tests  #in tests directory
-	[x] check all functions have """docstring""" comments
-	[x] check Python 2.7+ and Python 3+ compatibility with tests
-	[x] .eqHead, .eqTail, .eq --> accept str or regex #too complicate for now.. just use .all() etc
-	[x] test pattern add/del/triggers
-	[o] operator overloads #all currently not fully tested
-	[ ] operators behave same as their base-class deque counter parts (e.g. see how list[] etc works realtive to str casting)
+	[x] typeStr operator is "hidden" feature ## Todo: move test from example.py to tests dir
 	[x] __iadd__ (+=)
 	[x] __eq__ (==)
 	[x] append 		#with default inc=False  (increases fifostr by adding item on right)
@@ -49,22 +37,36 @@ e.g
 	[x] rotate		#with default inc=False
 	[x] remove      #remove item(s) with the supplied value
 	[x] __set_item__ #directly change one item 
-	[x]	proper markdown for README.md
-	[ ] test and finish & fix example  portion in README.md, perhaps use example from python interpreter  
+	[x] .eqHead, .eqTail, .eq --> accept str or regex #too complicated for regex for now.. just use .all() etc
+	[x] test pattern add/del/triggers
 	[x] document and check callback function parameters (e.g. match str(s,e) passed, label passed)  
-	[x] add bitbuck compliant double spaces at end of each line in readme  
-	[x] allow ^ and $ to be used as anchors for any pattern 
+	[x] allow ^ and $ to be used as start/end anchors for any pattern (useful for when fifostr is resized)
+	[x] length indefinite support  #eg z=fifostr()  produces a fifostr of indefinite length
+	[x] operator overloads 
+	[x] operators behave same as their base-class deque counter parts (e.g. see how list[] etc works realtive to str casting)
 
 ### fundamental pattern consists of:
 	pattern 	: regex | str | function of pattern to trigger on
 	callbackfn 	: function to call when pattern found
 		Arguments are (matching_string_section, label) 
 	optname 	: an optional label for when the pattern is found
-	optlog		: optional to call logging fn when pattern hit (not-logged is default)
 	pos_s		: start substring position to look for in fifostr (0 is default)
 	pos_e		: end substring position to look for in fifostr (maxlen-1 is default)
 	active		: whether this pattern is currently being interrogated
+	optlog		: optional to call logging fn when pattern hit (not-logged is default) #feature deferred to future
 
+## release housekeeping checklist  -- things to pack it up for release
+	[x] license.txt file -- chose FreeBSD
+	[ ] pip installer
+	[x] create identity in pypi (pip online directory)
+	[ ] tests.py / unit tests  #in /tests directory
+	[x] check all functions have """docstring""" comments
+	[x] function documentation in HTML in /docs directory --> accomplished with pydoc
+	[x] check Python 2.7+ and Python 3+ compatibility with tests
+	[x]	proper markdown for README.md
+	[ ] test and finish & fix example  portion in README.md, perhaps use example from python interpreter  
+	[x] add bitbucket compliant double spaces at end of each line in markdown files 
+	
 
 ## future stuff 
 	[ ] load/save array of patterns in one call (so can be stored to disk), note issue with serializing funcs
