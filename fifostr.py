@@ -1,40 +1,51 @@
 #!/usr/bin/env python
 """
-	fifostr.py - A FIFO for strings derived from deque with pattern match trigger capability
+	fifostr.py - A FIFO (first in first out) buffer for strings derived from deque with pattern match trigger and callback capability
 	
 	@copy Copyright (C) <2012>  <M. A. Chatterjee>
 	
 	@author M A Chatterjee, deftio [at] deftio [dot] com
 	
-	This software is provided 'as-is', without any express or implied
-	warranty. In no event will the authors be held liable for any damages
-	arising from the use of this software.
+	-- full license below -- 
+	Copyright (c) 2011-2016, M. A. Chatterjee <deftio at deftio dot com>
+	All rights reserved.
 
-	Permission is granted to anyone to use this software for any purpose,
-	including commercial applications, and to alter it and redistribute it
-	freely, subject to the following restrictions:
+	Redistribution and use in source and binary forms, with or without
+	modification, are permitted provided that the following conditions are met:
 
-	1. The origin of this software must not be misrepresented; you must not
-	claim that you wrote the original software. If you use this software
-	in a product, an acknowledgment in the product documentation is required.
+	* Redistributions of source code must retain the above copyright notice, this
+	  list of conditions and the following disclaimer.
 
-	2. Altered source versions must be plainly marked as such, and must not be
-	misrepresented as being the original software.
+	* Redistributions in binary form must reproduce the above copyright notice,
+	  this list of conditions and the following disclaimer in the documentation
+	  and/or other materials provided with the distribution.
 
-	3. This notice may not be removed or altered from any source
-	distribution.
+	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+	AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+	IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+	DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+	FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+	DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+	SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+	CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+	OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+	OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+	-- 
 	#this class should work on either python 2.7+ or python 3+ distributions
 	#for performance notes see README.md
 """
-
+#dependancies
 from collections import deque, Iterable
 import re 
 import itertools
 
-#Simple constant ENUM style generator used for indexing internal storage array
 def enum(**enums):
-    return type('Enum', (), enums)
+	"""
+	Simple constant ENUM style generator used for indexing internal storage array
+	"""
+	return type('Enum', (), enums)
+
 PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used internally
 
 
@@ -66,6 +77,7 @@ class fifostr(deque):
 		super( fifostr, self ).__init__(maxlen=size) #inheritance from deque
 		self.patterns 	= {} #dict of patterns to search for
 		self.patternIdx = 0
+		
 
 	def typeStr(self,x):
 		"""

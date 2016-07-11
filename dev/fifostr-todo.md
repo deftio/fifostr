@@ -29,7 +29,7 @@ e.g
 	[x] pattern can be user parser function
 	[x] operators support slicing, indexing
 	[0] typeStr operator is "hidden" feature ## Todo: move test from example.py to tests dir
-	[ ] license.txt file
+	[x] license.txt file -- chose FreeBSD
 	[x] length indefinite support  #eg z=fifostr()  produces a fifostr of indefinite length
 	[ ] pip installer
 	[ ] tests.py / unit tests  #in tests directory
@@ -51,14 +51,14 @@ e.g
 	[x] __set_item__ #directly change one item 
 	[x]	proper markdown for README.md
 	[ ] test and finish & fix example  portion in README.md, perhaps use example from python interpreter  
-	[ ] document and check callback function parameters (e.g. match str(s,e) passed, label passed)  
+	[x] document and check callback function parameters (e.g. match str(s,e) passed, label passed)  
 	[x] add bitbuck compliant double spaces at end of each line in readme  
 	[x] allow ^ and $ to be used as anchors for any pattern 
 
 ### fundamental pattern consists of:
 	pattern 	: regex | str | function of pattern to trigger on
-	callbackfn 	: function to call back when pattern found
-		params are (matching_string_section) 
+	callbackfn 	: function to call when pattern found
+		Arguments are (matching_string_section, label) 
 	optname 	: an optional label for when the pattern is found
 	optlog		: optional to call logging fn when pattern hit (not-logged is default)
 	pos_s		: start substring position to look for in fifostr (0 is default)
@@ -66,7 +66,7 @@ e.g
 	active		: whether this pattern is currently being interrogated
 
 
-## future
+## future stuff 
 	[ ] load/save array of patterns in one call (so can be stored to disk), note issue with serializing funcs
 		[
 			[pattern1, callbackfn1, optname1,  pos_s, pos_e] ,
