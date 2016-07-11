@@ -10,11 +10,11 @@ e.g
 	- tests
 	- interface completeness
 	- examples
-	- lic & packaging
+	- license
+	- packaging and dir structure
 
 
- 
-## features checklist (1.0.0)  -- what the module should do
+### features checklist (1.0.0)  -- what the module should do
 	[x] head
 	[x] tail
 	[x] eqhead
@@ -44,8 +44,9 @@ e.g
 	[x] length indefinite support  #eg z=fifostr()  produces a fifostr of indefinite length
 	[x] operator overloads 
 	[x] operators behave same as their base-class deque counter parts (e.g. see how list[] etc works realtive to str casting)
+	[ ] accept None as callback_function.  (allows user to just supply a parser function that does ... whatever they want)
 
-### fundamental pattern consists of:
+#### fundamental pattern consists of:
 	pattern 	: regex | str | function of pattern to trigger on
 	callbackfn 	: function to call when pattern found
 		Arguments are (matching_string_section, label) 
@@ -55,7 +56,7 @@ e.g
 	active		: whether this pattern is currently being interrogated
 	optlog		: optional to call logging fn when pattern hit (not-logged is default) #feature deferred to future
 
-## release housekeeping checklist  -- things to pack it up for release
+### release housekeeping checklist  -- things to pack it up for release
 	[x] license.txt file -- chose FreeBSD
 	[ ] pip installer
 	[x] create identity in pypi (pip online directory)
@@ -68,7 +69,7 @@ e.g
 	[x] add bitbucket compliant double spaces at end of each line in markdown files 
 	
 
-## future stuff 
+### future stuff 
 	[ ] load/save array of patterns in one call (so can be stored to disk), note issue with serializing funcs
 		[
 			[pattern1, callbackfn1, optname1,  pos_s, pos_e] ,

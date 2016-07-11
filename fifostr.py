@@ -2,7 +2,7 @@
 """
 	fifostr.py - A FIFO (first in first out) buffer for strings derived from deque with pattern match trigger and callback capability
 	
-	@copy Copyright (C) <2012>  <M. A. Chatterjee>
+	@copy Copyright (C) <2011>  <M. A. Chatterjee>
 	
 	@author M A Chatterjee, deftio [at] deftio [dot] com
 	
@@ -462,13 +462,13 @@ class fifostr(deque):
 				r=self.testPattern(self.patterns[i][PIDX.PATTERN],self.patterns[i][PIDX.START] ,self.patterns[i][PIDX.END])
 				l.append([i,self.patterns[i][PIDX.LABEL],r])
 				if (doCallbacks):
-					if r:
+					if r and (self.patterns[i][PIDX.CALLBACKFN] != None):
 						self.patterns[i][PIDX.CALLBACKFN](self[self.patterns[i][PIDX.START]:self.patterns[i][PIDX.END]],self.patterns[i][PIDX.LABEL])
 		if retnList:
 			return l
 		return len(l) #if not returning list, then return the # of matched patterns
 
-	def addPattern(self, pattern, callbackfn, start=0, end='$',label="",active=True): 
+	def addPattern(self, pattern, callbackfn = None, start=0, end='$',label="",active=True): 
 		"""
 		add a pattern to the fifostr internal pattern storage.
 

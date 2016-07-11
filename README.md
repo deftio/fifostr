@@ -9,9 +9,9 @@ fifostr (First In First Out String) is a small python library originally used fo
 fifostr has built-in pattern matching and triggering.  Simply add / remove patterns which can call a user supplied function (E.g. if the pattern is "seen" then trigger the function).  Patterns can be strings, regexes or user-supplied-functions. A pattern consists of:  
   * pattern: string <or> compiled regex <or> user-supplied-parser-function  
   * label: user supplied 'name' for this pattern  
-  * start index : position in fifostr to begin pattern match.  default is 0  
-  * stop index : position in fifostr to end pattern match.  default is end of fifostr.  the letter 'e' has special meaning as end of string no matter the length  
-  * callback_fn : called if pattern is found, fifostr(start:end) is passed to the callback fn  
+  * start index : position in fifostr to begin pattern match.  default is 0  (also accepts the character '^' as start anchor for those familiar with regexes)
+  * stop index : position in fifostr to end pattern match.  default is end of fifostr.  the letter '$' has special meaning as end of string no matter the length  (again regex)
+  * callback_fn : called if pattern is found, fifostr(start:end) and the label are passed to the callback function  (callback('thematchingstring','label'))
   * active : default is True, sets whether this pattern should be actively looked for  
 
 There is nothing really profound here -- one can argue its not worth its own repo. Originally a lighter version of this was used in a python serial terminal program dioterm (which allowed the serial terminal to parse commands sent/received by both sides).  
@@ -110,7 +110,7 @@ def main():
 
 ### Notes  
 Absolutley *no* warranties on performance.  This is not replacement for a compiler/parser front end!  It just iterates over stored patterns every time something is added to the 
-fifostr object.  If you do have a compiler front you wish to be called the just add one pattern in you pass your user-supplied-parser and let your own code do the work.
+fifostr object.  If you do have a parser you wish to be called then just add it as a function so that every time the fifostr is updated with a char it will call your parserto do the work.   Your parser must return a boolean result if you wish to use the callback based triggering.
 
 ```
 #let your own parser do the work  
@@ -158,7 +158,7 @@ pydoc -w ../fifostr.py
 ```
 note that as of this writing pydoc generates its output in the current directory and doesn't seem to be pipeable to another.  
 
-naming as fifostr vs FifoStr --> since the other collections are lowercase it seemed more natural even though some Python conventions refer to naming classes with MixedCase.  No real pref here just seemed the best fit at the time inline with this *is* a collection
+naming as fifostr vs FifoStr --> since the other collections are lowercase it seemed more natural even though some Python conventions refer to naming classes with MixedCase.  No real pref here just seemed the best fit at the time since this *is* a collection 
 
 ### License
 Opensource for all purposes as long as attribution is given.   
