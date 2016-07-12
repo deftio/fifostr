@@ -42,7 +42,7 @@ setup(
     author_email='deftio at deftio dot com',
  
     # Choose your license
-    license='FreeBSD',
+    license='BSD License',
  
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -54,10 +54,10 @@ setup(
  
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
-        'Topic :: Software Development :: Parser Tools',
+        'Topic :: Software Development ',
  
         # Pick your license as you wish (should match "license" above)
-        'License :: OSI Approved :: FreeBSD License',
+        'License :: OSI Approved :: BSD License',
  
         # 
         'Programming Language :: Python :: 2',
