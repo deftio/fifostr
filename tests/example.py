@@ -29,6 +29,8 @@ from __future__ import print_function #just for parenthesis wrapping in python 2
 	OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
+import sys
+sys.path.append('..')  #this is just to find fifostr which is in one up in the dir 
 
 from fifostr import fifostr
 import re
