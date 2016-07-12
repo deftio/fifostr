@@ -139,7 +139,7 @@ to run tests pytest needs to be installed.
 pip install -U pytest # or  
 easy_install -U pytest  
 ```
-#more info at pytest.org  for installation on other OSes  
+note: more info at pytest.org  for installation on other OSes  
 
 cd to the tests directory  
 ```
