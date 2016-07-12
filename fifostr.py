@@ -31,7 +31,7 @@
 	OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 	OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-	-- 
+	-- end license --
 	#this class should work on either python 2.7+ or python 3+ distributions
 	#for performance notes see README.md
 """
@@ -40,13 +40,6 @@ from collections import deque, Iterable
 import re 
 import itertools
 
-def enum(**enums):
-	"""
-	Simple constant ENUM style generator used for indexing internal storage array
-	"""
-	return type('Enum', (), enums)
-
-PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used internally
 
 
 #Simple FIFO (First-In-First-Out) for strings --> allows rolling FIFO of last n chars seen
@@ -55,7 +48,7 @@ PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used in
 #the function takes a string, returns a bool
 
 class fifostr(deque):
-	def __init__(self, size=None):
+	def __init__(self, maxsize=None):
 		"""
 		fifostr is a deque derived string class which has pattern matching abilities when new chars
 		are added to its internal storage.
@@ -74,10 +67,18 @@ class fifostr(deque):
 		Args:
 		    size (int, optional): set size of the fifostr object.  unbounded if omitted.
 		"""
-		super( fifostr, self ).__init__(maxlen=size) #inheritance from deque
+		super( fifostr, self ).__init__(maxlen=maxsize) #inheritance from deque
 		self.patterns 	= {} #dict of patterns to search for
 		self.patternIdx = 0
 		
+		def enum(**enums):
+			"""
+			Simple constant ENUM style generator used for indexing internal storage array
+			"""
+			return type('Enum', (), enums)
+
+		self.PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used internally
+
 
 	def typeStr(self,x):
 		"""
@@ -197,7 +198,8 @@ class fifostr(deque):
 	#overides================================================================
 	def append(self,x,inc=False): 
 		"""
-		add char(s) to the right end of the fifostr
+		add char(s) to the right end of the fifostr 
+		does not increase the size of the fifostr if maxlen is set
 
 		Args:
 			x (str) : str to add
@@ -223,6 +225,7 @@ class fifostr(deque):
 	def appendleft(self,x,inc=False): 
 		"""
 		add char(s) to the left end of the fifostr
+		does not increase the size of the fifostr if maxlen is set
 
 		Args:
 			x (str) : str to add
@@ -242,6 +245,41 @@ class fifostr(deque):
 				deque.appendleft(self,x[i])		
 				if len(self.patterns)>0:
 					self.testAllPatterns(doCallbacks=True,retnList=False)		
+		return self
+
+	def extend(self,x): 
+		"""
+		add char(s) to the right end of the fifostr 
+		does not increase the size of the fifostr if maxlen is set
+
+		Args:
+			x (iterable) : str to add
+
+		Returns:
+			fifostr object (mutable)
+		"""		
+		for i in range(len(x)):
+			deque.extend(self,str(x[i]))
+			#todo do inc handling
+			if len(self.patterns)>0:
+				self.testAllPatterns(doCallbacks=True,retnList=False)
+		return self
+
+	def extendleft (self,x): 
+		"""
+		add char(s) to the left end of the fifostr
+		does not increase the size of the fifostr if maxlen is set
+
+		Args:
+			x (iterable) : str to add
+
+		Returns:
+			fifostr object (mutable)
+		"""
+		for i in range(len(x)):
+			deque.extendleft(self,str(x[i]))	
+			if len(self.patterns)>0:
+				self.testAllPatterns(doCallbacks=True,retnList=False)		
 		return self
 
 	def rotate(self,x,inc=False): 
@@ -278,10 +316,10 @@ class fifostr(deque):
 		Returns:
 			fifostr object (mutable)
 		"""
-		deque.pop(self)
+		x=deque.pop(self)
 		if len(self.patterns)>0:
 			self.testAllPatterns(doCallbacks=True,retnList=False)
-		return self
+		return x
 
 	def popleft(self): 
 		"""
@@ -294,10 +332,10 @@ class fifostr(deque):
 		Returns:
 			fifostr object (mutable)
 		"""		
-		deque.popleft(self)
+		x=deque.popleft(self)
 		if len(self.patterns)>0:
 			self.testAllPatterns(doCallbacks=True,retnList=False)
-		return self
+		return x
 
 	def remove(self,value): 
 		"""
@@ -408,6 +446,15 @@ class fifostr(deque):
 			self.testAllPatterns(doCallbacks=True,retnList=False)
 		return self
 
+	def __str__(self):
+		return self.all()
+
+	def __add__(self,other):
+		return self.all()+str(other)
+
+	def __radd__ (self,other):
+		return str(other)+self.all()
+
 	#pattern handling==========================================================
 	def testPattern(self, pattern, start=0,end='$'):
 		"""
@@ -458,12 +505,12 @@ class fifostr(deque):
 		"""			
 		l = []
 		for i in self.patterns: #todo replace with map()
-			if (self.patterns[i][PIDX.ACTIVE]): #is an active pattern 
-				r=self.testPattern(self.patterns[i][PIDX.PATTERN],self.patterns[i][PIDX.START] ,self.patterns[i][PIDX.END])
-				l.append([i,self.patterns[i][PIDX.LABEL],r])
+			if (self.patterns[i][self.PIDX.ACTIVE]): #is an active pattern 
+				r=self.testPattern(self.patterns[i][self.PIDX.PATTERN],self.patterns[i][self.PIDX.START] ,self.patterns[i][self.PIDX.END])
+				l.append([i,self.patterns[i][self.PIDX.LABEL],r])
 				if (doCallbacks):
-					if r and (self.patterns[i][PIDX.CALLBACKFN] != None):
-						self.patterns[i][PIDX.CALLBACKFN](self[self.patterns[i][PIDX.START]:self.patterns[i][PIDX.END]],self.patterns[i][PIDX.LABEL])
+					if r and (self.patterns[i][self.PIDX.CALLBACKFN] != None):
+						self.patterns[i][self.PIDX.CALLBACKFN](self[self.patterns[i][self.PIDX.START]:self.patterns[i][self.PIDX.END]],self.patterns[i][self.PIDX.LABEL])
 		if retnList:
 			return l
 		return len(l) #if not returning list, then return the # of matched patterns
@@ -495,7 +542,7 @@ class fifostr(deque):
 		"""				
 		n = self.patternIdx
 		self.patterns[n] = [pattern,start,end,callbackfn,label,active] #note order is important since used elsewhere
-		#PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5)  # see declaration above class def
+		#self.PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5)  # see declaration above class def
 		self.patternIdx += 1
 
 		return n
@@ -512,8 +559,8 @@ class fifostr(deque):
 		"""
 		if (index in self.patterns):
 			#del self.patterns[index] # don't do this --> this will mess up indexes to existing patterns the user may have
-			self.patterns[index][PIDX.PATTERN]=""
-			self.patterns[index][PIDX.ACTIVE]=False
+			self.patterns[index][self.PIDX.PATTERN]=""
+			self.patterns[index][self.PIDX.ACTIVE]=False
 		return None
 
 	def getPattern(self,index): 
@@ -543,11 +590,11 @@ class fifostr(deque):
 		r=[]
 		if self.typeStr(label)=="str":
 			for i in self.patterns:
-				if self.patterns[i][PIDX.LABEL] == label:
+				if self.patterns[i][self.PIDX.LABEL] == label:
 					r.append(list(self.patterns[i]))
 		elif self.typeStr(label)=="regex":
 			for i in self.patterns:
-				if label.search(self.patterns[i][PIDX.LABEL]) != None:
+				if label.search(self.patterns[i][self.PIDX.LABEL]) != None:
 					r.append(list(self.patterns[i]))
 		return r
 
@@ -563,7 +610,7 @@ class fifostr(deque):
 			current pattern state after setting
 		"""
 		if (index in self.patterns):
-			self.patterns[index][PIDX.ACTIVE] = state==True
+			self.patterns[index][self.PIDX.ACTIVE] = state==True
 		return state==True
 
 	def getPatternActiveState(self,index): 
@@ -577,7 +624,7 @@ class fifostr(deque):
 			bool: current pattern state
 		"""
 		if (index in self.patterns):
-			return self.patterns[index][PIDX.ACTIVE]
+			return self.patterns[index][self.PIDX.ACTIVE]
 		return -1 #error in index
 
 
@@ -632,3 +679,4 @@ class fifostr(deque):
 		return 	{
 					"version" : [1,0,0]					
 				}
+

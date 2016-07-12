@@ -131,7 +131,7 @@ def main():
 	#now show searching for stored pattern matchers in the pattern dict
 	#this is not searching the fifo-string itself, just the stored patterns that we have entered
 	print("find pattern by label 'foo':",myFifoStr.findPatternByLabel("foo")) #no matches returns empty list
-	print("find pattern by label '234 hit':",myFifoStr.findPatternByLabel("234 hit")) #shows match
+	print("find pattern by label '234 hit':",myFifoStr.findPatternByLabel("234 at start")) #shows match
 	print("find pattern by label using regex '[rf][0-9]':")
 	pp.pprint(myFifoStr.findPatternByLabel(re.compile("[rf][0-9]")))
 
