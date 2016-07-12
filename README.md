@@ -160,11 +160,6 @@ note that as of this writing pydoc generates its output in the current directory
 
 naming as fifostr vs FifoStr --> since the other collections are lowercase it seemed more natural even though some Python conventions refer to naming classes with MixedCase.  No real pref here just seemed the best fit at the time since this *is* a collection 
 
-### License
-Opensource for all purposes as long as attribution is given.   
-
-
-
 
 
 
