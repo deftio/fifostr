@@ -122,7 +122,7 @@ def testSimplePatternMatches():
 	assert f.testPattern(f2) == False
 	pass
 
-def testPatternStorageManagement():
+def testStoredPatterns():
 	"""
 	test adding/deleting setActive, finding stored patterns
 	"""
@@ -195,26 +195,30 @@ def testPatternStorageManagement():
 
 	#end pattern management deleting / adding etc
 
-	#now beging actual pattern matching and triggers
-
-"""
+	#find a stored pattern..
 	#now show searching for stored pattern matchers in the pattern dict
 	#this is not searching the fifo-string itself, just the stored patterns that we have entered
-	print("find pattern by label 'foo':",myFifoStr.findPatternByLabel("foo")) #no matches returns empty list
-	print("find pattern by label '234 hit':",myFifoStr.findPatternByLabel("234 at start")) #shows match
-	print("find pattern by label using regex '[rf][0-9]':")
-	pp.pprint(myFifoStr.findPatternByLabel(re.compile("[rf][0-9]")))
+	assert f.findPatternByLabel("foo") == [] #no matches returns empty list
+	assert f.findPatternByLabel("234 at start") ==  [["234",0,3,logf,"234 at start",True]] #shows match	
+	assert f.findPatternByLabel(re.compile("[rf][0-9]")) == [
+				 [re.compile("[0-9]+"),0,"$",logf,"r1 hit",True],
+				 [re.compile("[a-z]|w+"),0,"$",logf,"r2 hit",True],
+				 [f2,0,"$",logf,"f2 hit",False]
+				]
+	#end of pattern management -- finding a stored pattern 
+
+	#now beging actual pattern matching and triggers
+
 
 	#and finally demonstrate that patterns auto-trigger when items inserted in fifostr .. which afterall
 	#is the point of the whole thing.. ;)
-	print("\n fifo operations ============")
-	for c in '01234567890abcdefghijklmnop':  #show using inc which accomplishes same thing
-		myFifoStr += c
+	#for c in '01234567890abcdefghijklmnop':  #show using inc which accomplishes same thing
+	#	myFifoStr += c
 
-	myFifoStr+= 'abcdefghi'
-	print (myFifoStr.all())
+	#myFifoStr+= 'abcdefghi'
+	#print (myFifoStr.all())
 	pass
-"""
+
 
 
 

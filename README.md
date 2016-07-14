@@ -27,6 +27,9 @@ See LICENSE.txt file in this directory.   The license is the "FreeBSD" 2 clause 
 pip install fifostr # or just pull fifostr.py from the source repository and put in your source path  
 ```
 
+### Original Usage
+
+Originally part of a terminal program called 'dioterm' (albeit in much more compact form), this library was used used to 'listen' to traffic in either direction on a serial port.  When certain patterns were found such as a command sent from the host or a special piece of data from the embedded microntroller client, fifostr would trigger a callback to do something.  This was very useful when sequences of commands had to be set up between the host and client.  Many of these sequences where conditional based on what either the host or client sent resulting in many variations of sequence-test cases, especially if this results in the host then having to make some other call to an unrelated process or hardware to reply correctly.
 
 ### Functionality   
 allows a string which is treated as a deque (fifo) object with:  
@@ -36,7 +39,7 @@ allows a string which is treated as a deque (fifo) object with:
   * match head/tail  --> match a supplied string to either the head or tail  
   * use patterns to trigger callbacks  --> pattern can be string | regex | user_supplied_parser any of which triggers user supplied callback_fn  
     * all patterns can look at either the whole fifostr or any subset e.g. addPattern("foo",myCallback,2,5,"bar") 
-        --> only looks for "foo" between positions 2 and 5 in the fifostr   object and will call myCallback with ("foo","bar")  
+        --> only looks for "foo" between positions 2 and 5 in the fifostr and will call myCallback with ("foo","bar")  if found
     * all patterns have optional label which can be used for logging purposes (eg. when pattern found, in addition to callback, emit label)  
     * user supplied callback_fn is called with both the string-match section and the label  
     * patterns can be added/deleted from the list of patterns "watching" the fifostr content
