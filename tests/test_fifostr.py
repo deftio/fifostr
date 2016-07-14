@@ -89,23 +89,132 @@ def testSimpleUnBoundedLengthFIFOOperations():
 	assert f== "z0abcdefghijk1234cx"
 	pass
 
+def testIndexAndSlicing():
+	f = fifostr(10)
+	f+= "abcdefghij"
+	assert f[3] == 'd'			#accepts integer index  
+	assert f[1:4] =='bcd' 		#accepts slice 
+	assert f[[1,4,2]] == 'bec'  #accepts list 
+	assert f[1,3,4] == 'bde'	#accepts tuple
+
 def testSimplePatternMatches():
 	"""
 	test simple direct pattern matches
 	"""
-	f = fifostr(10)
+	f = fifostr()
+	f += 'this and that'
+	assert f.testPattern('this',0,4) == True
+	assert f.testPattern('67890') == False
+
+	#regexes
+	r1=re.compile("[0-9]+")
+	f.testPattern(r1) == False
+	r2=re.compile("[a-z]|w+")
+	f.testPattern(r2)
+	
+	#functions which act as parsers  (note since using callback these functions must return True if match foud or False if no match)
+	def f1(s):
+		return s=='this and that'
+	assert f.testPattern(f1) == True
+
+	def f2(s):
+		return s=='67890'		
+	assert f.testPattern(f2) == False
 	pass
 
 def testPatternStorageManagement():
 	"""
 	test adding/deleting setActive, finding stored patterns
 	"""
-	pass
+	_r = ""
+	def logf(s):
+		assert s== _r
+	f = fifostr(5)
+	f+= "123456"
+	f.addPattern("234",logf,label="234 hit across whole string")
+	f.addPattern("234",logf,start=0, end=len("234"),label="234 at start")
+	f.addPattern("67890",logf,label="67890 hit as whole str")
+	f.addPattern('def',logf,start=3,end=6,label="'def' btw 3,6")
+		#regexes
+	r1=re.compile("[0-9]+")
+	r2=re.compile("[a-z]|w+")
+	f.addPattern(r1,logf,label="r1 hit")
+	f.addPattern(r2,logf,label="r2 hit")
 
-def testStoredPatternMatches():
-	"""
-	test stored patterns against a fifostr object 
-	"""
+	def f1(s):
+		return s=='this and that'
+	def f2(s):
+		return s=='67890'		
+	x1=f.addPattern(f1,logf,label="f1 hit")
+	x2=f.addPattern(f2,logf,label="f2 hit")
+	#f.showPatterns()
+	pats = f.showPatterns()
+
+	#check to see if all patterns got stored
+	assert pats == {
+					0: ["234",0,"$",logf,"234 hit across whole string",True],
+					1: ["234",0,3,logf,"234 at start",True],
+					2: ["67890",0,"$",logf,"67890 hit as whole str", True],
+					3: ["def",3,6,logf,"'def' btw 3,6",True],
+					4: [re.compile("[0-9]+"),0,"$",logf,"r1 hit",True],
+					5: [re.compile("[a-z]|w+"),0,"$",logf,"r2 hit",True],
+					6: [f1,0,"$",logf,"f1 hit",True],
+					7: [f2,0,"$",logf,"f2 hit",True]
+					}
+
+	results = f.testAllPatterns() #test all the patterns added and are active #note pass doCallbacks=True to activate callback fns
+
+	assert results == 					[
+					[0, '234 hit across whole string', False],
+					[1, '234 at start', True],
+					[2, '67890 hit as whole str', False],
+					[3, "'def' btw 3,6", False],
+					[4, 'r1 hit', True],
+					[5, 'r2 hit', False],
+					[6, 'f1 hit', False],
+					[7, 'f2 hit', False]]
+	assert len(results)==8
+
+	assert 7==f.delPattern(x1) #show deleting a pattern from the search
+	pats = f.showPatterns() #get remaining patterns
+	
+	assert pats == {
+				0: ["234",0,"$",logf,"234 hit across whole string",True],
+				1: ["234",0,3,logf,"234 at start",True],
+				2: ["67890",0,"$",logf,"67890 hit as whole str", True],
+				3: ["def",3,6,logf,"'def' btw 3,6",True],
+				4: [re.compile("[0-9]+"),0,"$",logf,"r1 hit",True],
+				5: [re.compile("[a-z]|w+"),0,"$",logf,"r2 hit",True],
+				7: [f2,0,"$",logf,"f2 hit",True]
+				}
+
+	assert len(pats)==7
+
+	f.setPatternActiveState(x2,False)  #show retrieving pattern by index and setting inactive
+	assert f.getPattern(x2) == [f2,0,"$",logf,"f2 hit",False]
+
+	#end pattern management deleting / adding etc
+
+	#now beging actual pattern matching and triggers
+
+"""
+	#now show searching for stored pattern matchers in the pattern dict
+	#this is not searching the fifo-string itself, just the stored patterns that we have entered
+	print("find pattern by label 'foo':",myFifoStr.findPatternByLabel("foo")) #no matches returns empty list
+	print("find pattern by label '234 hit':",myFifoStr.findPatternByLabel("234 at start")) #shows match
+	print("find pattern by label using regex '[rf][0-9]':")
+	pp.pprint(myFifoStr.findPatternByLabel(re.compile("[rf][0-9]")))
+
+	#and finally demonstrate that patterns auto-trigger when items inserted in fifostr .. which afterall
+	#is the point of the whole thing.. ;)
+	print("\n fifo operations ============")
+	for c in '01234567890abcdefghijklmnop':  #show using inc which accomplishes same thing
+		myFifoStr += c
+
+	myFifoStr+= 'abcdefghi'
+	print (myFifoStr.all())
 	pass
+"""
+
 
 

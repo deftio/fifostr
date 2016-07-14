@@ -103,7 +103,7 @@ Returns:<br>
 <dl><dt><a name="fifostr-__iadd__"><strong>__iadd__</strong></a>(self, x)</dt><dd><tt>add&nbsp;a&nbsp;string&nbsp;via&nbsp;the&nbsp;+=&nbsp;operator<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;(str):&nbsp;string&nbsp;to&nbsp;add<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;(str&nbsp;or&nbsp;int&nbsp;or&nbsp;float):&nbsp;string&nbsp;to&nbsp;add<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#fifostr">fifostr</a>&nbsp;object&nbsp;(mutable)</tt></dd></dl>
@@ -207,7 +207,7 @@ Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;(int)&nbsp;:&nbsp;id&nbsp;of&nbsp;pattern&nbsp;to&nbsp;be&nbsp;removed.<br>
 &nbsp;<br>
 Returns:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;of&nbsp;stored&nbsp;patterns&nbsp;remaining</tt></dd></dl>
 
 <dl><dt><a name="fifostr-eq"><strong>eq</strong></a>(self, instring)</dt><dd><tt>test&nbsp;if&nbsp;a&nbsp;string&nbsp;matches&nbsp;entire&nbsp;<a href="#fifostr">fifostr</a><br>
 &nbsp;<br>

@@ -386,11 +386,14 @@ class fifostr(deque):
 		add a string via the += operator
 
 		Args:
-			x (str): string to add
+			x (str or int or float): string to add
 
 		Returns:
 			fifostr object (mutable)
 		"""			
+		if isinstance(x,int) or isinstance(x,float):
+			x=str(x)
+
 		deque.__iadd__(self,x)
 		if len(self.patterns)>0:
 			self.testAllPatterns(doCallbacks=True,retnList=False)
@@ -475,7 +478,7 @@ class fifostr(deque):
 		if start == '^':
 			start = 0
 		if end == '$':
-			end = len(self)-1
+			end = len(self)
 		s=self[start:end]		
 		pt = self.typeStr(pattern)
 		#cheesy dynamic type handling here...  
@@ -555,13 +558,11 @@ class fifostr(deque):
 			index (int) : id of pattern to be removed.
 
 		Returns:
-			None
+			number of stored patterns remaining
 		"""
 		if (index in self.patterns):
-			#del self.patterns[index] # don't do this --> this will mess up indexes to existing patterns the user may have
-			self.patterns[index][self.PIDX.PATTERN]=""
-			self.patterns[index][self.PIDX.ACTIVE]=False
-		return None
+			del self.patterns[index] # don't do this --> this will mess up indexes to existing patterns the user may have
+		return len(self.patterns)
 
 	def getPattern(self,index): 
 		"""
