@@ -16,6 +16,8 @@ fifostr has built-in pattern matching and triggering.  Simply add / remove patte
 
 There is nothing really profound here -- one can argue its not worth its own repo. Originally a lighter version of this was used in a python serial terminal program dioterm (which allowed the serial terminal to parse commands sent/received by both sides).  
 
+And finally .. I just wanted to get some practice on python module packaging ... 
+
 cheers-
 manu
 
@@ -30,6 +32,7 @@ pip install fifostr # or just pull fifostr.py from the source repository and put
 ### Original Usage
 
 Originally part of a terminal program called 'dioterm' (albeit in much more compact form), this library was used used to 'listen' to traffic in either direction on a serial port.  When certain patterns were found such as a command sent from the host or a special piece of data from the embedded microntroller client, fifostr would trigger a callback to do something.  This was very useful when sequences of commands had to be set up between the host and client.  Many of these sequences where conditional based on what either the host or client sent resulting in many variations of sequence-test cases, especially if this results in the host then having to make some other call to an unrelated process or hardware to reply correctly.
+
 
 ### Functionality   
 allows a string which is treated as a deque (fifo) object with:  

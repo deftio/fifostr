@@ -415,8 +415,8 @@ class fifostr(deque):
 			if (e=='$') or (e== None): # the character "$" is used to specify end-of-string anchor in regex, so also allowed here
 				e=len(self)
 			if (e < 0):
-				e = len(self)+e  # the character "^" is used to specifiy start-of-string anchor in regex, so also allowed here
-			if (s=='^') or (s==None): 
+				e = len(self)+e  
+			if (s=='^') or (s==None):  # the character "^" is used to specifiy start-of-string anchor in regex, so also allowed here
 				s=0
 			return "".join(itertools.islice(self, s, e, index.step))
 		if isinstance(index, list):
@@ -507,16 +507,20 @@ class fifostr(deque):
 			if retnList is True returns list of matches else returns number of matches as int.
 		"""			
 		l = []
+		c = 0
 		for i in self.patterns: #todo replace with map()
 			if (self.patterns[i][self.PIDX.ACTIVE]): #is an active pattern 
 				r=self.testPattern(self.patterns[i][self.PIDX.PATTERN],self.patterns[i][self.PIDX.START] ,self.patterns[i][self.PIDX.END])
-				l.append([i,self.patterns[i][self.PIDX.LABEL],r])
+				if (retnList):
+					l.append([i,self.patterns[i][self.PIDX.LABEL],r])
+				else:
+					c=c+1
 				if (doCallbacks):
 					if r and (self.patterns[i][self.PIDX.CALLBACKFN] != None):
 						self.patterns[i][self.PIDX.CALLBACKFN](self[self.patterns[i][self.PIDX.START]:self.patterns[i][self.PIDX.END]],self.patterns[i][self.PIDX.LABEL])
 		if retnList:
 			return l
-		return len(l) #if not returning list, then return the # of matched patterns
+		return c #if not returning list, then return the # of matched patterns
 
 	def addPattern(self, pattern, callbackfn = None, start=0, end='$',label="",active=True): 
 		"""

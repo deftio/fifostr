@@ -27,7 +27,7 @@ e.g
 	[x] pattern can be user parser function
 	[x] operators support slicing, indexing
 	[x] find a pattern by label using str or regex 
-	[x] typeStr operator is "hidden" feature ## Todo: move test from example.py to tests dir
+	[x] typeStr operator is "hidden" feature 
 	[x] __iadd__ (+=) #add chars to fifostr right (note does not do resize), all chars added in 1 shot
 	[x] __eq__ (==)  #compare fifostr as if it were a string
 	[x] __get_item__ #operator overload  allows slicing, lists
@@ -72,6 +72,11 @@ e.g
 	[ ] test and finish & fix example  portion in README.md, perhaps use example from python interpreter  
 	[x] add bitbucket compliant double spaces at end of each line in markdown files 
 	[ ] makefile - build, run tests, clean (e.g remove .pyc, *~), package
+		../tests/pytest  #run tests  (be sure to run both python2, python3 )
+		../docs/pydoc -w ../fifostr.py 
+		../docs/zip fifostr-docs.zip *.html #documenation for upload to pypi.org
+		python packaging once above done twine etc...
+		make clean  #run makefile, remove *~, .pyc and other garbage
 
 ### future stuff (could be never)
 	[ ] load/save array of patterns in one call (so can be stored to disk), note issue with dealing callback & parser funcs
@@ -87,4 +92,4 @@ e.g
 	[ ] add/del log-function  
 	[ ] constructor, take log-function #as in logging each event to log function
 	[ ] allow optional flush each time
-	[ ] make standalone app which allows patterns to be loaded from a user-spec'd file, takes streams as input, logf output
+	[ ] make standalone app which allows patterns to be loaded from a user-spec'd file, takes streams as input, output logf output

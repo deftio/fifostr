@@ -5,6 +5,8 @@ fifostr.py installer file for pip packager
 setup file for pip install.
  
 See:
+    https://the-hitchhikers-guide-to-packaging.readthedocs.io/en/latest/quickstart.html
+
 taken from: 
     https://github.com/pypa/sampleproject
 

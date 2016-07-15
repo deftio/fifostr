@@ -139,12 +139,11 @@ def main():
 
 	#and finally demonstrate that patterns auto-trigger when items inserted in fifostr .. which afterall
 	#is the point of the whole thing.. ;)
-	print("\n fifo operations ============")
+	print("\nfifo pattern trigger examples ============")
 	for c in '01234567890abcdefghijklmnop':  #show using inc which accomplishes same thing
 		myFifoStr += c
+		print ('added: "'+ c + '"  fifostr--> ' + myFifoStr.all() + " ==================")
 
-	myFifoStr+= 'abcdefghi'
-	print (myFifoStr.all())
-
+	print("\done ... \n")
 if __name__ == '__main__':
     main()
