@@ -31,6 +31,7 @@ from __future__ import print_function #just for parenthesis wrapping in python 2
 """
 import sys
 sys.path.append('..')  #this is just to find fifostr which is in one up in the dir 
+sys.path.append('../fifostr')  #this is just to find fifostr which is in one up in the dir 
 
 from fifostr import fifostr
 import re
@@ -144,6 +145,6 @@ def main():
 		myFifoStr += c
 		print ('added: "'+ c + '"  fifostr--> ' + myFifoStr.all() + " ==================")
 
-	print("\done ... \n")
+	print("done ... \n")
 if __name__ == '__main__':
     main()

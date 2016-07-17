@@ -3,7 +3,8 @@
 
 this file contains some free form thinking of things needed before fifostr can be 'published' via github or pip
 
-much of the notes here are my internal thinking about what makes either a decent-enough complete module or good publishing hygene:
+much of the notes here are my internal thinking about what makes either a decent-enough complete module or good publishing hygene
+
 e.g
 
 	- docs
@@ -13,6 +14,7 @@ e.g
 	- license
 	- packaging and dir structure
 
+I'd released projects in other langauges but going the python packing release "process" has been interesting from a code-delievery point of view.
 
 ### features checklist (1.0.0)  -- what the module should do
 	[x] head
@@ -64,12 +66,12 @@ e.g
 	[x] license.txt file -- chose FreeBSD
 	[ ] pip installer
 	[x] create identity in pypi (pip online directory)
-	[ ] tests.py / unit tests  #in /tests directory
+	[x] tests.py / unit tests  #in /tests directory, note callbacks are tested in example.py
 	[x] check all functions have """docstring""" comments
 	[x] function documentation in HTML in /docs directory --> accomplished with pydoc
 	[x] check Python 2.7+ and Python 3+ compatibility with tests
 	[x]	proper markdown for README.md
-	[ ] test and finish & fix example  portion in README.md, perhaps use example from python interpreter  
+	[x] test and finish & fix example  portion in README.md, perhaps use example from python interpreter  
 	[x] add bitbucket compliant double spaces at end of each line in markdown files 
 	[ ] makefile - build, run tests, clean (e.g remove .pyc, *~), package
 		../tests/pytest  #run tests  (be sure to run both python2, python3 )

@@ -31,7 +31,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.0',
+    version='1.0.2',
  
     description='fifostr - A FIFO (first in first out) buffer for strings derived from deque with pattern match callbacks',
     long_description=long_description,
@@ -52,7 +52,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
  
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
@@ -71,6 +71,7 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
  
+
     # What does your project relate to?
     keywords='string stream parsing, parser utilities',
  
