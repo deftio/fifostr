@@ -682,6 +682,6 @@ class fifostr(deque):
 			dict: containing current version
 		"""
 		return 	{
-					"version" : [1,0,0]					
+					"version" : [1,0,4]					
 				}
 

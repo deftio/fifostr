@@ -1,0 +1,4 @@
+#__init__.py is required by python to treat a directory as a module.  
+def main():
+    """Entry point for the application script"""
+    pass
