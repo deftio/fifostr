@@ -671,7 +671,7 @@ class fifostr(deque):
 		return len(self.patterns)
 
 	#version info
-	def ver(self):
+	def ver(self, more=None):
 		"""
 		ver returns the version number of this library
 
@@ -681,7 +681,11 @@ class fifostr(deque):
 		Returns:
 			dict: containing current version
 		"""
-		return 	{
-					"version" : [1,0,8]					
-				}
+		v = {
+				"version" : [1,0,81]					
+			}
+		if more == "url":
+			v["url"] = "https://github.com/deftio/fifostr"
+			
+		return 	v
 
