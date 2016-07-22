@@ -117,7 +117,7 @@ def main():
 
 ### Notes  
 Absolutley *no* warranties on performance.  This is not replacement for a compiler/parser front end!  It just iterates over stored patterns every time something is added to the 
-fifostr object.  If you do have a parser you wish to be called then just add it as a function so that every time the fifostr is updated with a char it will call your parserto do the work.   Your parser must return a boolean result if you wish to use the callback based triggering.
+fifostr object.  If you do have a parser you wish to be called then just add it as a function so that every time the fifostr is updated with a char it will call your parser to do the work.   Your parser must return a boolean result if you wish to use the callback based triggering.
 
 ```
 #let your own parser do the work  
