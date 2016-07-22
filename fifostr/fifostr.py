@@ -41,23 +41,27 @@ import re
 import itertools
 
 
+__author__ = 'M. A. Chatterjee'
+__copyright__ = 'copyright (C) 2011-2016 M. A. Chatterjee'
+__version_full__ = [1,1,0]   #allows mixed types e.g. 1,0,"92b"
+__version__ = '.'.join(str(x) for x in __version_full__)
 
-#Simple FIFO (First-In-First-Out) for strings --> allows rolling FIFO of last n chars seen
+#FIFO (First-In-First-Out) String --> is a rolling FIFO of last n chars seen
 #use addPattern() / delPattern() to add/delete patterns to look for in the fifo
 #patterns can be strings, regular expressions (regex), or a user-supplied-function provided that
 #the function takes a string, returns a bool
 
-class fifostr(deque):
+class FIFOStr(deque):
 	def __init__(self, maxsize=None):
 		"""
-		fifostr is a deque derived string class which has pattern matching abilities when new chars
+		FIFOStr is a deque derived string class which has pattern matching abilities when new chars
 		are added to its internal storage.
 
-		fifostr may be unbounded in length as in 
-		myFifoStr = fifostr()
+		FIFOStr may be unbounded in length as in 
+		myFifoStr = FIFOStr()
 
 		or may be set to a fixed length as in
-		myFifoStr = fifostr(10)   #sets a fifostr object with a fixed length of 10 chars
+		myFifoStr = FIFOStr(10)   #sets a fifostr object with a fixed length of 10 chars
 
 		patterns can be strings, regular expressions, or user supplied parsers.  when a character is added to 
 		fifostr each stored pattern is checked to see if a match is found.  If a match is found then a user supplied
@@ -67,7 +71,7 @@ class fifostr(deque):
 		Args:
 		    size (int, optional): set size of the fifostr object.  unbounded if omitted.
 		"""
-		super( fifostr, self ).__init__(maxlen=maxsize) #inheritance from deque
+		super( FIFOStr, self ).__init__(maxlen=maxsize) #inheritance from deque
 		self.patterns 	= {} #dict of patterns to search for
 		self.patternIdx = 0
 		
@@ -99,7 +103,7 @@ class fifostr(deque):
 			str(type(self.head)):"function", #note raw type is 'instancemethod'
 			str(type(f)):"function",
 			str(type("")):"str",
-			str(type(fifostr)):"class"
+			str(type(FIFOStr)):"class"
 		}
 		if (xt) in t:
 			return t[xt]
@@ -671,21 +675,18 @@ class fifostr(deque):
 		return len(self.patterns)
 
 	#version info
-	def ver(self, more=None):
+	def ver(self):
 		"""
-		ver returns the version number of this library
-
-		Args:
-			None
+		ver returns the version info of this library
 
 		Returns:
 			dict: containing current version
 		"""
 		v = {
-				"version" : [1,0,81]					
+				"version_str" :  __version__,
+				"version" : __version_full__,
+				"url" : "https://github.com/deftio/fifostr"					 
 			}
-		if more == "url":
-			v["url"] = "https://github.com/deftio/fifostr"
 			
 		return 	v
 

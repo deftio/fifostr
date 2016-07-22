@@ -19,6 +19,15 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
  
+#get the package version from ... the package
+import sys
+sys.path.append('./fifostr')  #this is just to find fifostr which is in one up in the dir 
+from fifostr import *
+
+def getFIFOStrVersion():
+    f = FIFOStr()
+    return f.ver()["version_str"]
+
 here = path.abspath(path.dirname(__file__))
  
 # Get the long description from the README file
@@ -26,19 +35,19 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
  
 setup(
-    name='fifostr',
+    name='FIFOStr',
  
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.81',
+    version=getFIFOStrVersion(),
  
     description='fifostr - A FIFO (first in first out) buffer for strings derived from deque with pattern match callbacks',
     long_description=long_description,
  
     # The project's main homepage.
     url='https://github.com/deftio/fifostr',
-    download_url='https://github.com/deftio/fifostr',
+    download_url='https://pypi.python.org/pypi/fifostr',
 
     # Author details
     author='manu chatterjee',
@@ -99,7 +108,7 @@ setup(
         'test': ['pytest']
     },
  
-    pacakge_dir={'fifostr' : 'fifostr'},
+    package_dir={'fifostr' : 'fifostr'},
 
     # If there are data files included in your packages that need to be
     # installed, specify them here.  If using Python 2.6 or less, then these
@@ -122,4 +131,5 @@ setup(
     #        'sample=sample:main',
     #    ],
     #},
+    test_suite = "py.test"
 )

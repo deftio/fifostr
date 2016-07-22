@@ -33,7 +33,7 @@ import sys
 sys.path.append('..')  #this is just to find fifostr which is in one up in the dir 
 sys.path.append('../fifostr')  #this is just to find fifostr which is in one up in the dir 
 
-from fifostr import fifostr
+from fifostr import FIFOStr 
 import re
 import pprint
 
@@ -42,7 +42,7 @@ def main():
 	pp = pprint.PrettyPrinter(depth=6) #for nice printing complex objects
 	#simple examples...
 	print("simple examples for fifostr\nA class for treatings strings as FIFO(deque) with matching abilities\n")
-	myFifoStr=fifostr(5)
+	myFifoStr=FIFOStr(5)
 	print ("myFifoStr=fifostr(5) ==>",myFifoStr)
 	
 	myFifoStr+='1234567'
@@ -145,6 +145,9 @@ def main():
 		myFifoStr += c
 		print ('added: "'+ c + '"  fifostr--> ' + myFifoStr.all() + " ==================")
 
+	ver = '.'.join(str(x) for x in myFifoStr.ver()["version"])
+	print("completed examples... fifostr.py ver: " + ver)	
 	print("done ... \n")
+
 if __name__ == '__main__':
     main()

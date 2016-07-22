@@ -12,7 +12,7 @@ def testTypeStr():
 	"""
 	test internal "typeOf" function which is used for dynamically handling different pattern types
 	"""
-	myFifoStr = fifostr(5)
+	myFifoStr = FIFOStr(5)
 	assert myFifoStr.typeStr(123) == "int"  
 	assert myFifoStr.typeStr("this") == "str"
 	assert myFifoStr.typeStr(testTypeStr) == "function"
@@ -21,7 +21,7 @@ def testSimpleBoundedLengthFIFOOperations():
 	"""
 	test basic fifostr operations ... adding chars and checking head/tail/full-str extractions
 	"""
-	f = fifostr(10)
+	f = FIFOStr(10)
 	f += "abc"
 	assert f.all() == 'abc'
 	assert f == 'abc'
@@ -60,7 +60,7 @@ def testSimpleUnBoundedLengthFIFOOperations():
 	"""
 	test basic fifostr operations where no maxlen is set
 	"""
-	f = fifostr() #no max length set
+	f = FIFOStr() #no max length set
 	f += "abc"
 	assert f.all() == 'abc'
 	assert f == 'abc'
@@ -91,7 +91,7 @@ def testSimpleUnBoundedLengthFIFOOperations():
 	pass
 
 def testIndexAndSlicing():
-	f = fifostr(10)
+	f = FIFOStr(10)
 	f+= "abcdefghij"
 	assert f[3] == 'd'			#accepts integer index  
 	assert f[1:4] =='bcd' 		#accepts slice 
@@ -102,7 +102,7 @@ def testSimplePatternMatches():
 	"""
 	test simple direct pattern matches
 	"""
-	f = fifostr()
+	f = FIFOStr()
 	f += 'this and that'
 	assert f.testPattern('this',0,4) == True
 	assert f.testPattern('67890') == False
@@ -134,7 +134,7 @@ def testStoredPatterns():
 		pass
 
 	#set up fifostr tests for patterns
-	f = fifostr(5)
+	f = FIFOStr(5)
 	f+= "123456"
 	f.addPattern("234",logf,label="234 hit across whole string")
 	f.addPattern("234",logf,start=0, end=len("234"),label="234 at start")
@@ -214,7 +214,7 @@ def testStoredPatterns():
 
 
 	#now beging actual pattern matching and triggers
-	f = fifostr(5)  #just simpler for testing purposes
+	f = FIFOStr(5)  #just simpler for testing purposes
 
 	f+= "12345"
 
