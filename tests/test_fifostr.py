@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0, '..')
 sys.path.insert(0, '../fifostr')
 
+import re
 from fifostr import *
 
 def testTypeStr():
@@ -130,8 +131,12 @@ def testStoredPatterns():
 
 	#this is the callback function for the pattern matches.  We'll use this later 
 
-	def logf(matchStr,label):
-		pass
+	def logf(s,label=""):  
+		assert len(s)==0	#pragma: no cover
+		print("callback-> match_str:"+s+"  label:"+label) #pragma: no cover
+
+
+	#assert logf("foo","bar") != None
 
 	#set up fifostr tests for patterns
 	f = FIFOStr(5)

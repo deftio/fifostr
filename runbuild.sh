@@ -27,8 +27,10 @@ fi
 if [ $1 == 'tests' ]
 then
 	#testing (in tests dir)
-	(cd ./tests && py.test -vv)
-	(cd ./tests && python3 -m pytest  -vv)
+	#(cd ./tests && py.test -vv)
+	(cd ./tests && py.test --doctest-modules --cov ./test_fifostr.py -vv)
+	#(cd ./tests && python3 -m pytest  -vv)
+	(cd ./tests && python3 -m pytest --doctest-modules --cov ./test_fifostr.py -vv)
 fi
 
 if [ $1 == 'upload-pypitest' ]
