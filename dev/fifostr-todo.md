@@ -64,23 +64,26 @@ I'd released projects in other langauges but going the python packing release "p
 
 ### release housekeeping checklist  -- things to pack it up for release
 	[x] license.txt file -- chose FreeBSD
-	[ ] pip installer
+	[x] pip installer 
+	[x] pip3 installer
 	[x] create identity in pypi (pip online directory)
 	[x] tests.py / unit tests  #in /tests directory, note callbacks are tested in example.py
+	[x] 100% test coverage
 	[x] check all functions have """docstring""" comments
 	[x] function documentation in HTML in /docs directory --> accomplished with pydoc
 	[x] check Python 2.7+ and Python 3+ compatibility with tests
 	[x]	proper markdown for README.md
 	[x] test and finish & fix example  portion in README.md, perhaps use example from python interpreter  
 	[x] add bitbucket compliant double spaces at end of each line in markdown files 
-	[ ] makefile - build, run tests, clean (e.g remove .pyc, *~), package
+	[x] makefile - build, run tests, clean (e.g remove .pyc, *~), package
 		../tests/pytest  #run tests  (be sure to run both python2, python3 )
 		../docs/pydoc -w ../fifostr.py 
 		../docs/zip fifostr-docs.zip *.html #documenation for upload to pypi.org
 		python packaging once above done twine etc...
 		make clean  #run makefile, remove *~, .pyc and other garbage
 
-### future stuff (could be never)
+
+### future stuff .. could be never :)
 	[ ] load/save array of patterns in one call (so can be stored to disk), note issue with dealing callback & parser funcs
 		[
 			[pattern1, callbackfn1, optname1,  pos_s, pos_e] ,
@@ -89,9 +92,12 @@ I'd released projects in other langauges but going the python packing release "p
 	[ ] make optimization of map() for patterns instead of loop  
 		-keep "shadow" array of which patterns are active so as to remove check each time a char is added  
 	[ ]  make all string patterns (patterns which are just passed as a string) converted to regex internally  
-			note need to save the string in the pattern array holder so if a user does a "getPattern()" a string is returned  
+			note need to save the string in the pattern array holder so if a user does a "getPattern()" a string is returned 
+			then exec a master regex (for all matches) across fifostr "string" 
+			note that when combining these stringified regexes we need to add offset bounds in to the regex construct
 	universal logging function support: (allows one func which logs all changes and label hits to a stream useful for debugging stuff)
 	[ ] add/del log-function  
 	[ ] constructor, take log-function #as in logging each event to log function
 	[ ] allow optional flush each time
 	[ ] make standalone app which allows patterns to be loaded from a user-spec'd file, takes streams as input, output logf output
+	[ ] add continuous integration (e.g. travis-ci or jenkins for check-ins)
