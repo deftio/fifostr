@@ -16,7 +16,16 @@ e.g
 
 I'd released projects in other langauges but going the python packing release "process" has been interesting from a code-delievery point of view.
 
-### features checklist (1.0.0)  -- what the module should do
+### features checklist (1.1.1)
+    [ ] get Sphinx docs working
+    [ ] use continuous build checkin such as .travis.yml
+    [ ] auto convert python type long to FIFOStr (both typeStr, and in operators which convert numbers to string.  only applies to 2.7x )
+
+### features checklist (1.1.0)
+	[x] PEP8 compliant naming (FIFOStr)
+	[x] 100% code coverage in tests
+
+### features checklist (1.0.0)  -- what the module does
 	[x] head
 	[x] tail
 	[x] eqhead
@@ -68,9 +77,9 @@ I'd released projects in other langauges but going the python packing release "p
 	[x] pip3 installer
 	[x] create identity in pypi (pip online directory)
 	[x] tests.py / unit tests  #in /tests directory, note callbacks are tested in example.py
-	[x] 100% test coverage
+	[x] 100% test coverage (1.1)
 	[x] check all functions have """docstring""" comments
-	[x] function documentation in HTML in /docs directory --> accomplished with pydoc
+	[x] function documentation in HTML in /docs directory --> accomplished with pydoc  (apparently Pypi doesn't play with pydoc, requires Sphinx)
 	[x] check Python 2.7+ and Python 3+ compatibility with tests
 	[x]	proper markdown for README.md
 	[x] test and finish & fix example  portion in README.md, perhaps use example from python interpreter  
@@ -90,14 +99,16 @@ I'd released projects in other langauges but going the python packing release "p
 			[pattern2, callbackfn2, optname1,  pos_s, pos_e] ,
 		]
 	[ ] make optimization of map() for patterns instead of loop  
-		-keep "shadow" array of which patterns are active so as to remove check each time a char is added  
-	[ ]  make all string patterns (patterns which are just passed as a string) converted to regex internally  
+	[ ] keep "shadow" array of which patterns are active so as to remove check each time a char is added  
+	[ ] make all string patterns (patterns which are just passed as a string) converted to regex internally  
 			note need to save the string in the pattern array holder so if a user does a "getPattern()" a string is returned 
 			then exec a master regex (for all matches) across fifostr "string" 
 			note that when combining these stringified regexes we need to add offset bounds in to the regex construct
-	universal logging function support: (allows one func which logs all changes and label hits to a stream useful for debugging stuff)
-	[ ] add/del log-function  
-	[ ] constructor, take log-function #as in logging each event to log function
+	[ ] universal logging function support: (allows one func which logs all changes and label hits to a stream - useful for debugging serial stuff)
+		[ ] add/del log-function  callback
+		[ ] allow filename also?  or perhaps just make a default log function which is included with FIFOStr.defaultLog(filename) which can be passed?
+			or use typeStr() if FifoStr.addLogf(log) --> if log is a str open a file, if log is a function, use as callback
+		[ ] constructor, take log-function #as in logging each event to log function 
 	[ ] allow optional flush each time
-	[ ] make standalone app which allows patterns to be loaded from a user-spec'd file, takes streams as input, output logf output
+	[ ] make standalone commandline app which allows patterns to be loaded from a user-spec'd file, takes streams as input, output logf output
 	[ ] add continuous integration (e.g. travis-ci or jenkins for check-ins)
