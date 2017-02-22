@@ -3,7 +3,7 @@
 
 # fifostr.py
     
-a small python lib for treating strings as fifos with callback-based pattern matching
+A small python lib for treating strings as fifos with callback-based pattern matching
 
 (c) 2011 manu chatterjee    deftio (at) deftio.com
 
@@ -146,15 +146,19 @@ to run tests pytest needs to be installed.
 
 #### on Ubuntu 
 ```
-pip install -U pytest # or  
-easy_install -U pytest  
+pip install -U pytest pytest-cov 
+pip install coveralls   
 ```
 note: more info at pytest.org  for installation on other OSes  
 
-cd to the tests directory  
 ```
-run  
-py.test  
+#running basic tests
+cd tests
+pytest  #or py.test 
+
+# coverage stats below
+coverage run --source fifostr -m pytest 
+coverage report -m
 ```
 
 ### Release History  

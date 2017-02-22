@@ -43,7 +43,7 @@ import itertools
 
 __author__ = 'M. A. Chatterjee'
 __copyright__ = 'copyright (C) 2011-2016 M. A. Chatterjee'
-__version_full__ = [1,1,0]   #allows mixed types e.g. 1,0,"92b"
+__version_full__ = [1,1,1]   #allows mixed types e.g. 1,0,"92b"
 __version__ = '.'.join(str(x) for x in __version_full__)
 
 #FIFO (First-In-First-Out) String --> is a rolling FIFO of last n chars seen
@@ -105,9 +105,10 @@ class FIFOStr(deque):
 			str(type("")):"str",
 			str(type(FIFOStr)):"class"
 		}
+		tr = xt
 		if (xt) in t:
-			return t[xt]
-		return xt
+			tr = t[xt]
+		return tr
 
 	def iterable(self,obj):
 		"""
@@ -120,7 +121,7 @@ class FIFOStr(deque):
 		Returns:
 			bool: whether object is iterable
 		"""
-		return isinstance(obj, collections.Iterable)
+		return isinstance(obj, Iterable)
 
     #head,tail,all operations ==============================================
 	def head(self,l=1):
@@ -303,7 +304,7 @@ class FIFOStr(deque):
 			if len(self.patterns)>0:
 				self.testAllPatterns(doCallbacks=True,retnList=False)
 		else:
-			for i in range(len(x)):
+			for i in range(x):
 				deque.rotate(self,1) #1 at a time..
 				if len(self.patterns)>0:
 					self.testAllPatterns(doCallbacks=True,retnList=False)

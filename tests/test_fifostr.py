@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Test Harness for fifostr.py library class
 """
@@ -8,6 +10,7 @@ sys.path.insert(0, '../fifostr')
 
 import re
 from fifostr import *
+#from collections import deque, Iterable
 
 def testTypeStr():
 	"""
@@ -17,6 +20,17 @@ def testTypeStr():
 	assert myFifoStr.typeStr(123) == "int"  
 	assert myFifoStr.typeStr("this") == "str"
 	assert myFifoStr.typeStr(testTypeStr) == "function"
+	pass
+
+def testMisc():
+	myFifoStr = FIFOStr(5)
+	assert myFifoStr.iterable([2,4,5]) == True
+	assert myFifoStr.iterable(3) == False
+
+	myFifoStr += "abcdefg"
+	assert myFifoStr.head(6) == "cdefg"  #ask for more items than are in the fifostr obj
+	assert myFifoStr.tail(6) == "cdefg"  #ask for more items than are in the fifostr obj
+	pass
 
 def testSimpleBoundedLengthFIFOOperations():
 	"""
@@ -122,6 +136,7 @@ def testSimplePatternMatches():
 	def f2(s):
 		return s=='67890'		
 	assert f.testPattern(f2) == False
+
 	pass
 
 def testStoredPatterns():
@@ -132,7 +147,7 @@ def testStoredPatterns():
 	#this is the callback function for the pattern matches.  We'll use this later 
 
 	def logf(s,label=""):  
-		assert len(s)==0	#pragma: no cover
+		assert len(s)!=0	#pragma: no cover
 		print("callback-> match_str:"+s+"  label:"+label) #pragma: no cover
 
 
@@ -215,11 +230,32 @@ def testStoredPatterns():
 				 [re.compile("[a-z]|w+"),0,"$",logf,"r2 hit",True],
 				 [f2,0,"$",logf,"f2 hit",False]
 				]
+
+	assert f.append("123456",False) #== "23456"
+	assert f.append("abcdef",True) 
+	assert f.appendleft("123456",False)
+	assert f.appendleft("abcdef",True) 
+	
+	assert f.extend("123456") 
+	assert f.extendleft("abcdef")
+	
+	assert f.rotate(6,True) 
+	assert f.rotate(6,False) 
+
+	assert f.pop()
+	assert len(f) == 4
+	assert f.popleft()
+	assert len(f) == 3
+
+	assert f.remove('e')
+	assert f.reverse()
+	print f
+	
 	#end of pattern management -- finding a stored pattern 
 
 
 	#now beging actual pattern matching and triggers
-	f = FIFOStr(5)  #just simpler for testing purposes
+	#f = FIFOStr(5)  #just simpler for testing purposes
 
 	f+= "12345"
 
@@ -238,4 +274,9 @@ def testStoredPatterns():
 	pass
 
 	
-	return 0
+def testVer():
+	f=FIFOStr()
+	v = f.ver()
+	assert len(v["version_str"]) > 0
+	assert len(v["version"]) > 0
+	assert len(v["url"]) > 0
