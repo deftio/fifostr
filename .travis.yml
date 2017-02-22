@@ -19,9 +19,9 @@ install:
   - pip install coveralls 
 # command to run tests
 script: 
-    cd tests
-    pytest
-
+  - cd tests
+  - pytest
+  - coverage run --source fifostr setup.py test
 #code coverage
 after_success:
   - coveralls
