@@ -13,7 +13,12 @@ python:
   - "nightly" # currently points to 3.7-dev
 # command to install dependencies
 install: "pip install -U pytest"
+  "pip install coveralls"
 # command to run tests
 script: 
     cd tests
     pytest
+
+#code coverage
+after_success:
+  - coveralls
