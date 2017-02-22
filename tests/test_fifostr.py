@@ -238,4 +238,4 @@ def testStoredPatterns():
 	pass
 
 	
-
+	return 0

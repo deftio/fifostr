@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/deftio/fifostr.svg?branch=master)](https://travis-ci.org/deftio/fifostr)
+
 # fifostr.py
     
 a small python lib for treating strings as fifos with callback-based pattern matching
