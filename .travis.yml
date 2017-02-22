@@ -2,7 +2,7 @@
 language: python
 python:
   - "2.7"
-  - "3.2"
+  #- "3.2"  #python 3.2 works (and passes all tests) but covereralls4.0 CI suite no longer supports python 3.2 see https://github.com/praw-dev/praw/pull/532
   - "3.3"
   - "3.4"
   - "3.5"
