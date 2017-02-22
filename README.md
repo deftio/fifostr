@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/deftio/fifostr.svg?branch=master)](https://travis-ci.org/deftio/fifostr)
-[![Coverage Status](https://coveralls.io/repos/deftio/fifostr/badge.svg?branch=master)](https://coveralls.io/r/deftio/fifostr?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master)](https://coveralls.io/github/deftio/fifostr?branch=master)
 
 # fifostr.py
     
