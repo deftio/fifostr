@@ -30,6 +30,12 @@ def testMisc():
 	myFifoStr += "abcdefg"
 	assert myFifoStr.head(6) == "cdefg"  #ask for more items than are in the fifostr obj
 	assert myFifoStr.tail(6) == "cdefg"  #ask for more items than are in the fifostr obj
+
+
+	myFifoStr += "abcde"
+	assert myFifoStr['$'] != "abcdef"
+	assert myFifoStr['^'] != "abcdef"
+	
 	pass
 
 def testSimpleBoundedLengthFIFOOperations():
@@ -69,6 +75,14 @@ def testSimpleBoundedLengthFIFOOperations():
 	assert f== "z0fghijkc" and x=="x"
 	x=f.popleft() 
 	assert f== "0fghijkc" and x=="z"
+
+	f += 1
+	assert f.tail(1) == "1"
+
+	f += 2.1
+	assert f.tail(3) == "2.1"
+
+	assert f[7:10] == "2.1"
 	pass
 
 def testSimpleUnBoundedLengthFIFOOperations():
@@ -103,6 +117,9 @@ def testSimpleUnBoundedLengthFIFOOperations():
 	assert f== "4cxz0abcdefghijk123"
 	f.rotate(-3)
 	assert f== "z0abcdefghijk1234cx"
+
+	f[3] = 'm' #test __setitem__
+	assert f[3] == 'm'
 	pass
 
 def testIndexAndSlicing():
@@ -218,6 +235,7 @@ def testStoredPatterns():
 	f.setPatternActiveState(x2,False)  #show retrieving pattern by index and setting inactive
 	assert f.getPattern(x2) == [f2,0,"$",logf,"f2 hit",False]
 
+	assert f.getPatternActiveState(300) == -1 # coverage test -- show that if index is too big it returns -1
 	#end pattern management deleting / adding etc
 
 	#find a stored pattern..
@@ -249,7 +267,6 @@ def testStoredPatterns():
 
 	assert f.remove('e')
 	assert f.reverse()
-	print f
 	
 	#end of pattern management -- finding a stored pattern 
 
@@ -270,10 +287,13 @@ def testStoredPatterns():
 	f += cs[i]  # do it one char at a time so we can see the matches
 	i += 1
 	
+	#and finally clear out the patterns..
+	assert f.clearPatterns() == 0
 	#to see hit and callback testing testing look at example.py
 	pass
 
 	
+#test version if for  ode coverage testing -- just eliminate false positives by checking that version info is returned from the library
 def testVer():
 	f=FIFOStr()
 	v = f.ver()

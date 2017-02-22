@@ -430,7 +430,7 @@ class FIFOStr(deque):
 			return "".join([deque.__getitem__(self, x) for x in index])
 		if isinstance(index, str):
 			if index == '$':
-				index = len(self)
+				index = len(self) -1
 			if index == "^":
 				index = 0
 		return str(deque.__getitem__(self, index))
@@ -661,7 +661,7 @@ class FIFOStr(deque):
 			0
 		"""
 		self.patterns={}
-		return numPatterns()
+		return self.numPatterns()
 
 	def numPatterns(self):	 #show number of patterns in the search dictionary
 		"""
