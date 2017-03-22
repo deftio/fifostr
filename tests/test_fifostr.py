@@ -129,6 +129,10 @@ def testIndexAndSlicing():
 	assert f[1:4] =='bcd' 		#accepts slice 
 	assert f[[1,4,2]] == 'bec'  #accepts list 
 	assert f[1,3,4] == 'bde'	#accepts tuple
+	assert f[-1] == 'j'         #accepts negative indexing
+	assert f[-2:-1] == 'i'      #accepts slice w negative index
+	assert f[-3:-1] == 'hi'     #accepts slice w negative index
+	assert f['^':2] == 'ab'     #accepts begin of string symbol
 
 def testSimplePatternMatches():
 	"""
@@ -154,6 +158,10 @@ def testSimplePatternMatches():
 		return s=='67890'		
 	assert f.testPattern(f2) == False
 
+	assert str(f) == "this and that"
+	assert f+' other' == "this and that other"
+	assert 'other ' +f == "other this and that"
+	
 	pass
 
 def testStoredPatterns():
@@ -176,7 +184,8 @@ def testStoredPatterns():
 	f.addPattern("234",logf,label="234 hit across whole string")
 	f.addPattern("234",logf,start=0, end=len("234"),label="234 at start")
 	f.addPattern("67890",logf,label="67890 hit as whole str")
-	f.addPattern('def',logf,start=3,end=6,label="'def' btw 3,6")
+	f.addPattern("def",logf,start=3,end=6,label="'def' btw 3,6")
+	f.addPattern("345",logf, start="^", end="$", label=".. any hit across whole string")
 		#regexes
 	r1=re.compile("[0-9]+")
 	r2=re.compile("[a-z]|w+")
@@ -198,10 +207,11 @@ def testStoredPatterns():
 					1: ["234",0,3,logf,"234 at start",True],
 					2: ["67890",0,"$",logf,"67890 hit as whole str", True],
 					3: ["def",3,6,logf,"'def' btw 3,6",True],
-					4: [re.compile("[0-9]+"),0,"$",logf,"r1 hit",True],
-					5: [re.compile("[a-z]|w+"),0,"$",logf,"r2 hit",True],
-					6: [f1,0,"$",logf,"f1 hit",True],
-					7: [f2,0,"$",logf,"f2 hit",True]
+					4: ["345","^","$",logf,".. any hit across whole string", True],
+					5: [re.compile("[0-9]+"),0,"$",logf,"r1 hit",True],
+					6: [re.compile("[a-z]|w+"),0,"$",logf,"r2 hit",True],
+					7: [f1,0,"$",logf,"f1 hit",True],
+					8: [f2,0,"$",logf,"f2 hit",True]
 					}
 
 	results = f.testAllPatterns() #test all the patterns added and are active #note pass doCallbacks=True to activate callback fns
@@ -211,13 +221,14 @@ def testStoredPatterns():
 					[1, '234 at start', True],
 					[2, '67890 hit as whole str', False],
 					[3, "'def' btw 3,6", False],
-					[4, 'r1 hit', True],
-					[5, 'r2 hit', False],
-					[6, 'f1 hit', False],
-					[7, 'f2 hit', False]]
-	assert len(results)==8
+					[4, ".. any hit across whole string", False],
+					[5, 'r1 hit', True],
+					[6, 'r2 hit', False],
+					[7, 'f1 hit', False],
+					[8, 'f2 hit', False]]
+	assert len(results)==9
 
-	assert 7==f.delPattern(x1) #show deleting a pattern from the search
+	assert 8==f.delPattern(x1) #show deleting a pattern from the search
 	pats = f.showPatterns() #get remaining patterns
 	
 	assert pats == {
@@ -225,16 +236,20 @@ def testStoredPatterns():
 				1: ["234",0,3,logf,"234 at start",True],
 				2: ["67890",0,"$",logf,"67890 hit as whole str", True],
 				3: ["def",3,6,logf,"'def' btw 3,6",True],
-				4: [re.compile("[0-9]+"),0,"$",logf,"r1 hit",True],
-				5: [re.compile("[a-z]|w+"),0,"$",logf,"r2 hit",True],
-				7: [f2,0,"$",logf,"f2 hit",True]
+				4: ["345","^","$",logf,".. any hit across whole string", True],
+				5: [re.compile("[0-9]+"),0,"$",logf,"r1 hit",True],
+				6: [re.compile("[a-z]|w+"),0,"$",logf,"r2 hit",True],
+				8: [f2,0,"$",logf,"f2 hit",True]
 				}
 
-	assert len(pats)==7
+	assert len(pats)==8
 
 	f.setPatternActiveState(x2,False)  #show retrieving pattern by index and setting inactive
 	assert f.getPattern(x2) == [f2,0,"$",logf,"f2 hit",False]
 
+	assert f.getPattern(44) == None #check out of bounds
+
+	assert f.getPatternActiveState(3) == True #check that this pattern is active
 	assert f.getPatternActiveState(300) == -1 # coverage test -- show that if index is too big it returns -1
 	#end pattern management deleting / adding etc
 
@@ -267,7 +282,8 @@ def testStoredPatterns():
 
 	assert f.remove('e')
 	assert f.reverse()
-	
+	f[1] = 'z' #test pattern triggers on __set_item__
+
 	#end of pattern management -- finding a stored pattern 
 
 

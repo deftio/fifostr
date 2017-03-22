@@ -423,6 +423,8 @@ class FIFOStr(deque):
 				e = len(self)+e  
 			if (s=='^') or (s==None):  # the character "^" is used to specifiy start-of-string anchor in regex, so also allowed here
 				s=0
+			if (s<0):
+				s= len(self)+s
 			return "".join(itertools.islice(self, s, e, index.step))
 		if isinstance(index, list):
 			return "".join([deque.__getitem__(self, x) for x in index])
