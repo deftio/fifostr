@@ -35,7 +35,7 @@ fi
 
 if [ $1 == 'upload-pypitest' ]
 then
-	python setup.py sdist upload -r pypitest
+	python setup.py sdist upload -r testpypi 
 fi
 
 if [ $1 == 'upload-pypi' ]
