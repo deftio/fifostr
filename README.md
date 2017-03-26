@@ -174,6 +174,9 @@ pydoc -w ../fifostr.py
 ```
 note that as of this writing pydoc generates its output in the current directory and doesn't seem to be pipeable to another.  
 
+### README.md vs README.rst
+The README.rst is generated from the README.md using pandoc but the content is identical.  This has to do with uneven support of markdown vs ReStructured Text on github vs PyPi.
+
 
 ### License
 See LICENSE.txt file in this directory.   The license is the OSI approved "FreeBSD" 2 clause license.

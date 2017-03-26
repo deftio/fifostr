@@ -19,6 +19,9 @@ then
 
 	#then this
 	python setup.py bdist_wheel --universal
+
+	#this requires pandoc to be installed (on ubuntu sudo apt-get install pandoc)
+	pandoc --from=markdown --to=rst --output=README.rst README.md
 fi
 
 #now try to upload..

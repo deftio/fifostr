@@ -43,7 +43,7 @@ import itertools
 
 __author__ = 'M. A. Chatterjee'
 __copyright__ = 'copyright (C) 2011-2016 M. A. Chatterjee'
-__version_full__ = [1,1,3]   #allows mixed types e.g. 1,0,"92b"
+__version_full__ = [1,1,4]   #allows mixed types e.g. 1,0,"92b"
 __version__ = '.'.join(str(x) for x in __version_full__)
 
 #FIFO (First-In-First-Out) String --> is a rolling FIFO of last n chars seen
