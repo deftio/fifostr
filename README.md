@@ -163,6 +163,7 @@ coverage report -m
 ```
 
 ### Release History  
+* 1.1.7 updated MANIFEST.in to use README.rst 
 * 1.1.6 added PyPi version badge in README.md
 * 1.1.5 coverage to 100%, added badging, added README.rst
 * 1.1.x changed class name from fifostr to FIFOStr to make PEP8 compliant.  fixed bug in setup.py (package_dir)
