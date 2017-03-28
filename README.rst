@@ -1,4 +1,4 @@
-|Build Status| |Coverage Status|
+|PyPI version| |Build Status| |Coverage Status|
 
 fifostr.py
 ==========
@@ -249,6 +249,8 @@ License
 See LICENSE.txt file in this directory. The license is the OSI approved
 "FreeBSD" 2 clause license.
 
+.. |PyPI version| image:: https://badge.fury.io/py/fifostr.svg
+   :target: https://badge.fury.io/py/fifostr
 .. |Build Status| image:: https://travis-ci.org/deftio/fifostr.svg?branch=master
    :target: https://travis-ci.org/deftio/fifostr
 .. |Coverage Status| image:: https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master

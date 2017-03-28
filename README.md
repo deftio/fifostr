@@ -1,3 +1,4 @@
+[![PyPI version](https://badge.fury.io/py/fifostr.svg)](https://badge.fury.io/py/fifostr)
 [![Build Status](https://travis-ci.org/deftio/fifostr.svg?branch=master)](https://travis-ci.org/deftio/fifostr)
 [![Coverage Status](https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master)](https://coveralls.io/github/deftio/fifostr?branch=master)
 
@@ -162,8 +163,10 @@ coverage report -m
 ```
 
 ### Release History  
+* 1.1.6 added PyPi version badge in README.md
+* 1.1.5 coverage to 100%, added badging, added README.rst
 * 1.1.x changed class name from fifostr to FIFOStr to make PEP8 compliant.  fixed bug in setup.py (package_dir)
-* 1.0.. documentation clean up
+* 1.0.x documentation clean up
 * 1.0.0 Initial release  
 
 ### Docs
