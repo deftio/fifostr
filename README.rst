@@ -218,9 +218,11 @@ note: more info at pytest.org for installation on other OSes
 Release History
 ~~~~~~~~~~~~~~~
 
+-  1.1.6 added PyPi version badge in README.md
+-  1.1.5 coverage to 100%, added badging, added README.rst
 -  1.1.x changed class name from fifostr to FIFOStr to make PEP8
    compliant. fixed bug in setup.py (package\_dir)
--  1.0.. documentation clean up
+-  1.0.x documentation clean up
 -  1.0.0 Initial release
 
 Docs
