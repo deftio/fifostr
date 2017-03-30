@@ -239,6 +239,8 @@ coverage report -m
 Release History
 ~~~~~~~~~~~~~~~
 
+-  1.1.9 rebuild for README.md to README.rst conversion using pandoc (no
+   code changes) for PyPi
 -  1.1.8 rebuild to make sure proper pkg loaded to PyPi (no code
    changes)
 -  1.1.7 updated MANIFEST.in to use README.rst
