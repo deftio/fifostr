@@ -1,6 +1,7 @@
 |PyPI version|
 |Build Status|
 |Coverage Status|
+|License|
 
 fifostr.py
 ==========
@@ -279,3 +280,5 @@ See LICENSE.txt file in this directory. The license is the OSI approved
    :target: https://travis-ci.org/deftio/fifostr
 .. |Coverage Status| image:: https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master
    :target: https://coveralls.io/github/deftio/fifostr?branch=master
+.. |License| image:: https://img.shields.io/badge/License-BSD%202--Clause-blue.svg
+   :target: https://opensource.org/licenses/BSD-2-Clause
