@@ -13,9 +13,9 @@ python:
   - "nightly" # currently points to 3.7-dev
 matrix:
   include:
-    - python: 2.7
-    #-python:  "3.2"  #python 3.2 works (and passes all tests) but covereralls4.0 CI suite no longer supports python 3.2 see https://github.com/praw-dev/praw/pull/532
-    - python: "3.3"
+    - python: "2.7"
+    #- python: "3.2"  #python 3.2 works (and passes all tests) but covereralls4.0 CI suite no longer supports python 3.2 see https://github.com/praw-dev/praw/pull/532
+    #- python: "3.3"  #works on python 3.3  (passess all test cases), however Travis CI python 3.3 support is now broken.  download stats show < 0.01% of pythond dist using 3.3
     - python: "3.4"
     - python: "3.5"
     - python: "3.5-dev" # 3.5 development branch
@@ -29,7 +29,7 @@ install:
   #- "pip install 'coverage<4'"
   - pip install -U pytest pytest-cov 
   - pip install coveralls 
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.3 ]]; then pip install virtualenv==15.2.0; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.3 ]]; then pip install virtualenv==15.2.0; fi 
 # command to run tests
 script: 
   - cd tests
