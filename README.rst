@@ -1,42 +1,37 @@
-|PyPI version|
-|Build Status|
-|Coverage Status|
-|License|
+|PyPI version| |Build Status| |Coverage Status| |License|
 
 fifostr.py
 ==========
 
-A small python lib for treating strings as fifos with callback-based
-pattern matching
+FIFOStr - A small python library for mutable strings with a built-in
+streaming pattern parser.
 
-(c) 2011 manu chatterjee deftio (at) deftio.com
+FIFOstr was originally used for combining deque with pattern-trigger
+operations for an embedded terminal program. It allows pieces of a
+string to be treated in a mutable way with operations that you would
+expect from a bi-directional list such as insertion at either end and
+adding/removing N chars from either end.
 
-fifostr (First In First Out String) is a small python library originally
-used for combining deque with pattern-trigger operations for an embedded
-terminal program. It allows pieces of a string to be treated in a
-mutable way with operations that you would expect from a bi-directional
-list such as insertion at either end and adding/removing N chars from
-either end.
+Pattern Triggering Features
+---------------------------
 
-fifostr has built-in pattern matching and triggering. Simply add /
-remove patterns which can call a user supplied function (E.g. if the
-pattern is "seen" then trigger the function). Patterns can be strings,
-regexes or user-supplied-functions. A pattern consists of:
-
--  pattern: string *or* compiled regex *or*
-   user-supplied-parser-function
--  label: user supplied 'name' for this pattern
--  start index : position in fifostr to begin pattern match. default is
-   0 (also accepts the character '^' as start anchor for those familiar
-   with regexes)
--  stop index : position in fifostr to end pattern match. default is end
-   of fifostr. the letter '$' has special meaning as end of string no
-   matter the length (again regex)
--  callback\_fn : called if pattern is found, fifostr(start:end) and the
-   label are passed to the callback function
-   (callback('thematchingstring','label'))
--  active : default is True, sets whether this pattern should be
-   actively looked for
+| Built-in pattern matching and triggering: simply add / remove patterns
+  which then call a callback function (E.g. if the pattern is "seen"
+  then trigger the function). Patterns can be strings, regexes or
+  user-supplied-functions (parsers written in python). A pattern
+  consists of:
+| \* pattern: string *or* compiled regex *or*
+  user-supplied-parser-function
+| \* label: user supplied 'name' for this pattern
+| \* start index : position in fifostr to begin pattern match. default
+  is 0 (also accepts the character '^' as start anchor for those
+  familiar with regexes) \* stop index : position in fifostr to end
+  pattern match. default is end of fifostr. the letter '$' has special
+  meaning as end of string no matter the length (again regex) \*
+  callback\_fn : called if pattern is found, fifostr(start:end) and the
+  label are passed to the callback function
+  (callback('thematchingstring','label')) \* active : default is True,
+  sets whether this pattern should be actively looked for
 
 Originally a lighter version of this was used in a python serial
 terminal program dioterm (which allowed the serial terminal to parse
@@ -45,8 +40,7 @@ commands sent/received by both sides).
 And finally .. I just wanted to get some practice on python module
 packaging ...
 
-cheers-
-mc
+cheers- mc
 
 Installation
 ~~~~~~~~~~~~
@@ -71,39 +65,33 @@ hardware to reply correctly.
 Functionality
 ~~~~~~~~~~~~~
 
-FIFOStr is a string which is (derived from deque) with these properties:
-
--  add/remove chars or strings at either end
--  mutable (can set a char to any value like an array with [])
--  use slices, lists, or tuples to retrieve members (just like a real
-   str object)
--  get head/tail (returns as a str)
--  match head/tail --> match a supplied string to either the head or
-   tail
--  use patterns to trigger callbacks --> pattern can be string \| regex
-   \| user\ *supplied*\ parser any of which triggers user supplied
-   callback\_fn
-
-   -  all patterns can look at either the whole fifostr or any subset
-      e.g. addPattern("foo",myCallback,2,5,"bar")
-      ::
-
-          --> only looks for "foo" between positions 2 and 5 in the fifostr and will call myCallback with ("foo","bar")  if found
-
-   -  all patterns have optional label which can be used for logging
-      purposes (eg. when pattern found, in addition to callback, emit
-      label)
-   -  user supplied callback\_fn is called with both the string-match
-      section and the label
-   -  patterns can be added/deleted from the list of patterns "watching"
-      the fifostr content
-   -  all (active) patterns are always matched. fifostr matches multiple
-      different patterns over the same string.
-
--  clear all patterns --> removes patterns from processing
--  get/setPattern Active/Inactive --> allows a stored pattern to set on
-   or off
--  Python 2.7+, Python 3+ support with no mods
+| FIFOStr is a string which is (derived from deque) with these
+  properties:
+| \* add/remove chars or strings at either end
+| \* mutable (can set a char to any value like an array with []) \* use
+  slices, lists, or tuples to retrieve members (just like a real str
+  object)
+| \* get head/tail (returns as a str)
+| \* match head/tail --> match a supplied string to either the head or
+  tail
+| \* use patterns to trigger callbacks --> pattern can be string \|
+  regex \| user\ *supplied*\ parser any of which triggers user supplied
+  callback\ *fn
+  \* all patterns can look at either the whole fifostr or any subset
+  e.g. addPattern("foo",myCallback,2,5,"bar") --> only looks for "foo"
+  between positions 2 and 5 in the fifostr and will call myCallback with
+  ("foo","bar") if found \* all patterns have optional label which can
+  be used for logging purposes (eg. when pattern found, in addition to
+  callback, emit label)
+  \* user supplied callback*\ fn is called with both the string-match
+  section and the label
+| \* patterns can be added/deleted from the list of patterns "watching"
+  the fifostr content \* all (active) patterns are always matched.
+  fifostr matches multiple different patterns over the same string.
+| \* clear all patterns --> removes patterns from processing
+| \* get/setPattern Active/Inactive --> allows a stored pattern to set
+  on or off
+| \* Python 2.7+, Python 3+ support with no mods, no dependancies
 
 Usage example
 ~~~~~~~~~~~~~
@@ -111,14 +99,12 @@ Usage example
 See example.py to run in tests dir -- same examples as here but more
 comments, more use cases
 
-\`\`\`
-from fifostr import FIFOStr
-def main():
-::
+\`\`\` python from fifostr import FIFOStr def main():
+myFifoStr=FIFOStr(5) #make a fifostr of length 5 (for unlimited length
+omit number) myFifoStr+='1234567' #adds 1234567 to fifostr ... but len
+of fifostr is 5 # so only 34567 is retained
 
-    myFifoStr=FIFOStr(5) #make a fifostr of length 5 (for unlimited length omit number)
-    myFifoStr+='1234567' #adds 1234567 to fifostr ... but len of fifostr is 5
-                         # so only 34567 is retained
+::
 
     print "myFifoStr.head(3)= ",myFifoStr.head(3) #shows 345
     print "myFifoStr.tail(4)= ",myFifoStr.tail(4) #shows 4567
@@ -179,11 +165,11 @@ Notes
 
 Absolutley *no* warranties on performance. This is not replacement for a
 compiler/parser front end! It just iterates over stored patterns every
-time something is added to the
-fifostr object. If you do have a parser you wish to be called then just
-add it as a function so that every time the fifostr is updated with a
-char it will call your parser to do the work. Your parser must return a
-boolean result if you wish to use the callback based triggering.
+time something is added to the fifostr object. If you do have a parser
+you wish to be called then just add it as a function so that every time
+the fifostr is updated with a char it will call your parser to do the
+work. Your parser must return a boolean result if you wish to use the
+callback based triggering.
 
 \`\`\`
 
@@ -201,45 +187,50 @@ let your own parser do the work
 Source code home
 ~~~~~~~~~~~~~~~~
 
-all source is at github:
-http://github.com/deftio/fifostr
+| all source is at github:
+| http://github.com/deftio/fifostr
 
-docs and other projects at
-http://deftio.com/open-source
+| docs and other projects at
+| http://deftio.com/open-source
 
 Tests & Coverage
 ~~~~~~~~~~~~~~~~
 
-for quick usage see
-see **main** in example.py file
+| for quick usage see
+| see **main** in example.py file
 
-for test coverage look in the /tests directory
-to run tests pytest needs to be installed.
+| for test coverage look in the /tests directory
+| to run tests pytest needs to be installed.
 
 on Ubuntu
 ^^^^^^^^^
 
-``pip install -U pytest pytest-cov  pip install coveralls``
-note: more info at pytest.org for installation on other OSes
+``pip install -U pytest pytest-cov  pip install coveralls`` note: more
+info at pytest.org for installation on other OSes
 
 \`\`\`
 
 running basic tests
 ===================
 
-cd tests
-pytest #or py.test
+cd tests pytest #or py.test
 
 coverage stats below
 ====================
 
-coverage run --source fifostr -m pytest
-coverage report -m
-\`\`\`
+coverage run --source fifostr -m pytest coverage report -m \`\`\`
+
+Generating docs
+~~~~~~~~~~~~~~~
+
+Documenation is generated using pandoc from the build scripts.
+
+``sudo apt-get install pandoc``
 
 Release History
 ~~~~~~~~~~~~~~~
 
+-  1.1.10 Updated docs and related usage info for repo
 -  1.1.9 rebuild for README.md to README.rst conversion using pandoc (no
    code changes) for PyPi
 -  1.1.8 rebuild to make sure proper pkg loaded to PyPi (no code
@@ -255,11 +246,11 @@ Release History
 Docs
 ~~~~
 
-documentation is in /docs directory (generated by pydoc)
-to (re)generate the docs. cd to the docs directory. then type:
-``pydoc -w ../fifostr.py``
-note that as of this writing pydoc generates its output in the current
-directory and doesn't seem to be pipeable to another.
+documentation is in /docs directory (generated by pydoc) to (re)generate
+the docs. cd to the docs directory. then type:
+``pydoc -w ../fifostr.py`` note that as of this writing pydoc generates
+its output in the current directory and doesn't seem to be pipeable to
+another.
 
 README.md vs README.rst
 ~~~~~~~~~~~~~~~~~~~~~~~

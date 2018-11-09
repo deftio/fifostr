@@ -163,6 +163,12 @@ pytest  #or py.test
 coverage run --source fifostr -m pytest 
 coverage report -m
 ```
+### Generating docs
+Documenation is generated using pandoc from the build scripts.
+
+```
+sudo apt-get install pandoc
+```
 
 ### Release History  
 * 1.1.10 Updated docs and related usage info for repo

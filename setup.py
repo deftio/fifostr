@@ -10,6 +10,10 @@ See:
 taken from: 
     https://github.com/pypa/sampleproject
 
+see runbuild.sh for packaging (yes its shell script but it has all the other steps in it.)
+
+- m a chatterjee (c) 2017
+
 """
  
 # Always prefer setuptools over distutils
