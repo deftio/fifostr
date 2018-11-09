@@ -32,9 +32,10 @@ if [ $1 == 'tests' ]
 then
 	#testing (in tests dir)
 	#(cd ./tests && py.test -vv)
-	(cd ./tests && py.test --doctest-modules --cov ./test_fifostr -vv)
-	#(cd ./tests && python3 -m pytest  -vv)
-	(cd ./tests && python3 -m pytest --doctest-modules --cov ./test_fifostr -vv)
+	##(cd ./tests && py.test --doctest-modules --cov ./test_fifostr -vv) ## OLD DEPRECATED
+	(cd ./tests && py.test --doctest-modules --cov-report term --cov=fifostr -vv)
+	#(cd ./tests && python3 -m pytest  -vv) ## OLD DEPRECATED
+	(cd ./tests && python3 -m pytest --doctest-modules --cov-report term --cov=fifostr -vv)
 fi
 
 if [ $1 == 'upload-pypitest' ]
