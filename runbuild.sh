@@ -31,11 +31,11 @@ fi
 if [ $1 == 'tests' ]
 then
 	#testing (in tests dir)
-	#(cd ./tests && py.test -vv)
 	##(cd ./tests && py.test --doctest-modules --cov ./test_fifostr -vv) ## OLD DEPRECATED
-	(cd ./tests && py.test --doctest-modules --cov-report term --cov=fifostr -vv)
+	(cd ./tests && py.test --doctest-modules --cov-report term --cov=fifostr -vv)  # was working
 	#(cd ./tests && python3 -m pytest  -vv) ## OLD DEPRECATED
-	##(cd ./tests && python3 -m pytest --doctest-modules --cov-report term --cov=fifostr -vv) ## works locally but not in travis for python 3.3
+	#(cd ./tests && python -m pytest --doctest-modules --cov-report term --cov=fifostr -vv) ## works locally but not in travis for python 3.3
+	(cd ./tests && python3 -m pytest --doctest-modules --cov-report term --cov=fifostr -vv) ## works locally but not in travis for python 3.3
 fi
 
 if [ $1 == 'upload-pypitest' ]
