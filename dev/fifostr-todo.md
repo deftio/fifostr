@@ -6,7 +6,6 @@ this file contains some free form thinking of things needed before fifostr can b
 much of the notes here are my internal thinking about what makes either a decent-enough complete module or good publishing hygene
 
 e.g
-
 	- docs
 	- tests
 	- interface completeness

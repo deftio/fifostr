@@ -55,7 +55,7 @@ setup(
 
     # Author details
     author='manu chatterjee',
-    author_email='deftio at deftio dot com',
+    author_email='deftio@deftio.com',
  
     # Choose your license
     license='BSD License',
@@ -70,7 +70,7 @@ setup(
  
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
-        'Topic :: Software Development ',
+        #'Topic :: Software Development ',
  
         # Pick your license as you wish (should match "license" above)
         'License :: OSI Approved :: BSD License',
