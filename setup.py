@@ -48,7 +48,8 @@ setup(
  
     description='fifostr - A FIFO (first in first out) buffer for strings derived from deque with pattern match callbacks',
     long_description=long_description,
- 
+    long_description_content_type='text/markdown',
+
     # The project's main homepage.
     url='https://github.com/deftio/fifostr',
     download_url='https://pypi.python.org/pypi/fifostr',
