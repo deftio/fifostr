@@ -12,7 +12,7 @@ taken from:
 
 see runbuild.sh for packaging (yes its shell script but it has all the other steps in it.)
 
-- m a chatterjee (c) 2017
+- m a chatterjee (c) 2012,2017,2018
 
 """
  
