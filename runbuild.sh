@@ -42,12 +42,14 @@ fi
 
 if [ $1 == 'upload-pypitest' ]
 then
-	python setup.py sdist upload -r testpypi 
+	# python setup.py sdist upload -r testpypi   # it works but not with markdown format documentation.
+	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 fi
 
 if [ $1 == 'upload-pypi' ]
 then
-	python setup.py sdist upload -r pypi
+	# python setup.py sdist upload -r pypi  #old way works but not with markdown format documentation
+	twine upload dist/*
 fi
 
 #./example.py
