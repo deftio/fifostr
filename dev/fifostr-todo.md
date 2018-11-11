@@ -15,9 +15,11 @@ e.g
 
 I'd released projects in other langauges but going the python packing release "process" has been interesting from a code-delievery point of view.
 
+TODO remove README.rst and just use github flavored markdown now that PyPi supports markdown (and since the core README.rst is being converted from pandoc anyway...)
+
 ### features checklist (1.1.1)
     [ ] get Sphinx docs working
-    [ ] use continuous build checkin such as .travis.yml
+    [x] use continuous build checkin such as .travis.yml
     [ ] auto convert python type long to FIFOStr (both typeStr, and in operators which convert numbers to string.  only applies to 2.7x )
 
 ### features checklist (1.1.0)
