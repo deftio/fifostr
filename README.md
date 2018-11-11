@@ -176,7 +176,7 @@ pydoc -w ../fifostr.py
 note that as of this writing pydoc generates its output in the current directory and doesn't seem to be pipeable to another.  
 
 ### Release History  
-* 1.1.11 updated PyPi to use README.md instead of README.rst (no other changes)
+* 1.1.15 updated PyPi to use README.md instead of README.rst (no other changes)
 * 1.1.10 Updated docs and related usage info for repo
 * 1.1.9  rebuild for README.md to README.rst conversion using pandoc (no code changes) for PyPi
 * 1.1.8  rebuild to make sure proper pkg loaded to PyPi (no code changes) 
