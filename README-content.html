@@ -1,96 +1,96 @@
-<p><a href="https://badge.fury.io/py/fifostr"><img src="https://badge.fury.io/py/fifostr.svg" alt="PyPI version" /></a> <a href="https://travis-ci.org/deftio/fifostr"><img src="https://travis-ci.org/deftio/fifostr.svg?branch=master" alt="Build Status" /></a> <a href="https://coveralls.io/github/deftio/fifostr?branch=master"><img src="https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master" alt="Coverage Status" /></a> <a href="https://opensource.org/licenses/BSD-2-Clause"><img src="https://img.shields.io/badge/License-BSD%202--Clause-blue.svg" alt="License" /></a></p>
+<p><a href="https://img.shields.io/pypi/v/fifostr"><img src="https://img.shields.io/pypi/v/fifostr.svg" alt="PyPi version" /></a> <a href="https://travis-ci.org/deftio/fifostr"><img src="https://travis-ci.org/deftio/fifostr.svg?branch=master" alt="Build Status" /></a> <a href="https://coveralls.io/github/deftio/fifostr?branch=master"><img src="https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master" alt="Coverage Status" /></a> <a href="https://opensource.org/licenses/BSD-2-Clause"><img src="https://img.shields.io/badge/License-BSD%202--Clause-blue.svg" alt="License" /></a></p>
 <h1 id="fifostr.py">fifostr.py</h1>
 <p>FIFOStr - A string python library with a streaming pattern parser and mutability support. FIFOstr allows character(s) to be inserted on either side of a Str like object which then trigger callbacks based on regexes, strings, or customer parser functions.</p>
 <p>Originally a lighter version of this was used in a python serial terminal program dioterm (which allowed the serial terminal to parse commands sent/received by both sides).</p>
 <h2 id="pattern-triggering-features">Pattern Triggering Features</h2>
-<p>Built-in pattern matching and triggering: simply add / remove patterns which then call a callback function (E.g. if the pattern is “seen” then trigger the function). Patterns can be strings, regexes or user-supplied-functions (parsers written in python). A pattern consists of:<br />
+<p>Built-in pattern matching and triggering: simply add / remove patterns which then call a callback function (E.g. if the pattern is &quot;seen&quot; then trigger the function). Patterns can be strings, regexes or user-supplied-functions (parsers written in python). A pattern consists of:<br />
 * pattern: string <em>or</em> compiled regex <em>or</em> user-supplied-parser-function<br />
-* label: user supplied ‘name’ for this pattern<br />
-* start index : position in fifostr to begin pattern match. default is 0 (also accepts the character ‘^’ as start anchor for those familiar with regexes) * stop index : position in fifostr to end pattern match. default is end of fifostr. the letter ‘$’ has special meaning as end of string no matter the length (again regex) * callback_fn : called if pattern is found, fifostr(start:end) and the label are passed to the callback function (callback(‘thematchingstring’,‘label’)) * active : default is True, sets whether this pattern should be actively looked for<br />
+* label: user supplied 'name' for this pattern<br />
+* start index : position in fifostr to begin pattern match. default is 0 (also accepts the character '^' as start anchor for those familiar with regexes) * stop index : position in fifostr to end pattern match. default is end of fifostr. the letter '$' has special meaning as end of string no matter the length (again regex) * callback_fn : called if pattern is found, fifostr(start:end) and the label are passed to the callback function (callback('thematchingstring','label')) * active : default is True, sets whether this pattern should be actively looked for<br />
 * mutable string support for changing the contents middle position characters to look at callback responses.</p>
 <h3 id="installation">Installation</h3>
 <pre><code>pip install fifostr # or just pull fifostr.py from the source repository and put in your source path  </code></pre>
 <h3 id="original-usage">Original Usage</h3>
-<p>Originally part of a terminal program called ‘dioterm’ (albeit in much more compact form), this library was used used to ‘listen’ to traffic in either direction on a serial port. When certain patterns were found such as a command sent from the host or a special piece of data from the embedded microntroller client, fifostr would trigger a callback to do something. This was very useful when sequences of commands had to be set up between the host and client. Many of these sequences where conditional based on what either the host or client sent resulting in many variations of sequence-test cases, especially if this results in the host then having to make some other call to an unrelated process or hardware to reply correctly.</p>
+<p>Originally part of a terminal program called 'dioterm' (albeit in much more compact form), this library was used used to 'listen' to traffic in either direction on a serial port. When certain patterns were found such as a command sent from the host or a special piece of data from the embedded microntroller client, fifostr would trigger a callback to do something. This was very useful when sequences of commands had to be set up between the host and client. Many of these sequences where conditional based on what either the host or client sent resulting in many variations of sequence-test cases, especially if this results in the host then having to make some other call to an unrelated process or hardware to reply correctly.</p>
 <h3 id="functionality">Functionality</h3>
 <p>FIFOStr is a string which is (derived from deque) with these properties:<br />
 * add/remove chars or strings at either end<br />
 * mutable (can set a char to any value like an array with []) * use slices, lists, or tuples to retrieve members (just like a real str object)<br />
 * get head/tail (returns as a str)<br />
-* match head/tail –&gt; match a supplied string to either the head or tail<br />
-* use patterns to trigger callbacks –&gt; pattern can be string | regex | user_supplied_parser any of which triggers user supplied callback_fn<br />
-* all patterns can look at either the whole fifostr or any subset e.g. addPattern(“foo”,myCallback,2,5,“bar”) –&gt; only looks for “foo” between positions 2 and 5 in the fifostr and will call myCallback with (“foo”,“bar”) if found * all patterns have optional label which can be used for logging purposes (eg. when pattern found, in addition to callback, emit label)<br />
+* match head/tail --&gt; match a supplied string to either the head or tail<br />
+* use patterns to trigger callbacks --&gt; pattern can be string | regex | user_supplied_parser any of which triggers user supplied callback_fn<br />
+* all patterns can look at either the whole fifostr or any subset e.g. addPattern(&quot;foo&quot;,myCallback,2,5,&quot;bar&quot;) --&gt; only looks for &quot;foo&quot; between positions 2 and 5 in the fifostr and will call myCallback with (&quot;foo&quot;,&quot;bar&quot;) if found * all patterns have optional label which can be used for logging purposes (eg. when pattern found, in addition to callback, emit label)<br />
 * user supplied callback_fn is called with both the string-match section and the label<br />
-* patterns can be added/deleted from the list of patterns “watching” the fifostr content * all (active) patterns are always matched. fifostr matches multiple different patterns over the same string.<br />
-* clear all patterns –&gt; removes patterns from processing<br />
-* get/setPattern Active/Inactive –&gt; allows a stored pattern to set on or off<br />
+* patterns can be added/deleted from the list of patterns &quot;watching&quot; the fifostr content * all (active) patterns are always matched. fifostr matches multiple different patterns over the same string.<br />
+* clear all patterns --&gt; removes patterns from processing<br />
+* get/setPattern Active/Inactive --&gt; allows a stored pattern to set on or off<br />
 * Python 2.7+, Python 3+ support with no mods, no dependancies<br />
 * 100% test coverage in both 2.7 and 3.x</p>
 <h3 id="usage-example">Usage example</h3>
-<p>See example.py to run in tests dir – same examples as here but more comments, more use cases</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb2-1" title="1"><span class="im">from</span> fifostr <span class="im">import</span> FIFOStr</a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw">def</span> main():</a>
-<a class="sourceLine" id="cb2-3" title="3">    myFifoStr<span class="op">=</span>FIFOStr(<span class="dv">5</span>) <span class="co">#make a fifostr of length 5 (for unlimited length omit number)</span></a>
-<a class="sourceLine" id="cb2-4" title="4">    myFifoStr<span class="op">+=</span><span class="st">&#39;1234567&#39;</span> <span class="co">#adds 1234567 to fifostr ... but len of fifostr is 5</span></a>
-<a class="sourceLine" id="cb2-5" title="5">                         <span class="co"># so only 34567 is retained</span></a>
-<a class="sourceLine" id="cb2-6" title="6">   </a>
-<a class="sourceLine" id="cb2-7" title="7">    <span class="bu">print</span> <span class="st">&quot;myFifoStr.head(3)= &quot;</span>,myFifoStr.head(<span class="dv">3</span>) <span class="co">#shows 345</span></a>
-<a class="sourceLine" id="cb2-8" title="8">    <span class="bu">print</span> <span class="st">&quot;myFifoStr.tail(4)= &quot;</span>,myFifoStr.tail(<span class="dv">4</span>) <span class="co">#shows 4567</span></a>
-<a class="sourceLine" id="cb2-9" title="9"></a>
-<a class="sourceLine" id="cb2-10" title="10">    <span class="co"># the eqhead and eqtail functions allow string compares against</span></a>
-<a class="sourceLine" id="cb2-11" title="11">    <span class="co"># the head or the tail</span></a>
-<a class="sourceLine" id="cb2-12" title="12"></a>
-<a class="sourceLine" id="cb2-13" title="13">    myFifoStr.eqhead(<span class="st">&quot;3456&quot;</span>)    <span class="co">#True</span></a>
-<a class="sourceLine" id="cb2-14" title="14">    myFifoStr.eqhead(<span class="st">&quot;567&quot;</span>)     <span class="co">#False</span></a>
-<a class="sourceLine" id="cb2-15" title="15">    myFifoStr.eqtail(<span class="st">&quot;4567&quot;</span>)    <span class="co">#True</span></a>
-<a class="sourceLine" id="cb2-16" title="16">    myFifoStr.eqtail(<span class="st">&quot;abc&quot;</span>)     <span class="co">#False</span></a>
-<a class="sourceLine" id="cb2-17" title="17"></a>
-<a class="sourceLine" id="cb2-18" title="18">    <span class="co">#fifostr.testPattern() allows you to test if the pattern is present in the fifostr object</span></a>
-<a class="sourceLine" id="cb2-19" title="19">    <span class="co">#test a  string pattern directly</span></a>
-<a class="sourceLine" id="cb2-20" title="20">    myFifoStr.testPattern(<span class="st">&#39;67890&#39;</span>) <span class="co">#False</span></a>
-<a class="sourceLine" id="cb2-21" title="21">    </a>
-<a class="sourceLine" id="cb2-22" title="22">    <span class="co">#test a regex pattern directly.  to do this pass any valid regex in compiled form</span></a>
-<a class="sourceLine" id="cb2-23" title="23">    r1<span class="op">=</span>re.<span class="bu">compile</span>(<span class="st">&quot;[0-9]+&quot;</span>)</a>
-<a class="sourceLine" id="cb2-24" title="24">    myFifoStr.testPattern(r1)   <span class="co">#True</span></a>
-<a class="sourceLine" id="cb2-25" title="25"></a>
-<a class="sourceLine" id="cb2-26" title="26">    r2<span class="op">=</span>re.<span class="bu">compile</span>(<span class="st">&quot;[a-z]+&quot;</span>)</a>
-<a class="sourceLine" id="cb2-27" title="27">    myFifoStr.testPattern(r2)   <span class="co">#False</span></a>
-<a class="sourceLine" id="cb2-28" title="28"></a>
-<a class="sourceLine" id="cb2-29" title="29">    <span class="co">#more generally we can add (and remove) patterns which will scan and trigger a call back everytime the fifostr </span></a>
-<a class="sourceLine" id="cb2-30" title="30">    <span class="co">#internal content changes (whether adding or deleting chars from either end or even rotating/reversing the fifstr object)</span></a>
-<a class="sourceLine" id="cb2-31" title="31"></a>
-<a class="sourceLine" id="cb2-32" title="32">    <span class="co">#adding patterns</span></a>
-<a class="sourceLine" id="cb2-33" title="33">    p1 <span class="op">=</span> myFifoStr.addPattern(<span class="st">&quot;234&quot;</span>,logf,label<span class="op">=</span><span class="st">&quot;234 was here&quot;</span>) <span class="co">#integer index returned managing pattern </span></a>
-<a class="sourceLine" id="cb2-34" title="34">    p2 <span class="op">=</span> myFifoStr.addPattern(<span class="st">&quot;67890&quot;</span>,logf,label<span class="op">=</span><span class="st">&quot;67890 detected&quot;</span>)</a>
-<a class="sourceLine" id="cb2-35" title="35">    p3 <span class="op">=</span> myFifoStr.addPattern(r1,logf,label<span class="op">=</span><span class="st">&quot;r1 detected&quot;</span>)</a>
-<a class="sourceLine" id="cb2-36" title="36">    myFifoStr.addPattern(r2,logf,label<span class="op">=</span><span class="st">&quot;r2 hit&quot;</span>)</a>
-<a class="sourceLine" id="cb2-37" title="37">    myFifoStr.addPattern(f1,logf,label<span class="op">=</span><span class="st">&quot;f1 hit&quot;</span>)   </a>
-<a class="sourceLine" id="cb2-38" title="38">    myFifoStr.addPattern(f2,logf,label<span class="op">=</span><span class="st">&quot;f2 hit&quot;</span>)    </a>
-<a class="sourceLine" id="cb2-39" title="39"></a>
-<a class="sourceLine" id="cb2-40" title="40">    <span class="co">#patterns can be set active/inactive via pattern management fns </span></a>
-<a class="sourceLine" id="cb2-41" title="41">    myFifoStr.setPatternActiveState(p1,<span class="va">False</span>) <span class="co">#based on index returned from addPattern</span></a>
-<a class="sourceLine" id="cb2-42" title="42"></a>
-<a class="sourceLine" id="cb2-43" title="43">    <span class="co">#now show searching for stored pattern matchers in the pattern dict</span></a>
-<a class="sourceLine" id="cb2-44" title="44">    <span class="co">#this is not searching the fifo-string itself, just the stored patterns that we have entered</span></a>
-<a class="sourceLine" id="cb2-45" title="45">    <span class="bu">print</span>(<span class="st">&quot;find pattern by label &#39;foo&#39;:&quot;</span>,myFifoStr.findPatternByLabel(<span class="st">&quot;foo&quot;</span>)) <span class="co">#no matches returns empty list</span></a>
-<a class="sourceLine" id="cb2-46" title="46">    <span class="bu">print</span>(<span class="st">&quot;find pattern by label &#39;234 hit&#39;:&quot;</span>,myFifoStr.findPatternByLabel(<span class="st">&quot;234 hit&quot;</span>)) <span class="co">#shows match</span></a>
-<a class="sourceLine" id="cb2-47" title="47">    <span class="bu">print</span>(<span class="st">&quot;find pattern by label using regex &#39;[rf][0-9]&#39;:&quot;</span>)</a>
-<a class="sourceLine" id="cb2-48" title="48">    pp.pprint(myFifoStr.findPatternByLabel(re.<span class="bu">compile</span>(<span class="st">&quot;[rf][0-9]&quot;</span>)))</a>
-<a class="sourceLine" id="cb2-49" title="49"></a>
-<a class="sourceLine" id="cb2-50" title="50">    <span class="co">#and finally demonstrate that patterns auto-trigger when items inserted in fifostr .. which afterall</span></a>
-<a class="sourceLine" id="cb2-51" title="51">    <span class="co">#is the point of the whole thing.. ;)</span></a>
-<a class="sourceLine" id="cb2-52" title="52">    <span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st"> fifo operations ============&quot;</span>)</a>
-<a class="sourceLine" id="cb2-53" title="53">    <span class="cf">for</span> c <span class="kw">in</span> <span class="st">&#39;01234567890abcdefghijklmnop&#39;</span>:  <span class="co">#show using inc which accomplishes same thing</span></a>
-<a class="sourceLine" id="cb2-54" title="54">        myFifoStr <span class="op">+=</span> c</a>
-<a class="sourceLine" id="cb2-55" title="55"></a>
-<a class="sourceLine" id="cb2-56" title="56">    myFifoStr<span class="op">+=</span> <span class="st">&#39;abcdefghi&#39;</span></a>
-<a class="sourceLine" id="cb2-57" title="57">    <span class="bu">print</span> (myFifoStr.<span class="bu">all</span>())</a></code></pre></div>
+<p>See example.py to run in tests dir -- same examples as here but more comments, more use cases</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> fifostr <span class="im">import</span> FIFOStr
+<span class="kw">def</span> main():
+    myFifoStr<span class="op">=</span>FIFOStr(<span class="dv">5</span>) <span class="co">#make a fifostr of length 5 (for unlimited length omit number)</span>
+    myFifoStr<span class="op">+=</span><span class="st">&#39;1234567&#39;</span> <span class="co">#adds 1234567 to fifostr ... but len of fifostr is 5</span>
+                         <span class="co"># so only 34567 is retained</span>
+   
+    <span class="bu">print</span> <span class="st">&quot;myFifoStr.head(3)= &quot;</span>,myFifoStr.head(<span class="dv">3</span>) <span class="co">#shows 345</span>
+    <span class="bu">print</span> <span class="st">&quot;myFifoStr.tail(4)= &quot;</span>,myFifoStr.tail(<span class="dv">4</span>) <span class="co">#shows 4567</span>
+
+    <span class="co"># the eqhead and eqtail functions allow string compares against</span>
+    <span class="co"># the head or the tail</span>
+
+    myFifoStr.eqhead(<span class="st">&quot;3456&quot;</span>)    <span class="co">#True</span>
+    myFifoStr.eqhead(<span class="st">&quot;567&quot;</span>)     <span class="co">#False</span>
+    myFifoStr.eqtail(<span class="st">&quot;4567&quot;</span>)    <span class="co">#True</span>
+    myFifoStr.eqtail(<span class="st">&quot;abc&quot;</span>)     <span class="co">#False</span>
+
+    <span class="co">#fifostr.testPattern() allows you to test if the pattern is present in the fifostr object</span>
+    <span class="co">#test a  string pattern directly</span>
+    myFifoStr.testPattern(<span class="st">&#39;67890&#39;</span>) <span class="co">#False</span>
+    
+    <span class="co">#test a regex pattern directly.  to do this pass any valid regex in compiled form</span>
+    r1<span class="op">=</span>re.<span class="bu">compile</span>(<span class="st">&quot;[0-9]+&quot;</span>)
+    myFifoStr.testPattern(r1)   <span class="co">#True</span>
+
+    r2<span class="op">=</span>re.<span class="bu">compile</span>(<span class="st">&quot;[a-z]+&quot;</span>)
+    myFifoStr.testPattern(r2)   <span class="co">#False</span>
+
+    <span class="co">#more generally we can add (and remove) patterns which will scan and trigger a call back everytime the fifostr </span>
+    <span class="co">#internal content changes (whether adding or deleting chars from either end or even rotating/reversing the fifstr object)</span>
+
+    <span class="co">#adding patterns</span>
+    p1 <span class="op">=</span> myFifoStr.addPattern(<span class="st">&quot;234&quot;</span>,logf,label<span class="op">=</span><span class="st">&quot;234 was here&quot;</span>) <span class="co">#integer index returned managing pattern </span>
+    p2 <span class="op">=</span> myFifoStr.addPattern(<span class="st">&quot;67890&quot;</span>,logf,label<span class="op">=</span><span class="st">&quot;67890 detected&quot;</span>)
+    p3 <span class="op">=</span> myFifoStr.addPattern(r1,logf,label<span class="op">=</span><span class="st">&quot;r1 detected&quot;</span>)
+    myFifoStr.addPattern(r2,logf,label<span class="op">=</span><span class="st">&quot;r2 hit&quot;</span>)
+    myFifoStr.addPattern(f1,logf,label<span class="op">=</span><span class="st">&quot;f1 hit&quot;</span>)   
+    myFifoStr.addPattern(f2,logf,label<span class="op">=</span><span class="st">&quot;f2 hit&quot;</span>)    
+
+    <span class="co">#patterns can be set active/inactive via pattern management fns </span>
+    myFifoStr.setPatternActiveState(p1,<span class="va">False</span>) <span class="co">#based on index returned from addPattern</span>
+
+    <span class="co">#now show searching for stored pattern matchers in the pattern dict</span>
+    <span class="co">#this is not searching the fifo-string itself, just the stored patterns that we have entered</span>
+    <span class="bu">print</span>(<span class="st">&quot;find pattern by label &#39;foo&#39;:&quot;</span>,myFifoStr.findPatternByLabel(<span class="st">&quot;foo&quot;</span>)) <span class="co">#no matches returns empty list</span>
+    <span class="bu">print</span>(<span class="st">&quot;find pattern by label &#39;234 hit&#39;:&quot;</span>,myFifoStr.findPatternByLabel(<span class="st">&quot;234 hit&quot;</span>)) <span class="co">#shows match</span>
+    <span class="bu">print</span>(<span class="st">&quot;find pattern by label using regex &#39;[rf][0-9]&#39;:&quot;</span>)
+    pp.pprint(myFifoStr.findPatternByLabel(re.<span class="bu">compile</span>(<span class="st">&quot;[rf][0-9]&quot;</span>)))
+
+    <span class="co">#and finally demonstrate that patterns auto-trigger when items inserted in fifostr .. which afterall</span>
+    <span class="co">#is the point of the whole thing.. ;)</span>
+    <span class="bu">print</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st"> fifo operations ============&quot;</span>)
+    <span class="cf">for</span> c <span class="kw">in</span> <span class="st">&#39;01234567890abcdefghijklmnop&#39;</span>:  <span class="co">#show using inc which accomplishes same thing</span>
+        myFifoStr <span class="op">+=</span> c
+
+    myFifoStr<span class="op">+=</span> <span class="st">&#39;abcdefghi&#39;</span>
+    <span class="bu">print</span> (myFifoStr.<span class="bu">all</span>())</code></pre></div>
 <h3 id="notes">Notes</h3>
 <p>FIFOstr is not meant replacement for a compiler/parser front end though it can be used as complex tokenizer. Internally just iterates over stored patterns every time something is added to the fifostr object. If you do have a parser you wish to be called then just add it as a callback function so that every time the fifostr is updated with a char(s) it will call your parser to do the work. Your parser must return a boolean result if you wish to use the callback based triggering. Multiple custom parsers can be run in along with static string patterns or regexes.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb3-1" title="1"><span class="co">#let your own parser do the work  </span></a>
-<a class="sourceLine" id="cb3-2" title="2">    myFifo <span class="op">=</span> fifostr(<span class="dv">20</span>)  <span class="co"># make a 20 char fifostr</span></a>
-<a class="sourceLine" id="cb3-3" title="3">    myFifo.addPattern(myParser,myCallbk) <span class="co">#myParser passed entire fifostr (as str) when char(s) added</span></a>
-<a class="sourceLine" id="cb3-4" title="4">    myFifo.addPattern(myParser,myCallbk2,<span class="dv">3</span>,<span class="dv">5</span>) <span class="co">#myParser passed fifostr btw (3,5).  My Parser must return True if match found for callback to be invoked</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#let your own parser do the work  </span>
+    myFifo <span class="op">=</span> fifostr(<span class="dv">20</span>)  <span class="co"># make a 20 char fifostr</span>
+    myFifo.addPattern(myParser,myCallbk) <span class="co">#myParser passed entire fifostr (as str) when char(s) added</span>
+    myFifo.addPattern(myParser,myCallbk2,<span class="dv">3</span>,<span class="dv">5</span>) <span class="co">#myParser passed fifostr btw (3,5).  My Parser must return True if match found for callback to be invoked</span></code></pre></div>
 <h3 id="source-code">Source code</h3>
 <p>all source is at github:<br />
 https://github.com/deftio/fifostr</p>
@@ -105,22 +105,22 @@ see <strong>main</strong> in example.py file</p>
 <p>for test coverage look in the /tests directory<br />
 to run tests pytest needs to be installed.</p>
 <h4 id="on-ubuntu">on Ubuntu</h4>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="ex">pip</span> install -U pytest pytest-cov </a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="ex">pip</span> install coveralls   </a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">pip</span> install -U pytest pytest-cov 
+<span class="ex">pip</span> install coveralls   </code></pre></div>
 <p>note: more info at pytest.org for installation on other OSes</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># running basic tests</span></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="bu">cd</span> tests</a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="ex">pytest</span>  <span class="co">#or py.test </span></a>
-<a class="sourceLine" id="cb5-4" title="4"></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="co"># coverage stats below</span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="ex">coverage</span> run --source fifostr -m pytest </a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="ex">coverage</span> report -m</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># running basic tests</span>
+<span class="bu">cd</span> tests
+<span class="ex">pytest</span>  #or py.test 
+
+<span class="co"># coverage stats below</span>
+<span class="ex">coverage</span> run --source fifostr -m pytest 
+<span class="ex">coverage</span> report -m</code></pre></div>
 <h3 id="generating-docs">Generating docs</h3>
 <p>Documenation is generated using pandoc and pydoc from the build scripts.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="fu">sudo</span> apt-get install pandoc</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">sudo</span> apt-get install pandoc</code></pre></div>
 <p>documentation is in /docs directory (generated by pydoc) to (re)generate the docs. cd to the docs directory. then type:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" title="1"><span class="ex">pydoc</span> -w ../fifostr.py  </a></code></pre></div>
-<p>note that as of this writing pydoc generates its output in the current directory and doesn’t seem to be pipeable to another.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">pydoc</span> -w ../fifostr.py  </code></pre></div>
+<p>note that as of this writing pydoc generates its output in the current directory and doesn't seem to be pipeable to another.</p>
 <h3 id="release-history">Release History</h3>
 <ul>
 <li>1.1.16 updated to support python 3.7 3.8 3.9 in tests</li>
@@ -138,7 +138,7 @@ to run tests pytest needs to be installed.</p>
 <h3 id="readme.md-vs-readme.rst">README.md vs README.rst</h3>
 <p>The README.rst is generated from the README.md using pandoc but the content is identical. (used for PyPi in earlier releases)</p>
 <h3 id="license">License</h3>
-<p>See LICENSE.txt file in this directory. The license is the OSI approved “FreeBSD” 2 clause license.</p>
-<ol start="3" type="a">
+<p>See LICENSE.txt file in this directory. The license is the OSI approved &quot;FreeBSD&quot; 2 clause license.</p>
+<ol start="3" style="list-style-type: lower-alpha">
 <li>2018 m a chatterjee</li>
 </ol>
