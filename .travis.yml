@@ -6,11 +6,10 @@ python:
   #- "3.3"  #works on python 3.3  (passess all test cases), however Travis CI python 3.3 support is now broken.  download stats show < 0.01% of pythond dist using 3.3
   - "3.4"
   - "3.5"
-  - "3.5-dev" # 3.5 development branch
   - "3.6"
-  - "3.6-dev" # 3.6 development branch
-  - "3.7-dev" # 3.7 development branch
-  - "nightly" # currently points to 3.7-dev
+  - "3.7" 
+  - "3.8"
+  - "3.9"
 
 # command to install dependencies
 install: 

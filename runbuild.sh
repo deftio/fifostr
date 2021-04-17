@@ -15,15 +15,15 @@ fi
 if [ $1 == 'build' ]  #don't forget the spaces.... its sh afterall..
 then
 	#first build this 
-	python setup.py sdist
+	python3 setup.py sdist
 
 	#then this
-	python setup.py bdist_wheel --universal
+	python3 setup.py bdist_wheel --universal
 
 	#this requires pandoc to be installed (on ubuntu sudo apt-get install pandoc)
 	#pandoc --from=markdown --to=rst --output=README.rst README.md 
 	#pandoc --from=markdown_strict --to=rst --output=README.rst README.md
-	pandoc --from=markdown_github --to=rst --output=README.rst README.md
+	pandoc --from=gfm --to=rst --output=README.rst README.md
 	pandoc README.md -f markdown -t html -o README-content.html
 fi
 
