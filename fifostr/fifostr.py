@@ -49,7 +49,7 @@ import itertools
 
 __author__ = 'M. A. Chatterjee'
 __copyright__ = 'copyright (C) 2011-2018 M. A. Chatterjee'
-__version_full__ = [1,1,17]   #allows mixed types e.g. 1,0,"92b"
+__version_full__ = [1,1,18]   #allows mixed types e.g. 1,0,"92b"
 __version__ = '.'.join(str(x) for x in __version_full__)
 
 #FIFO (First-In-First-Out) String --> is a rolling FIFO of last n chars seen
@@ -58,7 +58,7 @@ __version__ = '.'.join(str(x) for x in __version_full__)
 #the function takes a string, returns a bool
 
 class FIFOStr(deque):
-	def __init__(self, maxsize=None):
+	def __init__(self, initparam=None):
 		"""
 		FIFOStr is a deque derived string class which has pattern matching abilities when new chars
 		are added to its internal storage.
@@ -69,6 +69,9 @@ class FIFOStr(deque):
 		or may be set to a fixed length as in
 		myFifoStr = FIFOStr(10)   #sets a fifostr object with a fixed length of 10 chars
 
+		or it can be initialized from a string 
+		myfifostr = FIFOStr("this is my string")
+
 		patterns can be strings, regular expressions, or user supplied parsers.  when a character is added to 
 		fifostr each stored pattern is checked to see if a match is found.  If a match is found then a user supplied
 		callback function is invoked.  Any number of patterns (which can be overlapping) can trigger the supplied
@@ -76,11 +79,22 @@ class FIFOStr(deque):
 
 		Args:
 		    size (int, optional): set size of the fifostr object.  unbounded if omitted.
+		    or
+		    string (optional) : set size of fifostr object from length of a string and assign initial value to from that string
+
 		"""
-		super( FIFOStr, self ).__init__(maxlen=maxsize) #inheritance from deque
+		initsize = initparam
+		
+		if type(initparam) ==  str:  #treat argument as a string, set length to the string's length
+			initsize = len(initparam)
+
+		super( FIFOStr, self ).__init__(maxlen=initsize) #inheritance from deque
 		self.patterns 	= {} #dict of patterns to search for
 		self.patternIdx = 0
 		
+		if (type(initparam) == str):  #since the initial param was a str we now set the deque to that string
+			deque.__iadd__(self,initparam)
+
 		def enum(**enums):
 			"""
 			Simple constant ENUM style generator used for indexing internal storage array
