@@ -1,5 +1,5 @@
 [![PyPi version](https://img.shields.io/pypi/v/fifostr.svg)](https://img.shields.io/pypi/v/fifostr)
-[![Build Status](https://travis-ci.org/deftio/fifostr.svg?branch=master)](https://travis-ci.org/deftio/fifostr)
+[![Build Status](https://travis-ci.com/deftio/fifostr.svg?branch=master)](https://travis-ci.com/deftio/fifostr)
 [![Coverage Status](https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master)](https://coveralls.io/github/deftio/fifostr?branch=master)
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-blue.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
