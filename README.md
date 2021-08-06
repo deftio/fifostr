@@ -6,9 +6,22 @@
 
 # fifostr.py
     
-FIFOStr - A string python library with a streaming pattern parser and mutability support.  FIFOstr allows character(s) to be inserted on either side of a Str like object which then trigger callbacks based on regexes, strings, or customer parser functions.  
+FIFOStr - A string python library with a streaming pattern parser and mutability support.  FIFOstr allows character(s) to be inserted on either side of a str-like object which then trigger callbacks based on regexes, strings, or customer parser functions.  Also features mutable string support (more on this below).
 
-Originally a lighter version of this was used in a python serial terminal program dioterm (which allowed the serial terminal to parse commands sent/received by both sides).  
+e.g. 
+```
+from fifostr import FIFOStr
+
+myString = FIFOStr("this is a test")
+myString.head(4) == "this"  #true
+
+myString+= " more"
+
+myString.head(4) == "is a"  #true because the string is also a FIFO and keeps fixed length.  Look at example below for more on pattern matching (and multiple pattern matching for more details)
+
+```
+
+Originally a lighter version of this was used in a python serial terminal program (which allowed the serial terminal to parse commands sent/received by both sides).  
 
 ## Pattern Triggering Features 
 
@@ -177,6 +190,8 @@ pydoc -w ../fifostr.py
 note that as of this writing pydoc generates its output in the current directory and doesn't seem to be pipeable to another.  
 
 ### Release History  
+* 1.1.18 added Str constructor 
+* 1.1.17 updated to support 3.9x
 * 1.1.16 updated to support python 3.7 3.8 3.9 in tests
 * 1.1.15 updated PyPi to use README.md instead of README.rst (no other changes)
 * 1.1.10 Updated docs and related usage info for repo

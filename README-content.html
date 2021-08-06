@@ -1,7 +1,17 @@
 <p><a href="https://img.shields.io/pypi/v/fifostr"><img src="https://img.shields.io/pypi/v/fifostr.svg" alt="PyPi version" /></a> <a href="https://travis-ci.org/deftio/fifostr"><img src="https://travis-ci.org/deftio/fifostr.svg?branch=master" alt="Build Status" /></a> <a href="https://coveralls.io/github/deftio/fifostr?branch=master"><img src="https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master" alt="Coverage Status" /></a> <a href="https://opensource.org/licenses/BSD-2-Clause"><img src="https://img.shields.io/badge/License-BSD%202--Clause-blue.svg" alt="License" /></a></p>
 <h1 id="fifostr.py">fifostr.py</h1>
-<p>FIFOStr - A string python library with a streaming pattern parser and mutability support. FIFOstr allows character(s) to be inserted on either side of a Str like object which then trigger callbacks based on regexes, strings, or customer parser functions.</p>
-<p>Originally a lighter version of this was used in a python serial terminal program dioterm (which allowed the serial terminal to parse commands sent/received by both sides).</p>
+<p>FIFOStr - A string python library with a streaming pattern parser and mutability support. FIFOstr allows character(s) to be inserted on either side of a str-like object which then trigger callbacks based on regexes, strings, or customer parser functions. Also features mutable string support (more on this below).</p>
+<p>e.g.</p>
+<pre><code>from fifostr import FIFOStr
+
+myString = FIFOStr(&quot;this is a test&quot;)
+myString.head(4) == &quot;this&quot;  #true
+
+myString+= &quot; more&quot;
+
+myString.head(4) == &quot;is a&quot;  #true because the string is also a FIFO and keeps fixed length.  Look at example below for more on pattern matching (and multiple pattern matching for more details)
+</code></pre>
+<p>Originally a lighter version of this was used in a python serial terminal program (which allowed the serial terminal to parse commands sent/received by both sides).</p>
 <h2 id="pattern-triggering-features">Pattern Triggering Features</h2>
 <p>Built-in pattern matching and triggering: simply add / remove patterns which then call a callback function (E.g. if the pattern is &quot;seen&quot; then trigger the function). Patterns can be strings, regexes or user-supplied-functions (parsers written in python). A pattern consists of:<br />
 * pattern: string <em>or</em> compiled regex <em>or</em> user-supplied-parser-function<br />
@@ -123,6 +133,8 @@ to run tests pytest needs to be installed.</p>
 <p>note that as of this writing pydoc generates its output in the current directory and doesn't seem to be pipeable to another.</p>
 <h3 id="release-history">Release History</h3>
 <ul>
+<li>1.1.18 added Str constructor</li>
+<li>1.1.17 updated to support 3.9x</li>
 <li>1.1.16 updated to support python 3.7 3.8 3.9 in tests</li>
 <li>1.1.15 updated PyPi to use README.md instead of README.rst (no other changes)</li>
 <li>1.1.10 Updated docs and related usage info for repo</li>

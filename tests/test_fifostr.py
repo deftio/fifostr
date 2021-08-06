@@ -4,12 +4,10 @@
 Test Harness for fifostr.py library class
 """
 
-import sys
-sys.path.insert(0, '..')
-sys.path.insert(0, '../fifostr')
 
 import re
-from fifostr import *
+
+from  fifostr import *
 #from collections import deque, Iterable
 
 def testTypeStr():
@@ -20,6 +18,21 @@ def testTypeStr():
 	assert myFifoStr.typeStr(123) == "int"  
 	assert myFifoStr.typeStr("this") == "str"
 	assert myFifoStr.typeStr(testTypeStr) == "function"
+	pass
+
+def testStrConstructor(): 
+	"""
+	test internal constructor using a string parameter
+	"""
+	testString = "this is a test string."
+	myFifoStr = FIFOStr(testString)
+	assert myFifoStr.all() == testString
+	assert myFifoStr.head(4) == "this"
+	assert myFifoStr.tail(4) == "ing."
+	assert len(myFifoStr) == len(testString)
+	myFifoStr += "more."
+	assert len(myFifoStr) == len(testString) # should stay same length
+	assert myFifoStr.eqtail("more.")
 	pass
 
 def testMisc():
