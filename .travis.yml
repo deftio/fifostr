@@ -21,8 +21,8 @@ install:
 
 # command to run tests
 script: 
-  - pytest
-  - coverage run --source fifostr -m pytest 
+  - python -m py.test
+  #- coverage run --source fifostr -m pytest 
 
 #code coverage
 after_success:
