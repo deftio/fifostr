@@ -190,6 +190,7 @@ pydoc -w ../fifostr.py
 note that as of this writing pydoc generates its output in the current directory and doesn't seem to be pipeable to another.  
 
 ### Release History  
+* 1.1.19 added sys.displayhook chaining for interactive mode display
 * 1.1.18 added Str constructor 
 * 1.1.17 updated to support 3.9x
 * 1.1.16 updated to support python 3.7 3.8 3.9 in tests
