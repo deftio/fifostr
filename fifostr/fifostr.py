@@ -45,11 +45,12 @@ except ImportError:
 
 import re 
 import itertools
-
+import sys
+#import builtins
 
 __author__ = 'M. A. Chatterjee'
 __copyright__ = 'copyright (C) 2011-2018 M. A. Chatterjee'
-__version_full__ = [1,1,18]   #allows mixed types e.g. 1,0,"92b"
+__version_full__ = [1,1,19]   #allows mixed types e.g. 1,0,"92b"
 __version__ = '.'.join(str(x) for x in __version_full__)
 
 #FIFO (First-In-First-Out) String --> is a rolling FIFO of last n chars seen
@@ -102,6 +103,18 @@ class FIFOStr(deque):
 			return type('Enum', (), enums)
 
 		self.PIDX = enum(PATTERN=0, START=1, END=2, CALLBACKFN=3, LABEL=4, ACTIVE=5) #used internally
+
+	@staticmethod
+	def fifodisplay(x):
+	    d = sys.__fifostr_prev_displayhook__
+	    #builtins._ = None
+	    if type(x) == type(FIFOStr(1)):
+	        d(str(x))
+	    else:
+	        d(x)
+
+		
+
 
 
 	def typeStr(self,x):
@@ -713,3 +726,7 @@ class FIFOStr(deque):
 			
 		return 	v
 
+
+if sys.displayhook != FIFOStr.fifodisplay:
+	sys.__fifostr_prev_displayhook__ = sys.displayhook
+	sys.displayhook = FIFOStr.fifodisplay

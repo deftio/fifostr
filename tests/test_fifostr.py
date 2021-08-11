@@ -329,3 +329,11 @@ def testVer():
 	assert len(v["version_str"]) > 0
 	assert len(v["version"]) > 0
 	assert len(v["url"]) > 0
+
+
+
+def testdisphook():
+	FIFOStr.fifodisplay(123)
+	a = FIFOStr("testing display hook")
+	FIFOStr.fifodisplay(a)
+	
