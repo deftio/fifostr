@@ -1,17 +1,38 @@
-<p><a href="https://img.shields.io/pypi/v/fifostr"><img src="https://img.shields.io/pypi/v/fifostr.svg" alt="PyPi version" /></a> <a href="https://travis-ci.org/deftio/fifostr"><img src="https://travis-ci.org/deftio/fifostr.svg?branch=master" alt="Build Status" /></a> <a href="https://coveralls.io/github/deftio/fifostr?branch=master"><img src="https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master" alt="Coverage Status" /></a> <a href="https://opensource.org/licenses/BSD-2-Clause"><img src="https://img.shields.io/badge/License-BSD%202--Clause-blue.svg" alt="License" /></a></p>
+<p><a href="https://pypi.org/project/FIFOStr/"><img src="https://img.shields.io/pypi/v/fifostr.svg" alt="PyPi version" /></a> <a href="https://travis-ci.com/deftio/fifostr"><img src="https://travis-ci.com/deftio/fifostr.svg?branch=master" alt="Build Status" /></a> <a href="https://coveralls.io/github/deftio/fifostr?branch=master"><img src="https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master" alt="Coverage Status" /></a> <a href="https://opensource.org/licenses/BSD-2-Clause"><img src="https://img.shields.io/badge/License-BSD%202--Clause-blue.svg" alt="License" /></a></p>
 <h1 id="fifostr.py">fifostr.py</h1>
-<p>FIFOStr - A string python library with a streaming pattern parser and mutability support. FIFOstr allows character(s) to be inserted on either side of a str-like object which then trigger callbacks based on regexes, strings, or customer parser functions. Also features mutable string support (more on this below).</p>
-<p>e.g.</p>
-<pre><code>from fifostr import FIFOStr
+<p>FIFOStr - A python language string library designed to look for patterns in a stream, such as serial connection or look back parser. FIFOStr works by allowing character(s) to be inserted in to a FIFOstr object which is treated as FIFO (First-In-First-Out) buffer. The FIFOstr object can be set to a fixed size so that when a new character is inserted the last character is removed.</p>
+<p>Trigger patterns (either strings, regular experssions, or customer parsers written in Python) can be attached to a FIFOstr object. If that pattern is deteced in a string, a callback function will is called to trigger an action. There is no limit to the number of patterns that can be deteted and each pattern can have a separate callback.</p>
+<p>Since a FIFOstr is a fixed length buffer it can be attached to any stream with predictable resource consumption. FIFOstr also supports mutable character injection / mutable string support (used to inject / to test patterns).</p>
+<p>Example code and a full test suite with CI are provided. See coverage and test section below.</p>
+<p>Logically FIFOstr works as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> fifostr <span class="im">import</span> FIFOStr
 
-myString = FIFOStr(&quot;this is a test&quot;)
-myString.head(4) == &quot;this&quot;  #true
+<span class="co">#initialize from a given string</span>
+myString <span class="op">=</span> FIFOStr(<span class="st">&quot;this is a test&quot;</span>) <span class="co"># initialize with a string</span>
+<span class="bu">len</span>(myString) <span class="op">==</span> <span class="dv">14</span> <span class="co">#true</span>
 
-myString+= &quot; more&quot;
+<span class="co"># The FIFOStr function head( int N) returns the the first N characters</span>
+myString.head(<span class="dv">4</span>) <span class="op">==</span> <span class="st">&quot;this&quot;</span>  <span class="co">#true</span>
 
-myString.head(4) == &quot;is a&quot;  #true because the string is also a FIFO and keeps fixed length.  Look at example below for more on pattern matching (and multiple pattern matching for more details)
-</code></pre>
-<p>Originally a lighter version of this was used in a python serial terminal program (which allowed the serial terminal to parse commands sent/received by both sides).</p>
+myString<span class="op">+=</span> <span class="st">&quot; more&quot;</span> <span class="co"># this addes the string &quot; more&quot; to myString, each character is fed in and the last character in the FIFOstr is removed.</span>
+
+<span class="co">#initialize with max fixed length</span>
+myString.head(<span class="dv">4</span>) <span class="op">==</span> <span class="st">&quot;is a&quot;</span>  <span class="co">#true because the string is also a true FIFO and keeps fixed length.  Look at example below for more on pattern matching (and multiple pattern matching for more details)</span>
+
+myString <span class="op">=</span> FIFOStr(<span class="dv">10</span>)  <span class="co"># creates a blank FIFOStr max length FIFOStr of 10 chars</span>
+<span class="bu">len</span>(myString)  <span class="co"># returns 0, there is no data in FIFOstr yet</span>
+myString <span class="op">+=</span> <span class="st">&quot;This&quot;</span>
+<span class="bu">len</span>(myString) <span class="op">==</span> <span class="dv">4</span>  <span class="co"># true</span>
+myString <span class="op">+=</span> <span class="st">&quot; is more stuff&quot;</span>  <span class="co"># add characters to end of string</span>
+<span class="bu">len</span>(myString) <span class="op">==</span> <span class="dv">10</span>  <span class="co">#true</span>
+myString <span class="op">==</span> <span class="st">&quot;more stuff&quot;</span>  <span class="co"># true, string is at max len of 10 chars</span>
+
+<span class="co">#mutable support</span>
+myString[<span class="dv">2</span>] <span class="op">==</span> <span class="st">&#39;d&#39;</span> <span class="co"># in place modification (mutable string)</span>
+myString <span class="op">==</span> <span class="st">&quot;mode stuff&quot;</span> <span class="co"># string position[2] is changed </span>
+
+<span class="co">#For pattern matching &amp; triggers see examples section.</span></code></pre></div>
+<p>Originally a lighter version of this was used in a python serial terminal program which allowed the serial terminal to parse commands sent/received by both sides.</p>
 <h2 id="pattern-triggering-features">Pattern Triggering Features</h2>
 <p>Built-in pattern matching and triggering: simply add / remove patterns which then call a callback function (E.g. if the pattern is &quot;seen&quot; then trigger the function). Patterns can be strings, regexes or user-supplied-functions (parsers written in python). A pattern consists of:<br />
 * pattern: string <em>or</em> compiled regex <em>or</em> user-supplied-parser-function<br />
@@ -34,7 +55,7 @@ myString.head(4) == &quot;is a&quot;  #true because the string is also a FIFO an
 * patterns can be added/deleted from the list of patterns &quot;watching&quot; the fifostr content * all (active) patterns are always matched. fifostr matches multiple different patterns over the same string.<br />
 * clear all patterns --&gt; removes patterns from processing<br />
 * get/setPattern Active/Inactive --&gt; allows a stored pattern to set on or off<br />
-* Python 2.7+, Python 3+ support with no mods, no dependancies<br />
+* Python 2.7+, Python 3+ support, derived from built-in deque package<br />
 * 100% test coverage in both 2.7 and 3.x</p>
 <h3 id="usage-example">Usage example</h3>
 <p>See example.py to run in tests dir -- same examples as here but more comments, more use cases</p>
@@ -133,6 +154,7 @@ to run tests pytest needs to be installed.</p>
 <p>note that as of this writing pydoc generates its output in the current directory and doesn't seem to be pipeable to another.</p>
 <h3 id="release-history">Release History</h3>
 <ul>
+<li>1.1.19 added sys.displayhook chaining for interactive mode display</li>
 <li>1.1.18 added Str constructor</li>
 <li>1.1.17 updated to support 3.9x</li>
 <li>1.1.16 updated to support python 3.7 3.8 3.9 in tests</li>

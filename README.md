@@ -1,4 +1,4 @@
-[![PyPi version](https://img.shields.io/pypi/v/fifostr.svg)](https://img.shields.io/pypi/v/fifostr)
+[![PyPi version](https://img.shields.io/pypi/v/fifostr.svg)](https://pypi.org/project/FIFOStr/)
 [![Build Status](https://travis-ci.com/deftio/fifostr.svg?branch=master)](https://travis-ci.com/deftio/fifostr)
 [![Coverage Status](https://coveralls.io/repos/github/deftio/fifostr/badge.svg?branch=master)](https://coveralls.io/github/deftio/fifostr?branch=master)
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-blue.svg)](https://opensource.org/licenses/BSD-2-Clause)
@@ -6,22 +6,49 @@
 
 # fifostr.py
     
-FIFOStr - A string python library with a streaming pattern parser and mutability support.  FIFOstr allows character(s) to be inserted on either side of a str-like object which then trigger callbacks based on regexes, strings, or customer parser functions.  Also features mutable string support (more on this below).
+FIFOStr - A python language string library designed to look for patterns in a stream, such as serial connection or look back parser.  FIFOStr works by allowing character(s) to be inserted in to a FIFOstr object which is treated as FIFO (First-In-First-Out) buffer.  The FIFOstr object can be set to a fixed size so that when a new character is inserted the last character is removed.  
 
-e.g. 
-```
+Trigger patterns (either strings, regular experssions, or customer parsers written in Python) can be attached to a FIFOstr object.  If that pattern is deteced in a string, a callback function will is called to trigger an action.  There is no limit to the number of patterns that can be deteted and each pattern can have a separate callback.
+
+Since a FIFOstr is a fixed length buffer it can be attached to any stream with predictable resource consumption.  FIFOstr also supports mutable character injection / mutable string support (used to inject / to test patterns). 
+
+
+Example code and a full test suite with CI are provided.  See coverage and test section below.
+
+Logically FIFOstr works as follows:
+
+```python
 from fifostr import FIFOStr
 
-myString = FIFOStr("this is a test")
+#initialize from a given string
+myString = FIFOStr("this is a test") # initialize with a string
+len(myString) == 14 #true
+
+# The FIFOStr function head( int N) returns the the first N characters
 myString.head(4) == "this"  #true
 
-myString+= " more"
+myString+= " more" # this addes the string " more" to myString, each character is fed in and the last character in the FIFOstr is removed.
 
-myString.head(4) == "is a"  #true because the string is also a FIFO and keeps fixed length.  Look at example below for more on pattern matching (and multiple pattern matching for more details)
+#initialize with max fixed length
+myString.head(4) == "is a"  #true because the string is also a true FIFO and keeps fixed length.  Look at example below for more on pattern matching (and multiple pattern matching for more details)
+
+myString = FIFOStr(10)  # creates a blank FIFOStr max length FIFOStr of 10 chars
+len(myString)  # returns 0, there is no data in FIFOstr yet
+myString += "This"
+len(myString) == 4  # true
+myString += " is more stuff"  # add characters to end of string
+len(myString) == 10  #true
+myString == "more stuff"  # true, string is at max len of 10 chars
+
+#mutable support
+myString[2] == 'd' # in place modification (mutable string)
+myString == "mode stuff" # string position[2] is changed 
+
+#For pattern matching & triggers see examples section.
 
 ```
 
-Originally a lighter version of this was used in a python serial terminal program (which allowed the serial terminal to parse commands sent/received by both sides).  
+Originally a lighter version of this was used in a python serial terminal program which allowed the serial terminal to parse commands sent/received by both sides.  
 
 ## Pattern Triggering Features 
 
@@ -61,7 +88,7 @@ FIFOStr is a string which is (derived from deque) with these properties:
     * all (active) patterns are always matched.  fifostr matches multiple different patterns over the same string.  
   * clear all patterns --> removes patterns from processing  
   * get/setPattern Active/Inactive  --> allows a stored pattern to set on or off  
-  * Python 2.7+, Python 3+ support with no mods, no dependancies  
+  * Python 2.7+, Python 3+ support, derived from built-in deque package  
   * 100% test coverage in both 2.7 and 3.x 
 
 ### Usage example   
